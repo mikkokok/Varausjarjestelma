@@ -1,0 +1,2 @@
+c:\users\mikko\documents\visual studio 2015\Projects\Varausjarjestelma\Varausjarjestelma\bin\Debug\Varausjarjestelma.exe.config
+C:\Users\Mikko\Source\Repos\Varausjarjestelma\Varausjarjestelma\bin\Debug\Varausjarjestelma.exe.config
