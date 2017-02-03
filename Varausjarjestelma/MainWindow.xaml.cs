@@ -20,9 +20,11 @@ namespace Varausjarjestelma
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Tietokanta _tietokanta;
         public MainWindow()
         {
             InitializeComponent();
+            //_tietokanta = new Tietokanta();
         }
     }
 }
