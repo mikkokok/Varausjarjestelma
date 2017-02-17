@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="Varausjarjestelma.Asiakas"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Varausjarjestelma"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <TabControl x:Name="tabControl" Margin="0,0,0,0">
+        <TabItem Header="Kirjaudu">
+            <Grid Background="#FFE5E5E5">
+                <Button Content="Seuraava" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="siirry" Tag="etusivu"/>
+                <Button Content="Lopeta" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="10,0,0,10"/>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="[Kirjaudu sisään]" VerticalAlignment="Center" Margin="0,50"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Etusivu" x:Name="etusivu" >
+            <Grid Background="#FFE5E5E5">
+                <Grid HorizontalAlignment="Center" Height="100" VerticalAlignment="Center" Width="250" Margin="0">
+                    <Button Tag="selaa_elokuvia" Content="Selaa elokuvia" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="10,0,0,0" Click="siirry"/>
+                    <Button Tag="nayta_varaukset" Content="Näytä varaukset" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="130,0,0,0" Click="siirry"/>
+                </Grid>
+
+            </Grid>
+        </TabItem>
+        <TabItem x:Name="ohjemisto" Header="Ohjemisto" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
+            <Grid Background="#FFE5E5E5">
+                <Button Content="Etusivulle" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="siirry" Tag="etusivu"/>
+            </Grid>
+        </TabItem>
+
+        <TabItem x:Name="nayta_varaukset" Header="Varaukset" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
+            <Grid Background="#FFE5E5E5">
+                <Button Content="Etusivulle" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="siirry" Tag="etusivu"/>
+            </Grid>
+        </TabItem>
+
+        <TabItem x:Name="selaa_elokuvia" Header="Selaa elokuvia" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
+            <Grid Background="#FFE5E5E5">
+                <Button Content="Etusivulle" Margin="0,0,209,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="siirry" Tag="etusivu"/>
+                <Button Content="Hae näytökset" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="194" Click="siirry" Tag="varaa_näytös"/>
+                <TextBlock HorizontalAlignment="Center" Margin="0,0,0,50" TextWrapping="Wrap" Text="Lista elokuvista" VerticalAlignment="Center"/>
+            </Grid>
+        </TabItem>
+
+        <TabItem x:Name="varaa_näytös" Header="Valitse näytös" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
+            <Grid Background="#FFE5E5E5">
+                <Button Content="Etusivulle" Margin="0,0,209,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="siirry" Tag="etusivu"/>
+                <Button Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="194" Click="siirry" Tag="varaa_paikat"/>
+                <TextBlock HorizontalAlignment="Center" Margin="0,0,0,50" TextWrapping="Wrap" Text="Näytöksen valinta, aika ja paikka" VerticalAlignment="Center"/>
+            </Grid>
+        </TabItem>
+
+        <TabItem x:Name="varaa_paikat" Header="Valitse paikat" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
+            <Grid Background="#FFE5E5E5">
+                <Button Content="Etusivulle" Margin="0,0,209,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="siirry" Tag="etusivu"/>
+                <Button Content="Vahvista paikat" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="194" Click="siirry" Tag="varaa_vahvista"/>
+                <TextBlock HorizontalAlignment="Center" Margin="0,0,0,50" TextWrapping="Wrap" Text="Paikkojen valinta" VerticalAlignment="Center"/>
+            </Grid>
+        </TabItem>
+
+        <TabItem x:Name="varaa_vahvista" Header="Vahvista " HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
+            <Grid Background="#FFE5E5E5">
+                <Button Content="Etusivulle" Margin="0,0,209,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="siirry" Tag="etusivu"/>
+                <Button Content="Varaa liput" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="194" Click="siirry" Tag="varaa_kiitos"/>
+                <TextBlock HorizontalAlignment="Center" Margin="0,0,0,50" TextWrapping="Wrap" Text="Näytä yhteenveto tässä" VerticalAlignment="Center"/>
+            </Grid>
+        </TabItem>
+
+        <TabItem x:Name="varaa_kiitos" Header="Kiitos varauksesta" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
+            <Grid Background="#FFE5E5E5">
+                <Button Content="Etusivulle" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="274" Click="siirry" Tag="etusivu"/>
+                <TextBlock HorizontalAlignment="Center" Margin="0,0,0,50" TextWrapping="Wrap" Text="Kiitos kun varasit lippuja" VerticalAlignment="Center"/>
+
+            </Grid>
+        </TabItem>
+
+    </TabControl>
+</UserControl>
