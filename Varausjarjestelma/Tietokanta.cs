@@ -40,7 +40,7 @@ namespace Varausjarjestelma
         {
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
-
+            return null;
         }
     }
 }
