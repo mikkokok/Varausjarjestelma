@@ -23,9 +23,14 @@ namespace Varausjarjestelma
     /// 
     public partial class Asiakas : UserControl
     {
+        private Tietokanta _tietokanta;
+
         public Asiakas()
         {
             InitializeComponent();
+
+            // toistaiseksi näin, lopullisessa pärjää 1:llä instanssilla
+            _tietokanta = new Tietokanta();
 
             // välilehdet piiloon
             //
@@ -59,12 +64,7 @@ namespace Varausjarjestelma
         private void Button_SelaaElokuvia(object sender, RoutedEventArgs e)
         {
             // tietokanta: Hae lista elokuvista
-            List<Elokuva> elokuvat = new List<Elokuva>();
-
-            elokuvat.Add(new Elokuva("Elokuva 1", 163, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ligula felis, tincidunt a maximus quis, vestibulum eu magna. Etiam ac dolor at lectus consectetur tempor id quis felis. In vitae vehicula eros, quis tristique urna. Ut tristique odio urna, vel dapibus felis vestibulum sit amet."));
-            elokuvat.Add(new Elokuva("Elokuva: II osa", 163, "Etiam pretium, justo posuere pellentesque egestas, eros sem convallis turpis, \n\n sed fermentum justo ante ut turpis. Proin viverra sed lacus at ultrices. Sed fermentum ultricies gravida. Quisque at bibendum ante, quis porta ipsum."));
-
-            Ohjelmisto.ItemsSource = elokuvat; // tämä tietokannasta
+            Ohjelmisto.ItemsSource = _tietokanta.Elokuvat(); // tämä tietokannasta
 
             Siirry("selaa_elokuvia");
         }
@@ -74,7 +74,9 @@ namespace Varausjarjestelma
             // tietokanta: Hae näytökset listausta varten sellaisiin esityksiin jotka ovat tulevaisuudessa
 
             Elokuva valittu_elokuva = Ohjelmisto.SelectedItem as Elokuva;
+            List<Näytös> näytökset = _tietokanta.Näytökset(valittu_elokuva);
 
+            TulevatNäytökset.ItemsSource = näytökset;
             Siirry("varaa_näytös");
         }
 
