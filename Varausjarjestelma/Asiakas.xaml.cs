@@ -35,10 +35,10 @@ namespace Varausjarjestelma
             {
                 t.Visibility = Visibility.Collapsed;
             }
-            elokuvat.ItemsSource = this.Elokuvat;
+            Ohjelmisto.ItemsSource = this.Elokuvat;
             this.Elokuvat.Add(new Elokuva("Elokuva 1", 163, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ligula felis, tincidunt a maximus quis, vestibulum eu magna. Etiam ac dolor at lectus consectetur tempor id quis felis. In vitae vehicula eros, quis tristique urna. Ut tristique odio urna, vel dapibus felis vestibulum sit amet."));
             this.Elokuvat.Add(new Elokuva("Elokuva: II osa", 163, "Etiam pretium, justo posuere pellentesque egestas, eros sem convallis turpis, \n\n sed fermentum justo ante ut turpis. Proin viverra sed lacus at ultrices. Sed fermentum ultricies gravida. Quisque at bibendum ante, quis porta ipsum."));
-            
+
         }
 
         protected void Etusivulle(object sender, EventArgs e)
@@ -52,14 +52,17 @@ namespace Varausjarjestelma
             if (newIndex >= tabControl.Items.Count) newIndex = 0;
             tabControl.SelectedIndex = newIndex;
         }
-        
 
-        // esim voi käyttää <Button Tag="kohde"/>
-        // kohde oltava välilehden (TabItem) x:Name="kohde"
-        //
-        private void Siirry(object sender, RoutedEventArgs e)
+        private void Button_VaraaNäytös(object sender, RoutedEventArgs e)
         {
-            string nimi = (sender as Button).Tag.ToString();
+            // Hae näytökset listausta varten
+            Elokuva valittu_elokuva = Ohjelmisto.SelectedItem as Elokuva;
+
+            Siirry("varaa_näytös");
+        }
+
+        private void Siirry(string nimi)
+        {
             TabItem kohde = tabControl.Items.OfType<TabItem>().SingleOrDefault(n => n.Name == nimi);
 
             Debug.Assert(kohde != null);
@@ -67,13 +70,22 @@ namespace Varausjarjestelma
 
             // mikäli on tarpeen luoda lomakkeen alustamista varten erikseen
             //
-            //System.Reflection.MethodInfo alusta = this.GetType().GetMethod("alusta_" + nimi);
+            // System.Reflection.MethodInfo alusta = this.GetType().GetMethod("alusta_" + nimi);
             //
-            //if (alusta != null)
-            //{
+            // if (alusta != null)
+            // {
             //    alusta.Invoke(this, null);
-            //}
+            // }
         }
-        
+
+        // esim voi käyttää <Button Tag="kohde"/>
+        // kohde oltava välilehden (TabItem) x:Name="kohde"
+        //
+        private void Button_Siirry(object sender, RoutedEventArgs e)
+        {
+            string nimi = (sender as Button).Tag.ToString();
+            Siirry(nimi);
+        }
+
     }
 }
