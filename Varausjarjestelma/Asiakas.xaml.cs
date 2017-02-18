@@ -23,8 +23,6 @@ namespace Varausjarjestelma
     /// 
     public partial class Asiakas : UserControl
     {
-        public List<Elokuva> Elokuvat = new List<Elokuva>();
-
         public Asiakas()
         {
             InitializeComponent();
@@ -35,10 +33,6 @@ namespace Varausjarjestelma
             {
                 t.Visibility = Visibility.Collapsed;
             }
-            Ohjelmisto.ItemsSource = this.Elokuvat;
-            this.Elokuvat.Add(new Elokuva("Elokuva 1", 163, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ligula felis, tincidunt a maximus quis, vestibulum eu magna. Etiam ac dolor at lectus consectetur tempor id quis felis. In vitae vehicula eros, quis tristique urna. Ut tristique odio urna, vel dapibus felis vestibulum sit amet."));
-            this.Elokuvat.Add(new Elokuva("Elokuva: II osa", 163, "Etiam pretium, justo posuere pellentesque egestas, eros sem convallis turpis, \n\n sed fermentum justo ante ut turpis. Proin viverra sed lacus at ultrices. Sed fermentum ultricies gravida. Quisque at bibendum ante, quis porta ipsum."));
-
         }
 
         protected void Etusivulle(object sender, EventArgs e)
@@ -46,19 +40,47 @@ namespace Varausjarjestelma
             etusivu.IsSelected = true;
         }
 
-        private void Seuraava(object sender, RoutedEventArgs e)
+        // siirry suoraan seuraavaan välilehteen
+        private void Button_Seuraava(object sender, RoutedEventArgs e)
         {
             int newIndex = tabControl.SelectedIndex + 1;
             if (newIndex >= tabControl.Items.Count) newIndex = 0;
             tabControl.SelectedIndex = newIndex;
         }
 
+        // siirry suoraan edelliseen välilehteen
+        private void Button_Edellinen(object sender, RoutedEventArgs e)
+        {
+            int newIndex = tabControl.SelectedIndex - 1;
+            if (newIndex < 0) newIndex = tabControl.Items.Count - 1;
+            tabControl.SelectedIndex = newIndex;
+        }
+        
+        private void Button_SelaaElokuvia(object sender, RoutedEventArgs e)
+        {
+            // tietokanta: Hae lista elokuvista
+            List<Elokuva> elokuvat = new List<Elokuva>();
+
+            elokuvat.Add(new Elokuva("Elokuva 1", 163, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ligula felis, tincidunt a maximus quis, vestibulum eu magna. Etiam ac dolor at lectus consectetur tempor id quis felis. In vitae vehicula eros, quis tristique urna. Ut tristique odio urna, vel dapibus felis vestibulum sit amet."));
+            elokuvat.Add(new Elokuva("Elokuva: II osa", 163, "Etiam pretium, justo posuere pellentesque egestas, eros sem convallis turpis, \n\n sed fermentum justo ante ut turpis. Proin viverra sed lacus at ultrices. Sed fermentum ultricies gravida. Quisque at bibendum ante, quis porta ipsum."));
+
+            Ohjelmisto.ItemsSource = elokuvat; // tämä tietokannasta
+
+            Siirry("selaa_elokuvia");
+        }
+
         private void Button_VaraaNäytös(object sender, RoutedEventArgs e)
         {
-            // Hae näytökset listausta varten
+            // tietokanta: Hae näytökset listausta varten sellaisiin esityksiin jotka ovat tulevaisuudessa
+
             Elokuva valittu_elokuva = Ohjelmisto.SelectedItem as Elokuva;
 
             Siirry("varaa_näytös");
+        }
+
+        private void Button_VaraaPaikat(object sender, RoutedEventArgs e)
+        {
+            Siirry("varaa_paikat");
         }
 
         private void Siirry(string nimi)
@@ -86,6 +108,5 @@ namespace Varausjarjestelma
             string nimi = (sender as Button).Tag.ToString();
             Siirry(nimi);
         }
-
     }
 }
