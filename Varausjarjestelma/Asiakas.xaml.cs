@@ -23,6 +23,8 @@ namespace Varausjarjestelma
     /// 
     public partial class Asiakas : UserControl
     {
+        public List<Elokuva> Elokuvat = new List<Elokuva>();
+
         public Asiakas()
         {
             InitializeComponent();
@@ -33,14 +35,18 @@ namespace Varausjarjestelma
             {
                 t.Visibility = Visibility.Collapsed;
             }
+            elokuvat.ItemsSource = this.Elokuvat;
+            this.Elokuvat.Add(new Elokuva("Elokuva 1", 163, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ligula felis, tincidunt a maximus quis, vestibulum eu magna. Etiam ac dolor at lectus consectetur tempor id quis felis. In vitae vehicula eros, quis tristique urna. Ut tristique odio urna, vel dapibus felis vestibulum sit amet."));
+            this.Elokuvat.Add(new Elokuva("Elokuva: II osa", 163, "Etiam pretium, justo posuere pellentesque egestas, eros sem convallis turpis, \n\n sed fermentum justo ante ut turpis. Proin viverra sed lacus at ultrices. Sed fermentum ultricies gravida. Quisque at bibendum ante, quis porta ipsum."));
+            
         }
 
-        protected void etusivulle(object sender, EventArgs e)
+        protected void Etusivulle(object sender, EventArgs e)
         {
             etusivu.IsSelected = true;
         }
 
-        private void seuraava(object sender, RoutedEventArgs e)
+        private void Seuraava(object sender, RoutedEventArgs e)
         {
             int newIndex = tabControl.SelectedIndex + 1;
             if (newIndex >= tabControl.Items.Count) newIndex = 0;
@@ -51,7 +57,7 @@ namespace Varausjarjestelma
         // esim voi käyttää <Button Tag="kohde"/>
         // kohde oltava välilehden (TabItem) x:Name="kohde"
         //
-        private void siirry(object sender, RoutedEventArgs e)
+        private void Siirry(object sender, RoutedEventArgs e)
         {
             string nimi = (sender as Button).Tag.ToString();
             TabItem kohde = tabControl.Items.OfType<TabItem>().SingleOrDefault(n => n.Name == nimi);
@@ -68,5 +74,6 @@ namespace Varausjarjestelma
             //    alusta.Invoke(this, null);
             //}
         }
+        
     }
 }
