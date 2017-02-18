@@ -17,18 +17,18 @@
         <Label x:Name="lbl_ilmoitus" Content="rekisteröinti/virhe" Foreground="Red" HorizontalAlignment="Left" Margin="122,120,0,0" VerticalAlignment="Top" />
         <TextBox x:Name="txt_kayttajaNimi" HorizontalAlignment="Left" Height="23" Margin="122,25,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="txt_salasana" HorizontalAlignment="Left" Height="23" Margin="122,76,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btn_kirjaudu" Background="#66a3ff" Foreground="White"  Click="btnkirjaudu_Click" HorizontalAlignment="Left" Margin="167,146,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press">
+        <Button x:Name="btn_kirjaudu" Background="Transparent" BorderBrush="Transparent" Foreground="White"  Click="btnkirjaudu_Click" HorizontalAlignment="Left" Margin="167,146,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press">
             <Button.Content>
-                <Border CornerRadius="5" Height="25" Width="65" Margin="0" BorderBrush="Transparent" BorderThickness="1,1,1,1" >
+                <Border CornerRadius="5" Height="25" Width="65" Margin="0" BorderBrush="White" BorderThickness="2,2,2,2" >
                     <TextBlock Text="Kirjaudu" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
             </Button.Content>
         </Button>
 
-        <Button x:Name="btn_rekisteroidy" Background="#66a3ff" Foreground="White" HorizontalAlignment="Left" Margin="34,152,0,0" VerticalAlignment="Top" Width="75" Click="btn_rekisteroidy_Click">
+        <Button x:Name="btn_rekisteroidy" Background="Transparent" BorderBrush="Transparent" Foreground="White" HorizontalAlignment="Left" Margin="34,144,0,0" VerticalAlignment="Top" Width="96" Click="btn_rekisteroidy_Click">
             <Button.Content>
-                <Border CornerRadius="5" Height="25" Width="65" Margin="0" BorderBrush="Transparent" BorderThickness="1,1,1,1" >
-                    <TextBlock Text="Rekisteröidy" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Border CornerRadius="5" Height="25" Width="85" Margin="0" BorderBrush="White" BorderThickness="2,2,2,2" >
+                    <TextBlock Text="Rekisteröidy" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="-2,5,-2,0"/>
                 </Border>
             </Button.Content>
         </Button>
