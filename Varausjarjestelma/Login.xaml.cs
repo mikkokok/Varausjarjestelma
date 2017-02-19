@@ -27,6 +27,7 @@ namespace Varausjarjestelma
         //Annetut käyttäjänimi ja salasana
         private String username;
         private String password;
+        private String repeatedPassword;
 
         private int rooli = 1; // 0 = asiakas 1 = ylläpitäjä
 
@@ -36,21 +37,23 @@ namespace Varausjarjestelma
             Application.Current.MainWindow = this;
         }
 
-        private void btnkirjaudu_Click(object sender, RoutedEventArgs e)
+        private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
         {
             //Alustetaan muuttujat tekstilaatikoiden avulla
             this.username = txt_kayttajaNimi.Text;
-            this.password = txt_salasana.Text;
+            this.password = txt_salasana.Password;
 
             //Toiminnot jos käyttäjänimi ja salasana ovat oikein
             if (this.username == "Matti" && this.password == "Matti")
             {
                 //Tulostetaan ilmoitus käyttäjälle
                 lbl_ilmoitus.Foreground = new SolidColorBrush(Colors.White);
-                lbl_ilmoitus.Content = "Kirjautuminen onnistui";
+                lbl_ilmoitus.Content = "Kirjautuminen onnistui. Ladataan...";
                 lbl_ilmoitus.Visibility = Visibility.Visible;
 
-                //Thread.Sleep(1000);
+                //pb_login.Visibility = Visibility.Visible;
+                //pb_login.IsIndeterminate = true;
+                await Task.Delay(2000);
 
                 //Piilotetaan Login ja muutetaan ikkunan kokoa
                 Login_Grid.Visibility = Visibility.Collapsed;
@@ -73,16 +76,19 @@ namespace Varausjarjestelma
             }
             //Virheilmoitus jos käyttäjänimi/salasana ovat väärin
             else
-            {
-                lbl_ilmoitus.Visibility = Visibility.Visible;
+            { 
                 lbl_ilmoitus.Content = "Väärä käyttäjänimi tai salasana";
                 lbl_ilmoitus.Foreground = new SolidColorBrush(Colors.Red);
+                lbl_ilmoitus.Visibility = Visibility.Visible;
+                
             }
         }
 
         private void btn_rekisteroidy_Click(object sender, RoutedEventArgs e)
         {
-
+            Login_Grid.Visibility = Visibility.Collapsed;
+            Register_Grid.Visibility = Visibility.Visible;
+            this.Title = "Rekisteröidy";
         }
 
         //Toiminnot Enter-painikkeelle
@@ -106,6 +112,38 @@ namespace Varausjarjestelma
 
             this.Left = (width - e.NewSize.Width) / 2;
             this.Top = (height - e.NewSize.Height) / 2;
+        }
+
+        private async void btn_rekisteroi_Click(object sender, RoutedEventArgs e)
+        {
+            this.username = txt_kayttajaNimiR.Text;
+            this.password = txt_salasanaR.Password;
+            this.repeatedPassword = txt_salasanan_vahvistus.Password;
+
+            if (this.password == this.repeatedPassword)
+            {
+                //Rekisteöi käyttäjäjä tietokantaan
+                lbl_ilmoitusR.Visibility = Visibility.Visible;
+                lbl_ilmoitusR.Content = "Rekisteröinti onnistui. Ladataan...";
+                await Task.Delay(2000);
+                Register_Grid.Visibility = Visibility.Collapsed;
+                Login_Grid.Visibility = Visibility.Visible;
+                this.Title = "Kirjaudu Sisään";
+
+            }
+            else
+            {
+                lbl_ilmoitusR.Foreground = new SolidColorBrush(Colors.Red);
+                lbl_ilmoitusR.Content = "Salasanat eivät täsmää!";
+                lbl_ilmoitusR.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void btn_takaisinR_Click(object sender, RoutedEventArgs e)
+        {
+            Register_Grid.Visibility = Visibility.Collapsed;
+            Login_Grid.Visibility = Visibility.Visible;
+            this.Title = "Kirjaudu Sisään";
         }
     }
 }

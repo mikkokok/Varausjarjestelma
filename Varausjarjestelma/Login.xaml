@@ -5,13 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Varausjarjestelma"
         mc:Ignorable="d"
-        Title="Kirjaudu Sisään" FontFamily="Arial" Height="218" Width="300" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" SizeChanged="Window_SizeChanged">
+        Title="Kirjaudu Sisään" FontFamily="Arial" Height="218" Width="300" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" SizeChanged="Window_SizeChanged" Background="#FFF6FBFD" Foreground="#FFEEF8FD" Visibility="Visible" ResizeMode="NoResize" Margin="0" BorderThickness="0">
     <Grid VerticalAlignment="Stretch">
         <Grid.Background>
             <LinearGradientBrush>
                 <GradientStop Color="#3385ff" Offset="0.9" />
             </LinearGradientBrush>
         </Grid.Background>
+
+        <Grid Name="Login_Grid" Visibility="Visible">
+            <Label x:Name="lbl_nimi" Content="Nimi" Foreground="White" HorizontalAlignment="Left" Margin="34,25,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="lbl_salasana" Content="Salasana" Foreground="White" HorizontalAlignment="Left" Margin="34,76,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="lbl_ilmoitus" Style="{StaticResource FadeAnimation}" Content="rekisteröinti/virhe" Foreground="White" Visibility="Collapsed" HorizontalAlignment="Left" Margin="34,115,0,0" VerticalAlignment="Top" />
+            <TextBox x:Name="txt_kayttajaNimi" HorizontalAlignment="Left" Height="24" Margin="122,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <PasswordBox x:Name="txt_salasana" HorizontalAlignment="Left" Height="23" Margin="122,76,0,0" VerticalAlignment="Top" Width="120"/>
+            <Button x:Name="btn_kirjaudu"  Height="25" Style="{StaticResource ButtonStyle}" Foreground="White"  Click="btnkirjaudu_Click" HorizontalAlignment="Left" Margin="167,152,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press" Content="Kirjaudu" />
+            <Button x:Name="btn_rekisteroidy" Height="25" Width="85" Style="{StaticResource ButtonStyle}" Foreground="White" HorizontalAlignment="Left" Margin="56,152,0,0" VerticalAlignment="Top" Click="btn_rekisteroidy_Click" Content="Rekisteröidy" />
+            <ProgressBar Name="pb_login" HorizontalAlignment="Left" Height="24" Margin="202,115,0,0" VerticalAlignment="Top" Width="40" Visibility="Collapsed"/>
+        </Grid>
+
+        <Grid Name="Register_Grid" Visibility="Collapsed">
+            <Label x:Name="lbl_nimiR" Content="Nimi" Foreground="White" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="lbl_salasanaR" Content="Salasana" Foreground="White" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="lbl_ilmoitusR" Style="{StaticResource FadeAnimation}" Content="onnistui/epäonnistui" Foreground="White" Visibility="Collapsed" HorizontalAlignment="Left" Margin="34,115,0,0" VerticalAlignment="Top" />
+            <Label x:Name="lbl_salasanan_vahvistus" Foreground="White" Content="Toista salasana" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="txt_kayttajaNimiR" HorizontalAlignment="Left" Height="24" Margin="122,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <PasswordBox x:Name="txt_salasanaR" HorizontalAlignment="Left" Height="23" Margin="122,50,0,0" VerticalAlignment="Top" Width="120"/>
+            <PasswordBox x:Name="txt_salasanan_vahvistus" HorizontalAlignment="Left" Height="23" Margin="122,91,0,0" VerticalAlignment="Top" Width="120"/>
+            <Button x:Name="btn_rekisteroi"  Height="25" Style="{StaticResource ButtonStyle}" Foreground="White" HorizontalAlignment="Left" Margin="167,152,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press" Content="Rekisteroidy" Click="btn_rekisteroi_Click" />
+            <Button x:Name="btn_takaisinR" Height="25" Width="85" Style="{StaticResource ButtonStyle}" Foreground="White" HorizontalAlignment="Left" Margin="56,152,0,0" VerticalAlignment="Top" Content="Takaisin" Click="btn_takaisinR_Click" />
+        </Grid>
 
         <TabControl Name="YllapidonControl" Visibility="Collapsed" Background="#3385ff" Width="800" Height="600">
             <TabControl.Resources>
@@ -42,10 +65,10 @@
             <TabItem Header="Etusivu">
                 <Label Content="Sisältö tulee tänne" />
             </TabItem>
-        <TabItem Header="Lisää elokuva" />
-        <TabItem Header="Lisää näytös" />
-        <TabItem Header="Muokkaa elokuvaa" />
-        <TabItem Header="Muokkaa näytöstä" />
+            <TabItem Header="Lisää elokuva" />
+            <TabItem Header="Lisää näytös" />
+            <TabItem Header="Muokkaa elokuvaa" />
+            <TabItem Header="Muokkaa näytöstä" />
         </TabControl>
 
         <TabControl Name="AsiakkaanControl" Visibility="Collapsed" Background="#3385ff" Width="800" Height="600">
@@ -83,27 +106,6 @@
             <TabItem Header="AsiakaanTab5" />
         </TabControl>
 
-        <Grid Name="Login_Grid">
-            <Label x:Name="lbl_nimi" Content="Nimi" Foreground="White" HorizontalAlignment="Left" Margin="34,25,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lbl_salasana" Content="Salasana" Foreground="White" HorizontalAlignment="Left" Margin="34,76,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lbl_ilmoitus" Content="rekisteröinti/virhe" Foreground="White" Visibility="Collapsed" HorizontalAlignment="Left" Margin="34,115,0,0" VerticalAlignment="Top" />
-        <TextBox x:Name="txt_kayttajaNimi" HorizontalAlignment="Left" Height="23" Margin="122,25,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txt_salasana" HorizontalAlignment="Left" Height="23" Margin="122,76,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btn_kirjaudu" Background="Transparent" BorderBrush="Transparent" Foreground="White"  Click="btnkirjaudu_Click" HorizontalAlignment="Left" Margin="167,144,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press">
-            <Button.Content>
-                <Border CornerRadius="5" Height="25" Width="65" Margin="0" BorderBrush="White" BorderThickness="2,2,2,2" >
-                    <TextBlock Text="Kirjaudu" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
-            </Button.Content>
-        </Button>
-        <Button x:Name="btn_rekisteroidy" Background="Transparent" BorderBrush="Transparent" Foreground="White" HorizontalAlignment="Left" Margin="34,144,0,0" VerticalAlignment="Top" Width="96" Click="btn_rekisteroidy_Click">
-            <Button.Content>
-                <Border CornerRadius="5" Height="25" Width="85" Margin="0" BorderBrush="White" BorderThickness="2,2,2,2" >
-                    <TextBlock Text="Rekisteröidy" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="-2,5,-2,0"/>
-                </Border>
-            </Button.Content>
-        </Button>
-        </Grid>
     </Grid>
 </Window>
 
