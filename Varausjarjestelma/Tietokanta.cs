@@ -30,17 +30,21 @@ namespace Varausjarjestelma
 
         private void LuoTaulut()
         {
-            _sql = "CREATE TABLE person" +           // Table person
+            _sql = "CREATE TABLE kayttajat" +           // Taulu kayttajat
                         "(id INTEGER PRIMARY KEY, " +
-                        "firstname VARCHAR(50), " +
-                        "lastname VARCHAR(255))";
+                        "etunimi VARCHAR(255), " +
+                        "sukunimi VARCHAR(255), " +
+                        "tunnus VARCHAR(255), " +
+                        "salasana VARCHAR(255), " +
+                        "rooli VARCHAR(255))";
+            Ajasql(_sql);
         }
 
         public string Ajasql(string sql)
         {
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
-
+            return null;
         }
     }
 }
