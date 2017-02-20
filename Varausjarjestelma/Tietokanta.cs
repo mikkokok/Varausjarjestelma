@@ -18,7 +18,7 @@ namespace Varausjarjestelma
 
         private void YhdistaTietokantaan()
         {
-            LuoTietokanta(); 
+            LuoTietokanta();
             _kantaYhteys = new SQLiteConnection($"Data Source={_tietokannannimi};Version=3;");
             _kantaYhteys.Open();
 
@@ -39,6 +39,30 @@ namespace Varausjarjestelma
                         "salasana VARCHAR(255), " +
                         "rooli VARCHAR(255))";
             Ajasql(_sql);
+            _sql = "CREATE TABLE elokuvat" +           // Taulu elokuvat
+            "(id INTEGER PRIMARY KEY, " +
+            "nimi VARCHAR(255), " +
+            "vuosi VARCHAR(255), " +
+            "xxxxxx VARCHAR(255), " +
+            "xxxxxx VARCHAR(255), " +
+            "xxxxxx VARCHAR(255))";
+            Ajasql(_sql);
+            _sql = "CREATE TABLE elokuvateatterit" +           // Taulu elokuvateatterit
+            "(id INTEGER PRIMARY KEY, " +
+            "nimi VARCHAR(255), " +
+            "paikkakunta VARCHAR(255), " +
+            "tunnus VARCHAR(255), " +
+            "salasana VARCHAR(255), " +
+            "rooli VARCHAR(255))";
+            Ajasql(_sql);
+            _sql = "CREATE TABLE lippu" +           // Taulu lippu
+            "(id INTEGER PRIMARY KEY, " +
+            "varaajannimi VARCHAR(255), " +
+            "elokuva VARCHAR(255), " +
+            "paikka VARCHAR(255), " +
+            "elokuvateatteri VARCHAR(255), " +
+            "xxxxxx VARCHAR(255))";
+            Ajasql(_sql);
         }
 
         public string Ajasql(string sql)
@@ -46,48 +70,48 @@ namespace Varausjarjestelma
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
             return null;
-<<<<<<< HEAD
-=======
         }
 
-        public List<Elokuva> Elokuvat() {
-            List<Elokuva> res = new List<Elokuva>();
+        public List<Elokuva> Elokuvat()
+        {
+            var res = new List<Elokuva>
+            {
+                new Elokuva("Elokuva 1", 163,
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ligula felis, tincidunt a maximus quis, vestibulum eu magna. Etiam ac dolor at lectus consectetur tempor id quis felis. In vitae vehicula eros, quis tristique urna. Ut tristique odio urna, vel dapibus felis vestibulum sit amet."),
+                new Elokuva("Elokuva: II osa", 163,
+                    "Etiam pretium, justo posuere pellentesque egestas, eros sem convallis turpis, \n\n sed fermentum justo ante ut turpis. Proin viverra sed lacus at ultrices. Sed fermentum ultricies gravida. Quisque at bibendum ante, quis porta ipsum.")
+            };
 
-            res.Add(new Elokuva("Elokuva 1", 163, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ligula felis, tincidunt a maximus quis, vestibulum eu magna. Etiam ac dolor at lectus consectetur tempor id quis felis. In vitae vehicula eros, quis tristique urna. Ut tristique odio urna, vel dapibus felis vestibulum sit amet."));
-            res.Add(new Elokuva("Elokuva: II osa", 163, "Etiam pretium, justo posuere pellentesque egestas, eros sem convallis turpis, \n\n sed fermentum justo ante ut turpis. Proin viverra sed lacus at ultrices. Sed fermentum ultricies gravida. Quisque at bibendum ante, quis porta ipsum."));
             return res;
         }
 
         public List<Näytös> Näytökset(Elokuva elokuva)
         {
-            List<Näytös> res = new List<Näytös>();
+            var res = new List<Näytös>();
 
-            Näytös näytös = new Näytös();
-            DateTime aika = DateTime.Now.AddDays(2);
+            var näytös = new Näytös();
+            var aika = DateTime.Now.AddDays(2);
 
-            Elokuvasali sali = new Elokuvasali();
-            sali.Rivejä = 6;
-            sali.PaikkojaRivissä = 8;
+            var sali = new Elokuvasali
+            {
+                Rivejä = 6,
+                PaikkojaRivissä = 8
+            };
 
             näytös.Aika = aika;
             näytös.Elokuva = elokuva;
             näytös.Sali = sali;
-            
-            näytös.Sali.Teatteri = new Teatteri();
-            näytös.Sali.Teatteri.Nimi = "KyberKino";
-            näytös.Sali.Teatteri.Kaupunki = "City 17";
-            
+
+            näytös.Sali.Teatteri = new Teatteri
+            {
+                Nimi = "KyberKino",
+                Kaupunki = "City 17"
+            };
+
             // koko varmaan parmepi erillään
             // esim. HaeVapaatPaikat(Näytös näytös) ?
             // (jolloin myös täytyy muuttaa Näytös-luokkaa)
-            näytös.VaratutPaikat = new List<int>();
-            näytös.VaratutPaikat.Add(1);
-            näytös.VaratutPaikat.Add(7);
-            näytös.VaratutPaikat.Add(14);
-            näytös.VaratutPaikat.Add(15);
-            näytös.VaratutPaikat.Add(16);
-            näytös.VaratutPaikat.Add(27);
-            näytös.VaratutPaikat.Add(40);
+            näytös.VaratutPaikat = new List<int> {1, 7, 14, 15, 16, 27, 40};
 
             res.Add(näytös);
             return res;
@@ -96,7 +120,6 @@ namespace Varausjarjestelma
         public List<Näytös> Näytökset(int elokuva)
         {
             return new List<Näytös>();
->>>>>>> 85345827bbc327055e834f668eeadd50ec5c25ad
         }
     }
 }
