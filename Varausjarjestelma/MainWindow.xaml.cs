@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace Varausjarjestelma
 {
@@ -21,10 +22,12 @@ namespace Varausjarjestelma
     public partial class MainWindow : Window
     {
         private Tietokanta _tietokanta;
+
         public MainWindow()
         {
             InitializeComponent();
-            //_tietokanta = new Tietokanta();
+            _tietokanta = new Tietokanta();
         }
     }
 }
+
