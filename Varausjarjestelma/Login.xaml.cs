@@ -38,9 +38,9 @@ namespace Varausjarjestelma
         private readonly int loginHeight = 218;
 
         //Annetut käyttäjänimi ja salasana
-        private String username;
-        private String password;
-        private String repeatedPassword;
+        private string username;
+        private string password;
+        private string repeatedPassword;
 
         private int rooli = 1; // 0 = asiakas 1 = ylläpitäjä, Testausta varten
 

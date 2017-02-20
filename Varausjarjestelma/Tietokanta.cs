@@ -14,24 +14,30 @@ namespace Varausjarjestelma
         private SQLiteDataReader _sqllukija;
         public Tietokanta()
         {
+            LuoTietokanta();
+            YhdistaTietokantaan();
         }
 
         private void YhdistaTietokantaan()
         {
-            LuoTietokanta();
+            if (_kantaYhteys != null) return; // Yhteys on jo olemassa
             _kantaYhteys = new SQLiteConnection($"Data Source={_tietokannannimi};Version=3;");
             _kantaYhteys.Open();
 
         }
         private void LuoTietokanta()
         {
-            if (File.Exists(_tietokannannimi)) return;
-            SQLiteConnection.CreateFile(_tietokannannimi); // Luo tietokannan samaan hakemistoon missä .exe ajetaan
+            if (File.Exists(_tietokannannimi))
+                SQLiteConnection.CreateFile(_tietokannannimi); // Luo tietokannan samaan hakemistoon missä .exe ajetaan
+            LuoTaulut(); // Tarkista taulut
         }
 
         private void LuoTaulut()
         {
-            _sql = "CREATE TABLE kayttajat" +           // Taulu kayttajat
+            if (_kantaYhteys == null) // Alustetaan kantayhteys jos sitä ei ole vielä tehty
+                YhdistaTietokantaan();
+
+            _sql = "CREATE TABLE IF NOT EXISTS kayttajat" +           // Taulu kayttajat
                         "(id INTEGER PRIMARY KEY, " +
                         "etunimi VARCHAR(255), " +
                         "sukunimi VARCHAR(255), " +
@@ -39,15 +45,13 @@ namespace Varausjarjestelma
                         "salasana VARCHAR(255), " +
                         "rooli VARCHAR(255))";
             Ajasql(_sql);
-            _sql = "CREATE TABLE elokuvat" +           // Taulu elokuvat
+            _sql = "CREATE TABLE IF NOT EXISTS elokuvat" +           // Taulu elokuvat
             "(id INTEGER PRIMARY KEY, " +
             "nimi VARCHAR(255), " +
             "vuosi VARCHAR(255), " +
-            "xxxxxx VARCHAR(255), " +
-            "xxxxxx VARCHAR(255), " +
-            "xxxxxx VARCHAR(255))";
+            "ohjelmistossa VARCHAR(255))";
             Ajasql(_sql);
-            _sql = "CREATE TABLE elokuvateatterit" +           // Taulu elokuvateatterit
+            _sql = "CREATE TABLE IF NOT EXISTS elokuvateatterit" +           // Taulu elokuvateatterit
             "(id INTEGER PRIMARY KEY, " +
             "nimi VARCHAR(255), " +
             "paikkakunta VARCHAR(255), " +
@@ -55,21 +59,25 @@ namespace Varausjarjestelma
             "salasana VARCHAR(255), " +
             "rooli VARCHAR(255))";
             Ajasql(_sql);
-            _sql = "CREATE TABLE lippu" +           // Taulu lippu
+            _sql = "CREATE TABLE IF NOT EXISTS lippu" +           // Taulu lippu
             "(id INTEGER PRIMARY KEY, " +
             "varaajannimi VARCHAR(255), " +
             "elokuva VARCHAR(255), " +
             "paikka VARCHAR(255), " +
-            "elokuvateatteri VARCHAR(255), " +
-            "xxxxxx VARCHAR(255))";
+            "elokuvateatteri VARCHAR(255))";
             Ajasql(_sql);
         }
 
-        public string Ajasql(string sql)
+        public List<string> Ajasql(string sql)
         {
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
-            return null;
+            var palautettava = new List<string>();
+            while (_sqllukija.Read())
+            {
+                palautettava.Add(_sqllukija.GetString(1));
+            }
+            return palautettava;
         }
 
         public List<Elokuva> Elokuvat()
@@ -120,6 +128,11 @@ namespace Varausjarjestelma
         public List<Näytös> Näytökset(int elokuva)
         {
             return new List<Näytös>();
+        }
+
+        public void Dispose()
+        {
+            _kantaYhteys.Close();
         }
     }
 }
