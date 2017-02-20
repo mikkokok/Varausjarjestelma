@@ -20,21 +20,35 @@ namespace Varausjarjestelma
     /// </summary>
     public partial class Login : Window
     {
+        private enum ProgramState
+        {
+            Kirjautuminen,
+            Rekisterointi,
+            YllapidonControl,
+            AsiakkaanControl
+        };
+
+        private ProgramState state;
+
         //Pääikkunan koko
         private readonly int mainWidth = 800;
         private readonly int mainHeight = 600;
+
+        private readonly int loginWidth = 300;
+        private readonly int loginHeight = 218;
 
         //Annetut käyttäjänimi ja salasana
         private String username;
         private String password;
         private String repeatedPassword;
 
-        private int rooli = 1; // 0 = asiakas 1 = ylläpitäjä
+        private int rooli = 1; // 0 = asiakas 1 = ylläpitäjä, Testausta varten
 
         public Login()
         {
             InitializeComponent();
             Application.Current.MainWindow = this;
+            state = ProgramState.Kirjautuminen;
         }
 
         private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
@@ -55,20 +69,27 @@ namespace Varausjarjestelma
                 //pb_login.IsIndeterminate = true;
                 await Task.Delay(2000);
 
+                lbl_ilmoitus.Visibility = Visibility.Collapsed;
+
                 //Piilotetaan Login ja muutetaan ikkunan kokoa
                 Login_Grid.Visibility = Visibility.Collapsed;
                 Application.Current.MainWindow.Width = this.mainWidth;
                 Application.Current.MainWindow.Height = this.mainHeight;
 
+                txt_kayttajaNimi.Clear();
+                txt_salasana.Clear();
+
                 //Käyttäjän roolin mukaan avataan käyttäjälle tarkoitettu näkymä
                 if (this.rooli == 1)
                 {
                     this.Title = "Varausjärjestelmän Ylläpito";
+                    state = ProgramState.YllapidonControl;
                     YllapidonControl.Visibility = Visibility.Visible;
                 }
                 else
                 {
                     this.Title = "Elokuvalippujen Varausjärjestelmä";
+                    state = ProgramState.AsiakkaanControl;
                     AsiakkaanControl.Visibility = Visibility.Visible;
                 }
                 
@@ -80,12 +101,16 @@ namespace Varausjarjestelma
                 lbl_ilmoitus.Content = "Väärä käyttäjänimi tai salasana";
                 lbl_ilmoitus.Foreground = new SolidColorBrush(Colors.Red);
                 lbl_ilmoitus.Visibility = Visibility.Visible;
+                await Task.Delay(3000);
+                lbl_ilmoitus.Visibility = Visibility.Collapsed;
                 
             }
         }
 
         private void btn_rekisteroidy_Click(object sender, RoutedEventArgs e)
         {
+            txt_kayttajaNimi.Clear();
+            txt_salasana.Clear();
             Login_Grid.Visibility = Visibility.Collapsed;
             Register_Grid.Visibility = Visibility.Visible;
             this.Title = "Rekisteröidy";
@@ -95,9 +120,14 @@ namespace Varausjarjestelma
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             //Jos käyttäjä on login formissa ja painaa enteriä niin yritetään kirjautua sisään
-            if (e.Key== Key.Enter && Login_Grid.Visibility == Visibility.Visible)
+            if (e.Key== Key.Enter && state == ProgramState.Kirjautuminen)
             {
                 btnkirjaudu_Click(sender, e);
+            }
+            //Jos käyttäjä on rekisteröinti formissa ja painaa enteriä niin yritetään rekisteröityä
+            else if (e.Key == Key.Enter && state == ProgramState.Rekisterointi)
+            {
+                btn_rekisteroidy_Click(sender, e);
             }
         }
 
@@ -122,10 +152,16 @@ namespace Varausjarjestelma
 
             if (this.password == this.repeatedPassword)
             {
-                //Rekisteöi käyttäjäjä tietokantaan
+                //Rekisteöi käyttäjäjän tietokantaan
                 lbl_ilmoitusR.Visibility = Visibility.Visible;
                 lbl_ilmoitusR.Content = "Rekisteröinti onnistui. Ladataan...";
                 await Task.Delay(2000);
+                lbl_ilmoitusR.Visibility = Visibility.Collapsed;
+
+                txt_kayttajaNimiR.Clear();
+                txt_salasanaR.Clear();
+                txt_salasanan_vahvistus.Clear();
+
                 Register_Grid.Visibility = Visibility.Collapsed;
                 Login_Grid.Visibility = Visibility.Visible;
                 this.Title = "Kirjaudu Sisään";
@@ -136,14 +172,46 @@ namespace Varausjarjestelma
                 lbl_ilmoitusR.Foreground = new SolidColorBrush(Colors.Red);
                 lbl_ilmoitusR.Content = "Salasanat eivät täsmää!";
                 lbl_ilmoitusR.Visibility = Visibility.Visible;
+                await Task.Delay(3000);
+                lbl_ilmoitusR.Visibility = Visibility.Collapsed;
             }
         }
 
         private void btn_takaisinR_Click(object sender, RoutedEventArgs e)
         {
+            txt_kayttajaNimiR.Clear();
+            txt_salasanaR.Clear();
+            txt_salasanan_vahvistus.Clear();
+
             Register_Grid.Visibility = Visibility.Collapsed;
             Login_Grid.Visibility = Visibility.Visible;
             this.Title = "Kirjaudu Sisään";
+        }
+
+        private async void btn_kirjaudu_ulos_Click(object sender, RoutedEventArgs e)
+        {
+            lbl_logout_ilmoitus.Visibility = Visibility.Visible;
+            await Task.Delay(2000);
+
+            if (state == ProgramState.YllapidonControl)
+            {
+                YllapidonControl.Visibility = Visibility.Collapsed;
+                Login_Grid.Visibility = Visibility.Visible;
+                resetYllapidonControl();
+                this.Title = "Kirjaudu Sisään";
+                Application.Current.MainWindow.Width = this.loginWidth;
+                Application.Current.MainWindow.Height = this.loginHeight;
+                state = ProgramState.Kirjautuminen;
+
+                this.username = null;
+                this.password = null;
+            }
+        }
+
+        private void resetYllapidonControl()
+        {
+            YllapidonEtusivu.IsSelected = true;
+            lbl_logout_ilmoitus.Visibility = Visibility.Collapsed;
         }
     }
 }

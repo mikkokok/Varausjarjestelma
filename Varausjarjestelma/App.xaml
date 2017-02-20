@@ -10,6 +10,7 @@
         <Style TargetType="Button" x:Key="ButtonStyle">
             <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="TextBlock.Foreground" Value="White"></Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -25,8 +26,36 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Normaalin tekstin tyyli-->
+        <Style TargetType="Label" x:Key="LabelStyle">
+            <Setter Property="Label.FontFamily" Value="Garamond"></Setter>
+            <Setter Property="Label.Foreground" Value="White"></Setter>
+            <Setter Property="Label.FontSize" Value="16px"></Setter>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" BeginTime="00:00:00" From="0.0" To="1.0"  />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!-- Otsikoiden tyyli-->
+        <Style TargetType="Label" x:Key="LabelHeaderStyle">
+            <Setter Property="Label.FontFamily" Value="Garamond"></Setter>
+            <Setter Property="Label.Foreground" Value="White"></Setter>
+            <Setter Property="Label.FontSize" Value="24px"></Setter>
+         </Style>
+
+        <!-- Häivytysanimaation määritykset-->
         <Style TargetType="Label" x:Key="FadeAnimation">
-            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
             <Style.Triggers>
                 <Trigger Property="Visibility" Value="Visible">
                     <Trigger.EnterActions>

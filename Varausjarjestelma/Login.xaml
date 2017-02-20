@@ -19,8 +19,8 @@
             <Label x:Name="lbl_ilmoitus" Style="{StaticResource FadeAnimation}" Content="rekisteröinti/virhe" Foreground="White" Visibility="Collapsed" HorizontalAlignment="Left" Margin="34,115,0,0" VerticalAlignment="Top" />
             <TextBox x:Name="txt_kayttajaNimi" HorizontalAlignment="Left" Height="24" Margin="122,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             <PasswordBox x:Name="txt_salasana" HorizontalAlignment="Left" Height="23" Margin="122,76,0,0" VerticalAlignment="Top" Width="120"/>
-            <Button x:Name="btn_kirjaudu"  Height="25" Style="{StaticResource ButtonStyle}" Foreground="White"  Click="btnkirjaudu_Click" HorizontalAlignment="Left" Margin="167,152,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press" Content="Kirjaudu" />
-            <Button x:Name="btn_rekisteroidy" Height="25" Width="85" Style="{StaticResource ButtonStyle}" Foreground="White" HorizontalAlignment="Left" Margin="56,152,0,0" VerticalAlignment="Top" Click="btn_rekisteroidy_Click" Content="Rekisteröidy" />
+            <Button x:Name="btn_kirjaudu"  Height="25" Style="{StaticResource ButtonStyle}" Click="btnkirjaudu_Click" HorizontalAlignment="Left" Margin="167,152,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press" Content="Kirjaudu" />
+            <Button x:Name="btn_rekisteroidy" Height="25" Width="85" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="56,152,0,0" VerticalAlignment="Top" Click="btn_rekisteroidy_Click" Content="Rekisteröidy" />
             <ProgressBar Name="pb_login" HorizontalAlignment="Left" Height="24" Margin="202,115,0,0" VerticalAlignment="Top" Width="40" Visibility="Collapsed"/>
         </Grid>
 
@@ -32,11 +32,11 @@
             <TextBox x:Name="txt_kayttajaNimiR" HorizontalAlignment="Left" Height="24" Margin="122,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             <PasswordBox x:Name="txt_salasanaR" HorizontalAlignment="Left" Height="23" Margin="122,50,0,0" VerticalAlignment="Top" Width="120"/>
             <PasswordBox x:Name="txt_salasanan_vahvistus" HorizontalAlignment="Left" Height="23" Margin="122,91,0,0" VerticalAlignment="Top" Width="120"/>
-            <Button x:Name="btn_rekisteroi"  Height="25" Style="{StaticResource ButtonStyle}" Foreground="White" HorizontalAlignment="Left" Margin="167,152,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press" Content="Rekisteroidy" Click="btn_rekisteroi_Click" />
-            <Button x:Name="btn_takaisinR" Height="25" Width="85" Style="{StaticResource ButtonStyle}" Foreground="White" HorizontalAlignment="Left" Margin="56,152,0,0" VerticalAlignment="Top" Content="Takaisin" Click="btn_takaisinR_Click" />
+            <Button x:Name="btn_rekisteroi"  Height="25" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="167,152,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press" Content="Rekisteroidy" Click="btn_rekisteroi_Click" />
+            <Button x:Name="btn_takaisinR" Height="25" Width="85" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="56,152,0,0" VerticalAlignment="Top" Content="Takaisin" Click="btn_takaisinR_Click" />
         </Grid>
 
-        <TabControl Name="YllapidonControl" Visibility="Collapsed" Background="#3385ff" Width="800" Height="600">
+        <TabControl Name="YllapidonControl" Visibility="Collapsed" Background="#3385ff">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">
@@ -62,13 +62,26 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="Etusivu">
-                <Label Content="Sisältö tulee tänne" />
+            <TabItem x:Name="YllapidonEtusivu" Header="Etusivu">
+                <Grid x:Name="Yllapidon_Etusivun_Tab">
+                    <Label x:Name="label" Content="ELOKUVAT" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="20"/>
+                    <DataGrid x:Name="dg_Elokuvat" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Height="368" Width="284"/>
+
+                </Grid>
             </TabItem>
             <TabItem Header="Lisää elokuva" />
             <TabItem Header="Lisää näytös" />
             <TabItem Header="Muokkaa elokuvaa" />
             <TabItem Header="Muokkaa näytöstä" />
+            <TabItem Header="Kirjaudu ulos">
+                <Grid x:Name="Yllapidon_Logout">
+                    <Label x:Name="lbl_kirjaudu_ulos" Content="OLET KIRJAUTUMASSA ULOS." Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="24,51,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="label1" Content="TALLENTAMATTOMAT TIEDOT MENETETÄÄN" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="35,103,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="btn_kirjaudu_ulos" Content="Kirjaudu Ulos" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="35,169,0,0" VerticalAlignment="Top" Width="153" Height="68" Click="btn_kirjaudu_ulos_Click"/>
+                    <Label x:Name="lbl_logout_ilmoitus" Content="Kirjaudutaan ulos..." Style="{StaticResource LabelStyle}" Visibility="Collapsed" HorizontalAlignment="Left" Margin="282,188,0,0" VerticalAlignment="Top"/>
+
+                </Grid>
+            </TabItem>
         </TabControl>
 
         <TabControl Name="AsiakkaanControl" Visibility="Collapsed" Background="#3385ff" Width="800" Height="600">
