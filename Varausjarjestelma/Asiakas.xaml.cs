@@ -60,7 +60,7 @@ namespace Varausjarjestelma
             if (newIndex < 0) newIndex = tabControl.Items.Count - 1;
             tabControl.SelectedIndex = newIndex;
         }
-        
+
         private void Button_SelaaElokuvia(object sender, RoutedEventArgs e)
         {
             // tietokanta: Hae lista elokuvista
@@ -80,9 +80,24 @@ namespace Varausjarjestelma
             Siirry("varaa_näytös");
         }
 
+        private List<PaikkaVaraus> _VapaatPaikat;
+        
+
         private void Button_VaraaPaikat(object sender, RoutedEventArgs e)
         {
+            Näytös n = (TulevatNäytökset.SelectedItem as Näytös);
+            Elokuvasali s = n.Sali;
+
+            List<PaikkaVaraus> varatutPaikat = _tietokanta.VaratutPaikat(n);
+            valitse_paikat.AlustaVarauksilla(s, varatutPaikat);
+            valitse_paikat.Valittavissa(48, true);
+
             Siirry("varaa_paikat");
+        }
+
+        private void Button_VahvistaVaraus(object sender, RoutedEventArgs e)
+        {
+            Siirry("varaa_vahvista");
         }
 
         private void Siirry(string nimi)
