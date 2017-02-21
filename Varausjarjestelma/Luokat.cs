@@ -29,6 +29,7 @@ namespace Varausjarjestelma
     public class Elokuvasali
     {
         public Teatteri Teatteri { set; get; }
+        public string Nimi { get; set; }
 
         // numerointi alkaa 1:stä
         // eli ensimmäinen rivi ja ensimmäinen paikka jne
@@ -46,18 +47,53 @@ namespace Varausjarjestelma
             }
         }
         
-        // return type? Lippu/Istumapaikka -luokka tarpeellinen/hyödyllinen?
-        //
-        public Tuple<int, int> Istumapaikka(int nro) {
-            int rivi = (nro + PaikkojaRivissä - 1) / PaikkojaRivissä;
-            int rivipaikka = nro - ((rivi - 1) * PaikkojaRivissä);
-
-            return new Tuple<int, int>(rivi, rivipaikka);
-        }
-
         public int IstumapaikkaNro(int rivi, int rivipaikka)
         {
             return ((rivi - 1) * PaikkojaRivissä) + rivipaikka;
+        }
+
+        public int RiviNrosta(int nro)
+        {
+            return (nro + PaikkojaRivissä - 1) / PaikkojaRivissä;
+        }
+
+        public int PaikkaRivissäNrosta(int nro)
+        {
+            return nro - ((RiviNrosta(nro) - 1) * PaikkojaRivissä);
+        }
+    }
+
+    public class Paikka
+    {
+        public Elokuvasali Sali { get; set; }
+        public int PaikkaNro { get; set; }
+
+        public int Rivi { get {
+                return Sali.RiviNrosta(PaikkaNro);
+            }
+        }
+
+        public int PaikkaRivissä { get {
+                return Sali.PaikkaRivissäNrosta(PaikkaNro);
+            }
+        }
+        
+    }
+
+    public class PaikkaVaraus : Paikka
+    {
+        public bool Varattu { get; set; }
+        public bool Vapaa { get { return !Varattu; } }
+
+        public PaikkaVaraus()
+        {
+
+        }
+
+        public PaikkaVaraus(Elokuvasali sali, int paikkaNro, bool varattu) {
+            Sali = sali;
+            PaikkaNro = paikkaNro;
+            Varattu = varattu;
         }
     }
     
@@ -70,25 +106,26 @@ namespace Varausjarjestelma
             }
         }
 
+        public int VapaitaPaikkoja { get; set; }
+
         public DateTime Aika { set; get; }
-        public List<int> VaratutPaikat { get; set; }
-        public List<int> VapaatPaikat {
-            get {
-                List<int> paikat = new List<int>();
 
-                for (int i = 1; i <= Sali.PaikkojaYhteensä; i += 1)
-                {
-                    if (!VaratutPaikat.Contains(i)) {
-                        paikat.Add(i);
-                    }
-                }
+        // siiretään tietokantaluokkaan?
+        //
+        //public list<int> varatutpaikat { get; set; }
+        //public list<int> vapaatpaikat {
+        //    get {
+        //        list<int> paikat = new list<int>();
 
-                return paikat;
-            }
-        }
+        //        for (int i = 1; i <= sali.paikkojayhteensä; i += 1)
+        //        {
+        //            if (!varatutpaikat.contains(i)) {
+        //                paikat.add(i);
+        //            }
+        //        }
 
-        public int VapaitaPaikkojaYht {
-            get { return VapaatPaikat.Count; }
-        }
+        //        return paikat;
+        //    }
+        //}
     }
 }

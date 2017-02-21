@@ -27,7 +27,7 @@ namespace Varausjarjestelma
         }
         private void LuoTietokanta()
         {
-            if (File.Exists(_tietokannannimi))
+            if (! File.Exists(_tietokannannimi))
                 SQLiteConnection.CreateFile(_tietokannannimi); // Luo tietokannan samaan hakemistoon missä .exe ajetaan
             LuoTaulut(); // Tarkista taulut
         }
@@ -119,11 +119,25 @@ namespace Varausjarjestelma
             // koko varmaan parmepi erillään
             // esim. HaeVapaatPaikat(Näytös näytös) ?
             // (jolloin myös täytyy muuttaa Näytös-luokkaa)
-            näytös.VaratutPaikat = new List<int> {1, 7, 14, 15, 16, 27, 40};
 
             res.Add(näytös);
             return res;
         }
+
+        public List<PaikkaVaraus> VaratutPaikat(Näytös n)
+        {
+            // Tässä placeholderissa salissa siis ainakin 48 paikkaa
+            return new List<PaikkaVaraus>() {
+                new PaikkaVaraus(n.Sali, 1, true),
+                new PaikkaVaraus(n.Sali, 2, true),
+                new PaikkaVaraus(n.Sali, 3, true),
+                new PaikkaVaraus(n.Sali, 9, true),
+                new PaikkaVaraus(n.Sali, 10, true),
+                new PaikkaVaraus(n.Sali, 28, true),
+                new PaikkaVaraus(n.Sali, 29, true),
+                new PaikkaVaraus(n.Sali, 48, true),
+            };
+    }
 
         public List<Näytös> Näytökset(int elokuva)
         {
