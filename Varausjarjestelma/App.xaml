@@ -32,7 +32,6 @@
             <Setter Property="Label.FontFamily" Value="Garamond"></Setter>
             <Setter Property="Label.Foreground" Value="White"></Setter>
             <Setter Property="Label.FontSize" Value="16px"></Setter>
-            <Setter Property="Visibility" Value="Collapsed"/>
             <Style.Triggers>
                 <Trigger Property="Visibility" Value="Visible">
                     <Trigger.EnterActions>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -48,7 +49,7 @@ namespace Varausjarjestelma
         {
             InitializeComponent();
             Application.Current.MainWindow = this;
-            state = ProgramState.Kirjautuminen;
+            state = ProgramState.YllapidonControl;
         }
 
         private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
@@ -208,10 +209,38 @@ namespace Varausjarjestelma
             }
         }
 
+        private void OnlyNumbers(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
         private void resetYllapidonControl()
         {
             YllapidonEtusivu.IsSelected = true;
             lbl_logout_ilmoitus.Visibility = Visibility.Collapsed;
+        }
+
+        private async void btn_Lisaa_Elokuva_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtElokuva_Nimi.Text.Equals("") || txt_Kesto.Text.Equals("") || txt_Kuvaus.Text.Equals("") || cmb_Elokuvateatterit.Text.Equals(""))
+            {
+                lbl_lisays_ilmoitus.Foreground = new SolidColorBrush(Colors.Red);
+                lbl_lisays_ilmoitus.Content = "Vaadittavia tietoja puuttuu!Tarkista tiedot";
+                lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
+                await Task.Delay(3000);
+                lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                lbl_lisays_ilmoitus.Foreground = new SolidColorBrush(Colors.White);
+                lbl_lisays_ilmoitus.Content = "Perustiedot lisätty. Ladataan...";
+                lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
+                await Task.Delay(2000);
+                lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+                Perustiedot_Grid.Visibility = Visibility.Collapsed;
+                Naytokset_Grid.Visibility = Visibility.Visible;
+            }
         }
     }
 }

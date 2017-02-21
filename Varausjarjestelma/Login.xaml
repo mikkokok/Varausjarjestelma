@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Varausjarjestelma"
         mc:Ignorable="d"
-        Title="Kirjaudu Sisään" FontFamily="Arial" Height="218" Width="300" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" SizeChanged="Window_SizeChanged" Background="#FFF6FBFD" Foreground="#FFEEF8FD" Visibility="Visible" ResizeMode="NoResize" Margin="0" BorderThickness="0">
+        Title="Kirjaudu Sisään" FontFamily="Arial" Height="600" Width="800" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" SizeChanged="Window_SizeChanged" Background="#FFF6FBFD" Foreground="#FFEEF8FD" Visibility="Visible" ResizeMode="NoResize" Margin="0" BorderThickness="0">
     <Grid VerticalAlignment="Stretch">
         <Grid.Background>
             <LinearGradientBrush>
@@ -13,7 +13,7 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <Grid Name="Login_Grid" Visibility="Visible">
+        <Grid Name="Login_Grid" Visibility="Collapsed">
             <Label x:Name="lbl_nimi" Content="Nimi" Foreground="White" HorizontalAlignment="Left" Margin="34,25,0,0" VerticalAlignment="Top"/>
             <Label x:Name="lbl_salasana" Content="Salasana" Foreground="White" HorizontalAlignment="Left" Margin="34,76,0,0" VerticalAlignment="Top"/>
             <Label x:Name="lbl_ilmoitus" Style="{StaticResource FadeAnimation}" Content="rekisteröinti/virhe" Foreground="White" Visibility="Collapsed" HorizontalAlignment="Left" Margin="34,115,0,0" VerticalAlignment="Top" />
@@ -36,7 +36,7 @@
             <Button x:Name="btn_takaisinR" Height="25" Width="85" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="56,152,0,0" VerticalAlignment="Top" Content="Takaisin" Click="btn_takaisinR_Click" />
         </Grid>
 
-        <TabControl Name="YllapidonControl" Visibility="Collapsed" Background="#3385ff">
+        <TabControl Name="YllapidonControl" Visibility="Visible" Background="#3385ff">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">
@@ -64,19 +64,55 @@
             </TabControl.Resources>
             <TabItem x:Name="YllapidonEtusivu" Header="Etusivu">
                 <Grid x:Name="Yllapidon_Etusivun_Tab">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="78*"/>
+                        <ColumnDefinition Width="119*"/>
+                    </Grid.ColumnDefinitions>
                     <Label x:Name="label" Content="ELOKUVAT" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="20"/>
-                    <DataGrid x:Name="dg_Elokuvat" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Height="368" Width="284"/>
+                    <DataGrid x:Name="dg_Elokuvat" Background=" #80c1ff" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Height="368" Width="284"/>
+                    <Label x:Name="lbl_ElokuvaID" Content="ID" Visibility="Collapsed" Style="{StaticResource LabelStyle}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,13,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.232,0.696"/>
+                    <Label x:Name="lbl_Elokuvan_Nimi_ja_Kesto" Visibility="Collapsed" Content="Elokuva" Style="{StaticResource LabelStyle}" Grid.Column="1" HorizontalAlignment="Left" Margin="43,13,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="lbl_Naytokset" Content="Elokuvan Näytökset" Visibility="Collapsed" Style="{StaticResource LabelStyle}" Grid.Column="1" HorizontalAlignment="Left" Margin="238,13,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="btn_Avaa_Muokkaus" Content="Muokkaa Elokuvaa" Visibility="Collapsed" Style="{StaticResource ButtonStyle}" Grid.Column="1" HorizontalAlignment="Left" Margin="10,440,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
+                    <Button x:Name="button" Content="Muokkaa näytöstä" Visibility="Collapsed" Grid.Column="1" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="238,440,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
+                    <Button x:Name="btn_Avaa_Naytoksen_Lisays" Visibility="Collapsed" Content="Lisää Näytös" Style="{StaticResource ButtonStyle}"  Grid.Column="1" HorizontalAlignment="Left" Margin="238,501,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
+                    <TextBox x:Name="txt_Elokuvan_Kuvaus" Background=" #80c1ff" Visibility="Collapsed" Grid.Column="1" HorizontalAlignment="Left" Margin="0,47,0,0" TextWrapping="Wrap" Text="Elokuvan Kuvaus" VerticalAlignment="Top" Width="228" Height="369"/>
+                    <DataGrid x:Name="dg_Naytokset" Background=" #80c1ff" Visibility="Collapsed" Grid.Column="1" HorizontalAlignment="Left" Margin="238,46,0,0" VerticalAlignment="Top" Width="228" Height="369"/>
+
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Lisää elokuva" />
+            <TabItem Header="Lisää elokuva">
+                <Grid x:Name="Elokuvan_Lisays_Grid">
+                    <Grid x:Name="Perustiedot_Grid" Visibility="Visible">
+                        <Label x:Name="lbl_Lisää_Elokuva" Content="LISAA ELOKUVA" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="lbl_Nimi" Content="Nimi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,63,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.295,0.604"/>
+                        <Label x:Name="lbl_Kesto" Content="Kesto(min)" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,110,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.173,0.625"/>
+                        <Label x:Name="lb_lKuvaus" Content="Kuvaus" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="200,222,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="lbl_ELokuvateatteri" Content="Elokuvateatteri" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,162,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.743,0.705"/>
+
+                        <TextBox x:Name="txtElokuva_Nimi" HorizontalAlignment="Left" Height="23" Margin="137,68,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="339"/>
+                        <TextBox x:Name="txt_Kesto" PreviewTextInput="OnlyNumbers" HorizontalAlignment="Left" Height="24" Margin="137,114,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                        <ComboBox x:Name="cmb_Elokuvateatterit" HorizontalAlignment="Left" Margin="137,162,0,0" VerticalAlignment="Top" Width="120" Height="28">
+                            <ComboBoxItem Content="Elokuvateatteri_1"/>
+                            <ComboBoxItem Content="Elokuvateatteri 2"/>
+                        </ComboBox>
+                        <TextBox x:Name="txt_Kuvaus" HorizontalAlignment="Left" Height="251" Margin="20,269,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456"/>
+                        <Button x:Name="btn_Lisaa_Elokuva" Content="Lisää Elokuva" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="568,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Elokuva_Click"/>
+                        <Label x:Name="lbl_lisays_ilmoitus" Content="Lisays ilmoitus" FontSize="18" Style="{StaticResource FadeAnimation}" HorizontalAlignment="Left" Margin="568,174,0,0" VerticalAlignment="Top" Height="159" Width="187"/>
+                    </Grid>
+
+                    <Grid x:Name="Naytokset_Grid" Visibility="Collapsed">
+
+                    </Grid>
+                </Grid>
+            </TabItem>
             <TabItem Header="Lisää näytös" />
-            <TabItem Header="Muokkaa elokuvaa" />
-            <TabItem Header="Muokkaa näytöstä" />
+            <TabItem Header="Ohje" />
             <TabItem Header="Kirjaudu ulos">
                 <Grid x:Name="Yllapidon_Logout">
                     <Label x:Name="lbl_kirjaudu_ulos" Content="OLET KIRJAUTUMASSA ULOS." Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="24,51,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="label1" Content="TALLENTAMATTOMAT TIEDOT MENETETÄÄN" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="35,103,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="label1" Content="TALLENTAMATTOMAT TIEDOT MENETETÄÄN" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="24,103,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="btn_kirjaudu_ulos" Content="Kirjaudu Ulos" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="35,169,0,0" VerticalAlignment="Top" Width="153" Height="68" Click="btn_kirjaudu_ulos_Click"/>
                     <Label x:Name="lbl_logout_ilmoitus" Content="Kirjaudutaan ulos..." Style="{StaticResource LabelStyle}" Visibility="Collapsed" HorizontalAlignment="Left" Margin="282,188,0,0" VerticalAlignment="Top"/>
 
