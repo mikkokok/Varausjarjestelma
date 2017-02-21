@@ -90,7 +90,6 @@ namespace Varausjarjestelma
 
             List<PaikkaVaraus> varatutPaikat = _tietokanta.VaratutPaikat(n);
             valitse_paikat.AlustaVarauksilla(s, varatutPaikat);
-            valitse_paikat.Valittavissa(48, true);
 
             Siirry("varaa_paikat");
         }

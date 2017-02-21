@@ -81,11 +81,11 @@
                 
                 <Grid Grid.ColumnSpan="2">
                     <TextBlock HorizontalAlignment="Center" Margin="0,0,0,50" TextWrapping="Wrap" Text="Paikkojen valinta" VerticalAlignment="Center"/>
-                    <local:PaikanValinta x:Name="valitse_paikat" ItemsSource="{Binding}"  VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <local:PaikanValinta x:Name="valitse_paikat" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                 </Grid>
                 <Button Content="Etusivulle" Margin="10,0,0,10" Height="20" VerticalAlignment="Bottom" Click="Button_Siirry" Tag="etusivu" Grid.Row="1" HorizontalAlignment="Left" Width="80"/>
                 <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" RenderTransformOrigin="0.053,0.85" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen" Grid.Row="1" Grid.ColumnSpan="2"/>
-                <Button Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_VahvistaVaraus" Grid.Row="1" Grid.Column="1"/>
+                <Button Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_VahvistaVaraus" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=valitse_paikat, Path=ValitutPaikat.Count}"/>
 
             </Grid>
         </TabItem>

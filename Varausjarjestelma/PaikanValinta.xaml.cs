@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -29,16 +30,9 @@ namespace Varausjarjestelma
         public PaikanValinta()
         {
             InitializeComponent();
+            ValitutPaikat = new ObservableCollection<PaikkaVaraus>();
         }
-
-        public IEnumerable ItemsSource
-        {
-            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
-            set {
-                SetValue(ItemsSourceProperty, value);
-            }
-        }
-
+        
         private class Valinta
         {
             public PaikkaVaraus Paikka { get; set; }
@@ -58,23 +52,10 @@ namespace Varausjarjestelma
             }
         }
 
-        private List<PaikkaVaraus> _ValitutPaikat;
+        public ObservableCollection<PaikkaVaraus> ValitutPaikat { get; set; }
         private Valinta[][] _Valinnat;
-        private Elokuvasali Sali;
-
-        public List<PaikkaVaraus> ValitutPaikat {
-            get {
-                List<PaikkaVaraus> res = new List<PaikkaVaraus>(_ValitutPaikat.Count);
-
-                foreach (PaikkaVaraus v in _ValitutPaikat)
-                {
-                    res.Add(v);
-                }
-
-                return res;
-            }
-        }
-
+        private Elokuvasali Sali; 
+        
         private Valinta _Valinta(int nro)
         {
             int rivi = Sali.Rivejä - Sali.RiviNrosta(nro);
@@ -82,20 +63,21 @@ namespace Varausjarjestelma
             return _Valinnat[rivi][paikka];
         }
 
-        private Valinta _Valinta(Paikka p) {
+        private Valinta _Valinta(PaikkaVaraus p) {
             int rivi = p.Sali.Rivejä - p.Rivi;
             int paikka = p.Sali.PaikkojaRivissä - p.PaikkaRivissä;
             return _Valinnat[rivi][paikka];
         }
 
-        public void PoistaValinta(Paikka p)
+        public void PoistaValinta(PaikkaVaraus p)
         {
             _Valinta(p).Valittu = false;
         }
 
-        public void Valitse(Paikka p)
+        public void Valitse(PaikkaVaraus p)
         {
            _Valinta(p).Valittu = true;
+            ValitutPaikat.Add(p);
         }
 
         public void Valittavissa(int nro, bool valittavissa)
@@ -103,7 +85,7 @@ namespace Varausjarjestelma
             _Valinta(nro).Valittavissa = valittavissa;
         }
 
-        public void Valittavissa(Paikka p, bool valittavissa)
+        public void Valittavissa(PaikkaVaraus p, bool valittavissa)
         {
             _Valinta(p).Valittavissa = true;
         }
@@ -120,7 +102,7 @@ namespace Varausjarjestelma
 
         public void AlustaSali(Elokuvasali sali)
         {
-            _ValitutPaikat = new List<PaikkaVaraus>();
+            ValitutPaikat.Clear();
             _Valinnat = new Valinta[sali.Rivejä][];
             Sali = sali;
 
@@ -154,12 +136,12 @@ namespace Varausjarjestelma
    
 
         private void CheckBox_LisääLippu(object sender, RoutedEventArgs e) {
-            _ValitutPaikat.Add(((sender as CheckBox).DataContext as Valinta).Paikka);
+            ValitutPaikat.Add(((sender as CheckBox).DataContext as Valinta).Paikka);
             //System.Windows.MessageBox.Show(((sender as CheckBox).DataContext as Valinta).Paikka.PaikkaNro.ToString());
         }
 
         private void CheckBox_PoistaLippu(object sender, RoutedEventArgs e) {
-            _ValitutPaikat.Remove(((sender as CheckBox).DataContext as Valinta).Paikka);
+            ValitutPaikat.Remove(((sender as CheckBox).DataContext as Valinta).Paikka);
         }
     }
 }
