@@ -18,9 +18,6 @@ namespace Varausjarjestelma
     /// Käyttäjän näkymä lipunvarausjärjestelmään
     /// TabControlia käyttäen siirtymät eteen-/taaksepäin
     /// 
-    /// Miten yhteys tietokantaan?
-    /// Onko järkevää mielekästä käyttää UserControlia tässä?
-    /// 
     public partial class Asiakas : UserControl
     {
         private Tietokanta _tietokanta;
@@ -61,6 +58,9 @@ namespace Varausjarjestelma
             tabControl.SelectedIndex = newIndex;
         }
 
+        // Allaolevat suoraan käyttöliittymissä vastaaviin OnClick=""
+        // Button_SelaaElokuvia, Button_VaraaNäytös, Button_VaraaPaikat, Button_VahvistaVaraus ja Button_TeeVaraus
+
         private void Button_SelaaElokuvia(object sender, RoutedEventArgs e)
         {
             // tietokanta: Hae lista elokuvista
@@ -79,10 +79,7 @@ namespace Varausjarjestelma
             TulevatNäytökset.ItemsSource = näytökset;
             Siirry("varaa_näytös");
         }
-
-        private List<Paikka> _VapaatPaikat;
         
-
         private void Button_VaraaPaikat(object sender, RoutedEventArgs e)
         {
             Näytös n = (TulevatNäytökset.SelectedItem as Näytös);
@@ -96,6 +93,7 @@ namespace Varausjarjestelma
 
         private void Button_VahvistaVaraus(object sender, RoutedEventArgs e)
         {
+            VahvistaPaikat.ItemsSource = ValitsePaikat.ValitutPaikat.OrderBy(p => p.PaikkaNro); // kivan näköistä
             Siirry("varaa_vahvista");
         }
         
@@ -113,21 +111,14 @@ namespace Varausjarjestelma
             Siirry("varaa_kiitos");
         }
 
+        // Siirry nimettyyn välilehteen
+        //
         private void Siirry(string nimi)
         {
             TabItem kohde = tabControl.Items.OfType<TabItem>().SingleOrDefault(n => n.Name == nimi);
 
             Debug.Assert(kohde != null);
             tabControl.SelectedItem = kohde;
-
-            // mikäli on tarpeen luoda lomakkeen alustamista varten erikseen
-            //
-            // System.Reflection.MethodInfo alusta = this.GetType().GetMethod("alusta_" + nimi);
-            //
-            // if (alusta != null)
-            // {
-            //    alusta.Invoke(this, null);
-            // }
         }
 
         // esim voi käyttää <Button Tag="kohde"/>

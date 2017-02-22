@@ -1,21 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Varausjarjestelma
 {
@@ -50,7 +37,11 @@ namespace Varausjarjestelma
             }
         }
 
+        // ajantasainen lista paikoista, jotka ovat valittuina
+        // joko käyttäjän toimesta tai käyttämällä Valitse() -metodia
+        //
         public ObservableCollection<Paikka> ValitutPaikat { get; set; }
+
         private Valinta[][] _Valinnat;
         private Elokuvasali Sali; 
         
@@ -69,11 +60,15 @@ namespace Varausjarjestelma
             return _Valinnat[rivi][paikka];
         }
 
+        // poista valinta paikalta p
+        //
         public void PoistaValinta(Paikka p)
         {
             _Valinta(p).Valittu = false;
         }
-        
+
+        // lisää valituksi paikka p
+        //
         public void Valitse(Paikka p)
         {
             Valinta v = _Valinta(p);
@@ -84,6 +79,8 @@ namespace Varausjarjestelma
             }
         }
 
+        // lisää valituksi paikkanro
+        //
         public void Valitse(int paikkaNro)
         {
             Valinta v = _Valinta(paikkaNro);
@@ -94,16 +91,23 @@ namespace Varausjarjestelma
             }
         }
 
+        // paikan valinta: enabled/disabled
+        //
         public void Valittavissa(int nro, bool valittavissa)
         {
             _Valinta(nro).Valittavissa = valittavissa;
         }
 
+        // paikan valinta: enabled/disabled
+        //
         public void Valittavissa(Paikka p, bool valittavissa)
         {
             _Valinta(p).Valittavissa = true;
         }
 
+        // merkitsee listassa olevat paikat varatuiksi ja
+        // Checkbox.IsEnabled = false kyseisille paikoille
+        //
         public void MerkitseVaratut(List<Paikka> varaukset)
         {
             foreach (Paikka v in varaukset)
@@ -116,6 +120,8 @@ namespace Varausjarjestelma
             }
         }
 
+        // Alusta pohjapiirros salin mukaan
+        //
         public void AlustaSali(Elokuvasali sali)
         {
             ValitutPaikat.Clear();
@@ -144,14 +150,15 @@ namespace Varausjarjestelma
             Pohjapiirros.ItemsSource = _Valinnat;
         }
 
+        // ks. AlustaSali() ja MerkitseVaraukset()
+        //
         public void AlustaVarauksilla(Elokuvasali sali, List<Paikka> varaukset) {
             AlustaSali(sali);
             MerkitseVaratut(varaukset);
         }
         
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(PaikanValinta));
-   
-
+        
         private void CheckBox_LisääLippu(object sender, RoutedEventArgs e) {
             ValitutPaikat.Add(((sender as CheckBox).DataContext as Valinta).Paikka);
         }

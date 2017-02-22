@@ -126,8 +126,23 @@
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
-                    <TextBlock Margin="0,73,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Right" Text="Liput:"/>
-                    <TextBlock Margin="10,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Left" Grid.Column="1" Width="354"><Run Text="rivi "/><Run Text="A"/><Run Text=", paikka "/><Run Text="B"/><LineBreak/><Run Text="rivi C, paikka D"/><LineBreak/><Run Text="rivi E, paikka F"/><LineBreak/><Run Text="jne"/><LineBreak/><Run/></TextBlock>
+                    <TextBlock Margin="0,73,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Right" Text="Paikat:"/>
+                    <StackPanel Orientation="Vertical" Margin="10,73,0,0" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <ItemsControl x:Name="VahvistaPaikat" ItemsSource="{Binding ElementName=ValitsePaikat, Path=ValitutPaikat}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}rivi: {0}, paikka {1}">
+                                                <Binding Path="Rivi"/>
+                                                <Binding Path="PaikkaRivissä"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </Grid>
                 <Button Content="Etusivulle" Margin="10,0,0,10" Height="20" VerticalAlignment="Bottom" Click="Button_Siirry" Tag="etusivu" Grid.Row="1" HorizontalAlignment="Left" Width="80"/>
                 <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" RenderTransformOrigin="0.053,0.85" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen" Grid.Row="1"/>
