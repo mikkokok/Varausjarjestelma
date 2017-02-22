@@ -234,13 +234,26 @@ namespace Varausjarjestelma
             else
             {
                 lbl_lisays_ilmoitus.Foreground = new SolidColorBrush(Colors.White);
-                lbl_lisays_ilmoitus.Content = "Perustiedot lisätty. Ladataan...";
-                lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
-                await Task.Delay(2000);
                 lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
                 Perustiedot_Grid.Visibility = Visibility.Collapsed;
-                Naytokset_Grid.Visibility = Visibility.Visible;
+                Naytokset_Lisays_Grid.Visibility = Visibility.Visible;
             }
+        }
+
+        private void btn_Takaisin_Lisays_Click(object sender, RoutedEventArgs e)
+        {
+            Naytokset_Lisays_Grid.Visibility = Visibility.Collapsed;
+            Perustiedot_Grid.Visibility = Visibility.Visible;
+
+        }
+
+        private void btn_Lisaa_Naytos_Click(object sender, RoutedEventArgs e)
+        {
+            dg_Lisattavat_Naytokset.Items.Add(new { Sijainti = txt_Paikkakunta.Text,
+                Elokuvateatteri = txt_Elokuvateatteri.Text,
+                Pvm = datep_Naytoksen_pvm.Text,
+                Klo = txt_Aika.Text
+            });
         }
     }
 }
