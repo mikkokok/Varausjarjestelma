@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,7 @@ namespace Varausjarjestelma
         private readonly int mainWidth = 800;
         private readonly int mainHeight = 600;
 
+        //Login formin koko
         private readonly int loginWidth = 300;
         private readonly int loginHeight = 218;
 
@@ -45,11 +47,29 @@ namespace Varausjarjestelma
 
         private int rooli = 1; // 0 = asiakas 1 = ylläpitäjä, Testausta varten
 
+        private Elokuva elokuva;
+        private Näytös naytos;
+        private ArrayList naytokset;
+
+        private String elokuvanNimi;
+        private int elokuvanVuosi;
+        private int elokuvanKesto;
+        private String elokuvanKuvaus;
+
+        private String naytoksenPaikkakunta;
+        private String naytoksenTeatteri;
+        private String naytoksenPvm;
+        private String naytoksenKlo;
+
+        private SolidColorBrush red = new SolidColorBrush(Colors.Red);
+        private SolidColorBrush white = new SolidColorBrush(Colors.White);
+
         public Login()
         {
             InitializeComponent();
             Application.Current.MainWindow = this;
             state = ProgramState.YllapidonControl;
+            naytokset = new ArrayList();
         }
 
         private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
@@ -62,7 +82,7 @@ namespace Varausjarjestelma
             if (this.username == "Matti" && this.password == "Matti")
             {
                 //Tulostetaan ilmoitus käyttäjälle
-                lbl_ilmoitus.Foreground = new SolidColorBrush(Colors.White);
+                lbl_ilmoitus.Foreground = white;
                 lbl_ilmoitus.Content = "Kirjautuminen onnistui. Ladataan...";
                 lbl_ilmoitus.Visibility = Visibility.Visible;
 
@@ -100,7 +120,7 @@ namespace Varausjarjestelma
             else
             { 
                 lbl_ilmoitus.Content = "Väärä käyttäjänimi tai salasana";
-                lbl_ilmoitus.Foreground = new SolidColorBrush(Colors.Red);
+                lbl_ilmoitus.Foreground = red;
                 lbl_ilmoitus.Visibility = Visibility.Visible;
                 await Task.Delay(3000);
                 lbl_ilmoitus.Visibility = Visibility.Collapsed;
@@ -154,6 +174,7 @@ namespace Varausjarjestelma
             if (this.password == this.repeatedPassword)
             {
                 //Rekisteöi käyttäjäjän tietokantaan
+                lbl_ilmoitusR.Foreground = white;
                 lbl_ilmoitusR.Visibility = Visibility.Visible;
                 lbl_ilmoitusR.Content = "Rekisteröinti onnistui. Ladataan...";
                 await Task.Delay(2000);
@@ -170,7 +191,7 @@ namespace Varausjarjestelma
             }
             else
             {
-                lbl_ilmoitusR.Foreground = new SolidColorBrush(Colors.Red);
+                lbl_ilmoitusR.Foreground = red;
                 lbl_ilmoitusR.Content = "Salasanat eivät täsmää!";
                 lbl_ilmoitusR.Visibility = Visibility.Visible;
                 await Task.Delay(3000);
@@ -221,20 +242,25 @@ namespace Varausjarjestelma
             lbl_logout_ilmoitus.Visibility = Visibility.Collapsed;
         }
 
-        private async void btn_Lisaa_Elokuva_Click(object sender, RoutedEventArgs e)
+        private async void btn_Lisaa_Elokuvan_Perustiedot_Click(object sender, RoutedEventArgs e)
         {
-            if (txtElokuva_Nimi.Text.Equals("") || txt_Kesto.Text.Equals("") || txt_Kuvaus.Text.Equals("") || cmb_Elokuvateatterit.Text.Equals(""))
+            if (txt_Elokuvan_Nimi.Text.Equals("") || txt_Vuosi.Text.Equals("") || txt_Kesto.Text.Equals("") || txt_Kuvaus.Text.Equals(""))
             {
-                lbl_lisays_ilmoitus.Foreground = new SolidColorBrush(Colors.Red);
-                lbl_lisays_ilmoitus.Content = "Vaadittavia tietoja puuttuu!Tarkista tiedot";
+                lbl_lisays_ilmoitus.Foreground = red;
+                lbl_lisays_ilmoitus.Content = "Vaadittavia tietoja puuttuu! Tarkista tiedot";
                 lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
                 await Task.Delay(3000);
                 lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
             }
             else
             {
-                lbl_lisays_ilmoitus.Foreground = new SolidColorBrush(Colors.White);
-                lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+                elokuvanNimi = txt_Elokuvan_Nimi.Text;
+                elokuvanVuosi = Int32.Parse(txt_Vuosi.Text);
+                elokuvanKesto = Int32.Parse(txt_Kesto.Text);
+                elokuvanKuvaus = txt_Kuvaus.Text;
+
+                elokuva = new Elokuva(elokuvanNimi, elokuvanKesto, elokuvanKuvaus);
+
                 Perustiedot_Grid.Visibility = Visibility.Collapsed;
                 Naytokset_Lisays_Grid.Visibility = Visibility.Visible;
             }
@@ -249,11 +275,67 @@ namespace Varausjarjestelma
 
         private void btn_Lisaa_Naytos_Click(object sender, RoutedEventArgs e)
         {
-            dg_Lisattavat_Naytokset.Items.Add(new { Sijainti = txt_Paikkakunta.Text,
+            dg_Lisattavat_Naytokset.Items.Add(new { Paikkakunta = txt_Paikkakunta.Text,
                 Elokuvateatteri = txt_Elokuvateatteri.Text,
                 Pvm = datep_Naytoksen_pvm.Text,
                 Klo = txt_Aika.Text
             });
+        }
+
+        private void btn_Poista_Lisattava_Naytos_Click(object sender, RoutedEventArgs e)
+        {
+            var myNaytokset = dg_Lisattavat_Naytokset;
+            var naytokset = dg_Lisattavat_Naytokset;
+
+            if (myNaytokset.SelectedItems.Count > 1)
+            {
+                for(int i = 0; i < myNaytokset.SelectedItems.Count; i++)
+                {
+                    naytokset.Items.Remove(myNaytokset.SelectedItems[i]);
+                }
+            }
+            else
+            {
+                 myNaytokset.Items.Remove(naytokset.SelectedItem);
+            }
+
+            myNaytokset = naytokset;
+        }
+
+        private async void btn_Lisaa_Elokuva_Click_(object sender, RoutedEventArgs e)
+        {
+            if (txt_Paikkakunta.Text.Equals(null) || txt_Elokuvateatteri.Equals(null) || datep_Naytoksen_pvm.Text.Equals(null) || txt_Aika.Text.Equals(null))
+            {
+                lbl_lisays_ilmoitus.Foreground = red;
+                lbl_lisays_ilmoitus.Content = "Tarvittavia tietoja puuttuu! Tarkista tiedot";
+                lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
+                await Task.Delay(3000);
+                lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+
+                for (int i = 0; i < dg_Lisattavat_Naytokset.Items.Count; i++)
+                {
+                    //naytoksenPaikkakunta = dg_Lisattavat_Naytokset.Items[i];
+                }
+                naytoksenPaikkakunta = txt_Paikkakunta.Text;
+                naytoksenTeatteri = txt_Elokuvateatteri.Text;
+                naytoksenPvm = datep_Naytoksen_pvm.Text;
+                naytoksenKlo = txt_Aika.Text;
+
+                lisaaElokuvaTietokantaan();
+                lbl_lisays_ilmoitus.Foreground = white;
+                lbl_lisays_ilmoitus.Content = "Elokuvan lisääminen onnistui. Palataan alkuun...";
+                lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
+                await Task.Delay(3000);
+                lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void lisaaElokuvaTietokantaan()
+        {
+
         }
     }
 }

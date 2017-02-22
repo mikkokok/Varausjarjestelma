@@ -100,18 +100,15 @@
                     <Grid x:Name="Perustiedot_Grid" Visibility="Collapsed">
                         <Label x:Name="lbl_Lisää_Elokuva" Content="LISAA ELOKUVA" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="lbl_Nimi" Content="Nimi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,63,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.295,0.604"/>
-                        <Label x:Name="lbl_Kesto" Content="Kesto(min)" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,110,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.173,0.625"/>
+                        <Label x:Name="lbl_Kesto" Content="Kesto(min)" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.173,0.625"/>
                         <Label x:Name="lb_lKuvaus" Content="Kuvaus" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="200,222,0,0" VerticalAlignment="Top"/>
-                        <Label x:Name="lbl_ELokuvateatteri" Content="Elokuvateatteri" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,162,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.743,0.705"/>
-                        <TextBox x:Name="txtElokuva_Nimi" HorizontalAlignment="Left" Height="23" Margin="137,68,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="339"/>
-                        <TextBox x:Name="txt_Kesto" PreviewTextInput="OnlyNumbers" HorizontalAlignment="Left" Height="24" Margin="137,114,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-                        <ComboBox x:Name="cmb_Elokuvateatterit" HorizontalAlignment="Left" Margin="137,162,0,0" VerticalAlignment="Top" Width="120" Height="28">
-                            <ComboBoxItem Content="Elokuvateatteri_1"/>
-                            <ComboBoxItem Content="Elokuvateatteri 2"/>
-                        </ComboBox>
+                        <Label x:Name="lbl_vuosi" Content="Vuosi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.743,0.705"/>
+                        <TextBox x:Name="txt_Elokuvan_Nimi" HorizontalAlignment="Left" Height="23" Margin="137,68,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="339"/>
+                        <TextBox x:Name="txt_Kesto" PreviewTextInput="OnlyNumbers" HorizontalAlignment="Left" Height="24" Margin="137,174,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                         <TextBox x:Name="txt_Kuvaus" HorizontalAlignment="Left" Height="251" Margin="20,269,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456"/>
-                        <Button x:Name="btn_Lisays_Seuraava" Content="Seuraava" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="568,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Elokuva_Click"/>
+                        <Button x:Name="btn_Lisays_Seuraava" Content="Seuraava" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="568,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Elokuvan_Perustiedot_Click"/>
                         <Label x:Name="lbl_lisays_ilmoitus" Content="Lisays ilmoitus" FontSize="18" Style="{StaticResource FadeAnimation}" HorizontalAlignment="Left" Margin="568,174,0,0" VerticalAlignment="Top" Height="159" Width="187"/>
+                        <TextBox x:Name="txt_Vuosi" HorizontalAlignment="Left" Height="23" Margin="137,113,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                     </Grid>
 
                     <Grid x:Name="Naytokset_Lisays_Grid" Visibility="Visible" Margin="-10,-23,10,23">
@@ -125,12 +122,12 @@
                         <TextBox x:Name="txt_Elokuvateatteri" HorizontalAlignment="Left" Height="23" Margin="178,135,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                         <DatePicker x:Name="datep_Naytoksen_pvm" HorizontalAlignment="Left" Margin="178,181,0,0" VerticalAlignment="Top" Width="148" Height="23"/>
                         <Button x:Name="btn_Lisaa_Naytos" Content="Lisää näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="26,280,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Naytos_Click"/>
-                        <Button x:Name="btn_Poista_Lisattava_Naytos" Content="Poista näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="211,280,0,0" VerticalAlignment="Top" Width="135" Height="53"/>
+                        <Button x:Name="btn_Poista_Lisattava_Naytos" Content="Poista näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="211,280,0,0" VerticalAlignment="Top" Width="135" Height="53" Click="btn_Poista_Lisattava_Naytos_Click"/>
                         <TextBox x:Name="txt_Aika" HorizontalAlignment="Left" Height="23" Margin="178,228,0,0" TextWrapping="Wrap" Text="{Binding TreatmentTime, StringFormat=hh:mm}"  VerticalAlignment="Top" Width="120"/>
-                        <Button x:Name="btn_Lisaa_Elokuva" Content="Lisää elokuva" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="601,59,0,0" VerticalAlignment="Top" Width="160" Height="53"/>
+                        <Button x:Name="btn_Lisaa_Elokuva" Content="Lisää elokuva" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="601,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Elokuva_Click_"/>
                         <DataGrid x:Name="dg_Lisattavat_Naytokset" HorizontalAlignment="Left" Margin="364,135,0,0" VerticalAlignment="Top" Height="409" Width="414">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Sijainti}" ClipboardContentBinding="{x:Null}" Header="Sijainti"/>
+                                <DataGridTextColumn Binding="{Binding Paikkakunta}" ClipboardContentBinding="{x:Null}" Header="Paikkakunta"/>
                                 <DataGridTextColumn Binding="{Binding Elokuvateatteri}" ClipboardContentBinding="{x:Null}" Header="Elokuvateatteri"/>
                                 <DataGridTextColumn Binding="{Binding Pvm}" ClipboardContentBinding="{x:Null}" Header="Pvm."/>
                                 <DataGridTextColumn Binding="{Binding Klo}" ClipboardContentBinding="{x:Null}" Header="Klo."/>
