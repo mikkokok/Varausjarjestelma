@@ -26,11 +26,10 @@ namespace Varausjarjestelma
         {
             InitializeComponent();
 
-            // toistaiseksi näin, lopullisessa pärjää 1:llä instanssilla
+            // toistaiseksi näin, lopullisessa pärjää varmaan yhdellä instanssilla
             _tietokanta = new Tietokanta();
 
             // välilehdet piiloon
-            //
             foreach (TabItem t in tabControl.Items.OfType<TabItem>())
             {
                 t.Visibility = Visibility.Collapsed;
@@ -112,6 +111,7 @@ namespace Varausjarjestelma
         }
 
         // Siirry nimettyyn välilehteen
+        // nimi siis x:Name="nimi"
         //
         private void Siirry(string nimi)
         {

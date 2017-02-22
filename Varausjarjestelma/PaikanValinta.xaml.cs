@@ -10,8 +10,6 @@ namespace Varausjarjestelma
     /// Interaction logic for PaikanValinta.xaml
     /// </summary>
     /// 
-
-
     public partial class PaikanValinta : UserControl
     {
         public PaikanValinta()
@@ -23,8 +21,8 @@ namespace Varausjarjestelma
         private class Valinta
         {
             public Paikka Paikka { get; set; }
-            public bool Valittu { get; set; }
-            public bool Valittavissa { get; set; }
+            public bool Valittu { get; set; }      // CheckBox.IsChecked
+            public bool Valittavissa { get; set; } // CheckBox.IsEnabled
 
             public Valinta(Paikka p) {
                 Paikka = p;
@@ -73,7 +71,7 @@ namespace Varausjarjestelma
         {
             Valinta v = _Valinta(p);
             v.Valittu = true;
-            if (!ValitutPaikat.Contains(v.Paikka))
+            if (!ValitutPaikat.Contains(v.Paikka)) // huom, ref-yhtäsuuruus
             {
                 ValitutPaikat.Add(v.Paikka);
             }
@@ -85,7 +83,7 @@ namespace Varausjarjestelma
         {
             Valinta v = _Valinta(paikkaNro);
             v.Valittu = true;
-            if (!ValitutPaikat.Contains(v.Paikka))
+            if (!ValitutPaikat.Contains(v.Paikka)) // huom, ref-yhtäsuuruus
             {
                 ValitutPaikat.Add(v.Paikka);
             }
@@ -139,6 +137,12 @@ namespace Varausjarjestelma
                 {
                     if (_Valinnat[r][s] == null)
                     {
+                        // numerointi: ensimmäinen rivi lähinnä valkokangasta
+                        //             ensimmäinen paikka valkokankaalta katsottuna vasemmalla
+                        //
+                        //             kommentoitu pois peilikuva, jossa ensimmäinen paikka on
+                        //             valkokankaalta katsottuna oikealla
+                        //
                         int rivi = sali.Rivejä - r;
                         int paikka = s + 1;
                         // peilikuva: sali.PaikkojaRivissä - s 
