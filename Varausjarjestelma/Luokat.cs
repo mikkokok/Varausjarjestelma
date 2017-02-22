@@ -8,12 +8,13 @@ namespace Varausjarjestelma
 {
     public class Elokuva
     {
-        public int id { get; set; } 
+        public int Id { get; set; } 
         public string Nimi { get; set; }
         public int Kesto { get; set; } // minuutteja
         public string Teksti { get; set; }
 
-        public Elokuva(string nimi, int kesto, string teksti) {
+        public Elokuva(string nimi, int kesto, string teksti)
+        {
             this.Nimi = nimi;
             this.Kesto = kesto;
             this.Teksti = teksti;
@@ -115,5 +116,10 @@ namespace Varausjarjestelma
         //        return paikat;
         //    }
         //}
+    }
+
+    public class Kayttaja
+    {
+        
     }
 }

@@ -70,6 +70,16 @@ namespace Varausjarjestelma
             Application.Current.MainWindow = this;
             state = ProgramState.YllapidonControl;
             naytokset = new ArrayList();
+            //var tietokanta = new Tietokanta(); // Debuggia varten / mikko
+            //for (var i = 0; i < 10; i++)
+            //{
+            //    tietokanta.Ajasql($"INSERT INTO elokuvat VALUES(null, 'Elokuva {i}', '2005', 'Kylla')");
+            //}
+            //var testi = tietokanta.Ajasql("SELECT * FROM elokuvat");
+            //foreach (var testib in testi)
+            //{
+            //    Console.Write(testib);
+            //}
         }
 
         private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
@@ -113,18 +123,18 @@ namespace Varausjarjestelma
                     state = ProgramState.AsiakkaanControl;
                     AsiakkaanControl.Visibility = Visibility.Visible;
                 }
-                
+
 
             }
             //Virheilmoitus jos käyttäjänimi/salasana ovat väärin
             else
-            { 
+            {
                 lbl_ilmoitus.Content = "Väärä käyttäjänimi tai salasana";
                 lbl_ilmoitus.Foreground = red;
                 lbl_ilmoitus.Visibility = Visibility.Visible;
                 await Task.Delay(3000);
                 lbl_ilmoitus.Visibility = Visibility.Collapsed;
-                
+
             }
         }
 
@@ -141,7 +151,7 @@ namespace Varausjarjestelma
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             //Jos käyttäjä on login formissa ja painaa enteriä niin yritetään kirjautua sisään
-            if (e.Key== Key.Enter && state == ProgramState.Kirjautuminen)
+            if (e.Key == Key.Enter && state == ProgramState.Kirjautuminen)
             {
                 btnkirjaudu_Click(sender, e);
             }
@@ -275,7 +285,9 @@ namespace Varausjarjestelma
 
         private void btn_Lisaa_Naytos_Click(object sender, RoutedEventArgs e)
         {
-            dg_Lisattavat_Naytokset.Items.Add(new { Paikkakunta = txt_Paikkakunta.Text,
+            dg_Lisattavat_Naytokset.Items.Add(new
+            {
+                Paikkakunta = txt_Paikkakunta.Text,
                 Elokuvateatteri = txt_Elokuvateatteri.Text,
                 Pvm = datep_Naytoksen_pvm.Text,
                 Klo = txt_Aika.Text
@@ -289,14 +301,14 @@ namespace Varausjarjestelma
 
             if (myNaytokset.SelectedItems.Count > 1)
             {
-                for(int i = 0; i < myNaytokset.SelectedItems.Count; i++)
+                for (int i = 0; i < myNaytokset.SelectedItems.Count; i++)
                 {
                     naytokset.Items.Remove(myNaytokset.SelectedItems[i]);
                 }
             }
             else
             {
-                 myNaytokset.Items.Remove(naytokset.SelectedItem);
+                myNaytokset.Items.Remove(naytokset.SelectedItem);
             }
 
             myNaytokset = naytokset;

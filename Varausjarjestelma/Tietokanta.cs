@@ -2,6 +2,7 @@
 using System.Data.SQLite;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Varausjarjestelma
 {
@@ -9,7 +10,7 @@ namespace Varausjarjestelma
     {
         private string _tietokannannimi = "Varausjarjestelma.sqlite";
         private string _sql;
-        private SQLiteConnection _kantaYhteys;
+        private static SQLiteConnection _kantaYhteys;
         private SQLiteCommand _sqlkomento;
         private SQLiteDataReader _sqllukija;
         public Tietokanta()
@@ -27,7 +28,7 @@ namespace Varausjarjestelma
         }
         private void LuoTietokanta()
         {
-            if (! File.Exists(_tietokannannimi))
+            if (!File.Exists(_tietokannannimi))
                 SQLiteConnection.CreateFile(_tietokannannimi); // Luo tietokannan samaan hakemistoon missä .exe ajetaan
             LuoTaulut(); // Tarkista taulut
         }
@@ -59,11 +60,17 @@ namespace Varausjarjestelma
             "salasana VARCHAR(255), " +
             "rooli VARCHAR(255))";
             Ajasql(_sql);
-            _sql = "CREATE TABLE IF NOT EXISTS lippu" +           // Taulu lippu
+            _sql = "CREATE TABLE IF NOT EXISTS liput" +           // Taulu liput
             "(id INTEGER PRIMARY KEY, " +
             "varaajannimi VARCHAR(255), " +
             "elokuva VARCHAR(255), " +
             "paikka VARCHAR(255), " +
+            "elokuvateatteri VARCHAR(255))";
+            Ajasql(_sql);
+            _sql = "CREATE TABLE IF NOT EXISTS naytokset" +           // Taulu naytokset
+            "(id INTEGER PRIMARY KEY, " +
+            "elokuvannimi VARCHAR(255), " +
+            "aika VARCHAR(255), " +
             "elokuvateatteri VARCHAR(255))";
             Ajasql(_sql);
         }
@@ -72,25 +79,49 @@ namespace Varausjarjestelma
         {
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
+            Console.WriteLine($"SQL kysely: {sql}");
             var palautettava = new List<string>();
+            var luku = _sqllukija.FieldCount;
+            if (luku == 0) return palautettava;
+            var sb = new StringBuilder();
             while (_sqllukija.Read())
             {
-                palautettava.Add(_sqllukija.GetString(1));
+                for (var i = 1; i < luku; i++)
+                {
+                    sb.Append(_sqllukija.GetString(i));
+                    sb.Append(", ");
+                }
+                palautettava.Add(sb.ToString());
             }
             return palautettava;
         }
 
-        public List<Elokuva> Elokuvat()
+        public List<Elokuva> GetElokuvat()
         {
-            var res = new List<Elokuva>
+            var res = new List<Elokuva>();
+            const string sql = "(SELECT * FROM elokuvat)";
+            _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
+            _sqllukija = _sqlkomento.ExecuteReader();
+            var luku = _sqllukija.FieldCount;
+            if (luku == 0) return res; // Taulu on tyhja
+            while (_sqllukija.Read())
+            {
+               res.Add(new Elokuva(_sqllukija.GetString(1), int.Parse(_sqllukija.GetString(2)), _sqllukija.GetString(3)));
+            }
+            /*var res = new List<Elokuva>
             {
                 new Elokuva("Elokuva 1", 163,
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ligula felis, tincidunt a maximus quis, vestibulum eu magna. Etiam ac dolor at lectus consectetur tempor id quis felis. In vitae vehicula eros, quis tristique urna. Ut tristique odio urna, vel dapibus felis vestibulum sit amet."),
                 new Elokuva("Elokuva: II osa", 163,
                     "Etiam pretium, justo posuere pellentesque egestas, eros sem convallis turpis, \n\n sed fermentum justo ante ut turpis. Proin viverra sed lacus at ultrices. Sed fermentum ultricies gravida. Quisque at bibendum ante, quis porta ipsum.")
             };
-
+            */
             return res;
+        }
+
+        public void SetElokuva(Elokuva elokuva)
+        {
+            Ajasql($"INSERT INTO elokuvat VALUES (null, '{elokuva.Nimi}', '{elokuva.Kesto}', '{elokuva.Teksti}')");
         }
 
         public List<Näytös> Näytökset(Elokuva elokuva)
@@ -138,16 +169,13 @@ namespace Varausjarjestelma
                 new Paikka(n.Sali, 29),
                 new Paikka(n.Sali, 48)
             };
-    }
+        }
 
         public List<Näytös> Näytökset(int elokuva)
         {
             return new List<Näytös>();
         }
-
-        // PUUTTUU: Käyttäjä -luokka (kun tehty, vaihda "object käyttäjä" -> "Käyttäjä käyttäjä"
-        //
-        public void VaraaPaikka(object käyttäjä, Näytös n, Paikka paikka)
+        public void VaraaPaikka(Kayttaja kayttaja, Näytös naytos, Paikka paikka)
         {
 
         }

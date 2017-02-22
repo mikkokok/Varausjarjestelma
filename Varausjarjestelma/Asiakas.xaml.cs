@@ -64,7 +64,7 @@ namespace Varausjarjestelma
         private void Button_SelaaElokuvia(object sender, RoutedEventArgs e)
         {
             // tietokanta: Hae lista elokuvista
-            Ohjelmisto.ItemsSource = _tietokanta.Elokuvat(); // tämä tietokannasta
+            Ohjelmisto.ItemsSource = _tietokanta.GetElokuvat(); // tämä tietokannasta
 
             Siirry("selaa_elokuvia");
         }
