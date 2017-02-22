@@ -80,7 +80,7 @@ namespace Varausjarjestelma
             Siirry("varaa_näytös");
         }
 
-        private List<PaikkaVaraus> _VapaatPaikat;
+        private List<Paikka> _VapaatPaikat;
         
 
         private void Button_VaraaPaikat(object sender, RoutedEventArgs e)
@@ -88,8 +88,8 @@ namespace Varausjarjestelma
             Näytös n = (TulevatNäytökset.SelectedItem as Näytös);
             Elokuvasali s = n.Sali;
 
-            List<PaikkaVaraus> varatutPaikat = _tietokanta.VaratutPaikat(n);
-            valitse_paikat.AlustaVarauksilla(s, varatutPaikat);
+            List<Paikka> varatutPaikat = _tietokanta.VaratutPaikat(n);
+            ValitsePaikat.AlustaVarauksilla(s, varatutPaikat);
 
             Siirry("varaa_paikat");
         }
@@ -97,6 +97,20 @@ namespace Varausjarjestelma
         private void Button_VahvistaVaraus(object sender, RoutedEventArgs e)
         {
             Siirry("varaa_vahvista");
+        }
+        
+        private void Button_TeeVaraus(object sender, RoutedEventArgs e)
+        {
+            Näytös n = TulevatNäytökset.SelectedItem as Näytös;
+
+            foreach (Paikka p in ValitsePaikat.ValitutPaikat)
+            {
+                // Huom: Käyttäjä! puuttuu
+                _tietokanta.VaraaPaikka(null, n, p);
+                System.Windows.MessageBox.Show("Lippu paikalle: " + p.PaikkaNro.ToString() + "\n(rivi: " + p.Rivi.ToString() + ", paikka: " + p.PaikkaRivissä.ToString() + ")");
+            }
+
+            Siirry("varaa_kiitos");
         }
 
         private void Siirry(string nimi)
@@ -124,5 +138,6 @@ namespace Varausjarjestelma
             string nimi = (sender as Button).Tag.ToString();
             Siirry(nimi);
         }
+
     }
 }

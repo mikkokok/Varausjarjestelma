@@ -77,23 +77,11 @@ namespace Varausjarjestelma
                 return Sali.PaikkaRivissäNrosta(PaikkaNro);
             }
         }
-        
-    }
 
-    public class PaikkaVaraus : Paikka
-    {
-        public bool Varattu { get; set; }
-        public bool Vapaa { get { return !Varattu; } }
-
-        public PaikkaVaraus()
+        public Paikka(Elokuvasali sali, int paikkaNro)
         {
-
-        }
-
-        public PaikkaVaraus(Elokuvasali sali, int paikkaNro, bool varattu) {
             Sali = sali;
             PaikkaNro = paikkaNro;
-            Varattu = varattu;
         }
     }
     

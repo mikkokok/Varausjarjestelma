@@ -103,7 +103,8 @@ namespace Varausjarjestelma
             var sali = new Elokuvasali
             {
                 Rivejä = 6,
-                PaikkojaRivissä = 8
+                PaikkojaRivissä = 8,
+                Nimi = "Suurin ja kaunein -sali"
             };
 
             näytös.Aika = aika;
@@ -124,24 +125,31 @@ namespace Varausjarjestelma
             return res;
         }
 
-        public List<PaikkaVaraus> VaratutPaikat(Näytös n)
+        public List<Paikka> VaratutPaikat(Näytös n)
         {
             // Tässä placeholderissa salissa siis ainakin 48 paikkaa
-            return new List<PaikkaVaraus>() {
-                new PaikkaVaraus(n.Sali, 1, true),
-                new PaikkaVaraus(n.Sali, 2, true),
-                new PaikkaVaraus(n.Sali, 3, true),
-                new PaikkaVaraus(n.Sali, 9, true),
-                new PaikkaVaraus(n.Sali, 10, true),
-                new PaikkaVaraus(n.Sali, 28, true),
-                new PaikkaVaraus(n.Sali, 29, true),
-                new PaikkaVaraus(n.Sali, 48, true),
+            return new List<Paikka>() {
+                new Paikka(n.Sali, 1),
+                new Paikka(n.Sali, 2),
+                new Paikka(n.Sali, 3),
+                new Paikka(n.Sali, 9),
+                new Paikka(n.Sali, 10),
+                new Paikka(n.Sali, 28),
+                new Paikka(n.Sali, 29),
+                new Paikka(n.Sali, 48)
             };
     }
 
         public List<Näytös> Näytökset(int elokuva)
         {
             return new List<Näytös>();
+        }
+
+        // PUUTTUU: Käyttäjä -luokka (kun tehty, vaihda "object käyttäjä" -> "Käyttäjä käyttäjä"
+        //
+        public void VaraaPaikka(object käyttäjä, Näytös n, Paikka paikka)
+        {
+
         }
 
         public void Dispose()

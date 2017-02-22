@@ -6,27 +6,30 @@
              xmlns:local="clr-namespace:Varausjarjestelma"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <ItemsControl x:Name="Pohjapiirros" ItemsSource="{Binding}">
+    <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+        <ItemsControl x:Name="Pohjapiirros" ItemsSource="{Binding}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ItemsControl ItemsSource="{Binding}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <ItemsControl ItemsSource="{Binding}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <CheckBox Checked="CheckBox_LisääLippu" Unchecked="CheckBox_PoistaLippu" IsChecked="{Binding Valittu}" IsEnabled="{Binding Valittavissa}"/>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <UniformGrid Rows="1"/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
+                                <CheckBox Checked="CheckBox_LisääLippu" Unchecked="CheckBox_PoistaLippu" IsChecked="{Binding Valittu}" IsEnabled="{Binding Valittavissa}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Columns="1"/>
+                                <UniformGrid Rows="1"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="1"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        <TextBlock Text="VALKOKANGAS" Foreground="#FFEAEAEA" Margin="0" Background="#FF6C6C6C" TextAlignment="Center" Padding="5,3" FontSize="9"/>
+    </StackPanel>
 </UserControl>

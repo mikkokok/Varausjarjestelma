@@ -61,32 +61,38 @@
 
         <TabItem x:Name="varaa_näytös" Header="Valitse näytös" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
             <Grid Background="#FFE5E5E5">
-                <ListBox x:Name="TulevatNäytökset" ItemsSource="{Binding}" Margin="10,10,10,35" ItemTemplate="{DynamicResource Näytökset}"/>
+                <ListBox x:Name="TulevatNäytökset" ItemsSource="{Binding}" Margin="10,45,10,35" ItemTemplate="{DynamicResource Näytökset}"/>
                 <Button Content="Etusivulle" Margin="10,0,0,10" Height="20" VerticalAlignment="Bottom" Click="Button_Siirry" Tag="etusivu" Width="80" HorizontalAlignment="Left"/>
                 <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" RenderTransformOrigin="0.053,0.85" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen"/>
                 <Button IsEnabled="{Binding ElementName=TulevatNäytökset, Path=SelectedItems.Count}" Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_VaraaPaikat"/>
+                <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Tulevat näytökset:" VerticalAlignment="Top" Margin="10,10,0,0" Height="30" Width="178" FontSize="18"/>
             </Grid>
         </TabItem>
 
         <TabItem x:Name="varaa_paikat" Header="Valitse paikat" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
             <Grid Background="#FFE5E5E5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="11*"/>
-                    <ColumnDefinition Width="8*"/>
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="38"/>
                 </Grid.RowDefinitions>
-                
+
                 <Grid Grid.ColumnSpan="2">
-                    <TextBlock HorizontalAlignment="Center" Margin="0,0,0,50" TextWrapping="Wrap" Text="Paikkojen valinta" VerticalAlignment="Center"/>
-                    <local:PaikanValinta x:Name="valitse_paikat" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <local:PaikanValinta x:Name="ValitsePaikat" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Grid>
                 <Button Content="Etusivulle" Margin="10,0,0,10" Height="20" VerticalAlignment="Bottom" Click="Button_Siirry" Tag="etusivu" Grid.Row="1" HorizontalAlignment="Left" Width="80"/>
                 <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" RenderTransformOrigin="0.053,0.85" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen" Grid.Row="1" Grid.ColumnSpan="2"/>
-                <Button Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_VahvistaVaraus" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=valitse_paikat, Path=ValitutPaikat.Count}"/>
+                <Button Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_VahvistaVaraus" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=ValitsePaikat, Path=ValitutPaikat.Count}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Valitse istumapaikat" VerticalAlignment="Top" FontSize="18"/>
+                <TextBlock HorizontalAlignment="Left" Margin="10,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" DataContext="{Binding ElementName=TulevatNäytökset}" FontSize="14" FontStyle="Italic">
 
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0}, {1}: {2}">
+                            <Binding Path="SelectedItem.Teatteri.Nimi"/>
+                            <Binding Path="SelectedItem.Teatteri.Kaupunki"/>
+                            <Binding Path="SelectedItem.Sali.Nimi"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
             </Grid>
         </TabItem>
 
@@ -106,14 +112,26 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Vahvista varaus" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="158" Height="30" FontSize="18"/>
-                    <TextBlock Margin="10,10,10,0" Grid.Row="1" TextWrapping="Wrap" Text="Elokuvan nimi:" VerticalAlignment="Top" TextAlignment="Right" Height="16"/>
+                    <TextBlock Margin="0,10,10,0" Grid.Row="1" TextWrapping="Wrap" Text="Elokuvan nimi:" VerticalAlignment="Top" TextAlignment="Right" Height="16" HorizontalAlignment="Right" Width="100"/>
                     <TextBlock Margin="10,10,10,0" Text="{Binding ElementName=Ohjelmisto, Path=SelectedItem.Nimi}" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Height="16"/>
-                    <TextBlock Margin="10,31,10,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Right" Height="16"><Run Text="Aika"/><Run Text=":"/></TextBlock>
+                    <TextBlock Margin="0,31,10,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Right" Height="16" HorizontalAlignment="Right" Width="100" Text="Aika:" />
                     <TextBlock Margin="10,31,10,0" Text="{Binding SelectedItem.Aika, ElementName=TulevatNäytökset}" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Height="16"/>
+                    <TextBlock Margin="0,52,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Right" Text="Teatteri:"></TextBlock>
+                    <TextBlock Grid.Column="1" Margin="10,52,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" DataContext="{Binding ElementName=TulevatNäytökset}" HorizontalAlignment="Left">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}, {1}: {2}">
+                                <Binding Path="SelectedItem.Teatteri.Nimi"/>
+                                <Binding Path="SelectedItem.Teatteri.Kaupunki"/>
+                                <Binding Path="SelectedItem.Sali.Nimi"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock Margin="0,73,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Right" Text="Liput:"/>
+                    <TextBlock Margin="10,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Left" Grid.Column="1" Width="354"><Run Text="rivi "/><Run Text="A"/><Run Text=", paikka "/><Run Text="B"/><LineBreak/><Run Text="rivi C, paikka D"/><LineBreak/><Run Text="rivi E, paikka F"/><LineBreak/><Run Text="jne"/><LineBreak/><Run/></TextBlock>
                 </Grid>
                 <Button Content="Etusivulle" Margin="10,0,0,10" Height="20" VerticalAlignment="Bottom" Click="Button_Siirry" Tag="etusivu" Grid.Row="1" HorizontalAlignment="Left" Width="80"/>
                 <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" RenderTransformOrigin="0.053,0.85" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen" Grid.Row="1"/>
-                <Button Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_Siirry" Tag="varaa_kiitos" Grid.Row="1"/>
+                <Button Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_TeeVaraus" Grid.Row="1"/>
 
             </Grid>
         </TabItem>
