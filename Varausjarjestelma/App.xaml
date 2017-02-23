@@ -69,7 +69,12 @@
             </Style.Triggers>
         </Style>
         
-        <!--Pyöristetyn Progressbarin määrittelyt-->
+        <!--Text Wrap ominaisuus-->
+        <Style TargetType="{x:Type TextBlock}" x:Key="WrapText">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+            <!--Pyöristetyn Progressbarin määrittelyt-->
         <SolidColorBrush x:Key="ProgressBar.Progress" Color="#4d94ff"/>
         <SolidColorBrush x:Key="ProgressBar.Background" Color="White"/>
         <SolidColorBrush x:Key="ProgressBar.Border" Color="#4d94ff"/>

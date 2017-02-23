@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -47,16 +48,16 @@ namespace Varausjarjestelma
 
         private int rooli = 1; // 0 = asiakas 1 = ylläpitäjä, Testausta varten
 
-        private Elokuva elokuva;
+        private Elokuva lisattavaElokuva;
         private Näytös naytos;
-        private ArrayList naytokset;
+        //private ArrayList lisattavatNaytokset;
+        private List<Näytös>  lisattavatNaytokset;
 
         private String elokuvanNimi;
         private int elokuvanVuosi;
         private int elokuvanKesto;
         private String elokuvanKuvaus;
 
-        private String naytoksenPaikkakunta;
         private String naytoksenTeatteri;
         private String naytoksenPvm;
         private String naytoksenKlo;
@@ -69,7 +70,8 @@ namespace Varausjarjestelma
             InitializeComponent();
             Application.Current.MainWindow = this;
             state = ProgramState.YllapidonControl;
-            naytokset = new ArrayList();
+            lisattavatNaytokset = new List<Näytös>();
+
             //var tietokanta = new Tietokanta(); // Debuggia varten / mikko
             //for (var i = 0; i < 10; i++)
             //{
@@ -138,6 +140,7 @@ namespace Varausjarjestelma
             }
         }
 
+        //Painike joka avaa rekisteröinti sivun
         private void btn_rekisteroidy_Click(object sender, RoutedEventArgs e)
         {
             txt_kayttajaNimi.Clear();
@@ -175,6 +178,7 @@ namespace Varausjarjestelma
             this.Top = (height - e.NewSize.Height) / 2;
         }
 
+        //Painike joka lisää käyttäjän tietokantaan
         private async void btn_rekisteroi_Click(object sender, RoutedEventArgs e)
         {
             this.username = txt_kayttajaNimiR.Text;
@@ -184,6 +188,10 @@ namespace Varausjarjestelma
             if (this.password == this.repeatedPassword)
             {
                 //Rekisteöi käyttäjäjän tietokantaan
+                rekisteroiKayttaja(this.username, this.password);
+
+                //Ilmoitetaan käyttäjälle että rekisteöinti onnistui,
+                //tyhjennetään tekstilaatikot ja siirrytään login-formiin
                 lbl_ilmoitusR.Foreground = white;
                 lbl_ilmoitusR.Visibility = Visibility.Visible;
                 lbl_ilmoitusR.Content = "Rekisteröinti onnistui. Ladataan...";
@@ -209,6 +217,7 @@ namespace Varausjarjestelma
             }
         }
 
+        //Painike joka palaa login-formiin rekisteröinti-lomakkeelta
         private void btn_takaisinR_Click(object sender, RoutedEventArgs e)
         {
             txt_kayttajaNimiR.Clear();
@@ -220,6 +229,8 @@ namespace Varausjarjestelma
             this.Title = "Kirjaudu Sisään";
         }
 
+        //Painike joka hoitaa käyttäjän kirjautumisen ulos järjestelmästä ja 
+        //avaa login-formin ja tyhjentää muuttujat
         private async void btn_kirjaudu_ulos_Click(object sender, RoutedEventArgs e)
         {
             lbl_logout_ilmoitus.Visibility = Visibility.Visible;
@@ -237,18 +248,21 @@ namespace Varausjarjestelma
 
                 this.username = null;
                 this.password = null;
+                //Lisää tyhjennyksiä tulossa
             }
         }
 
+        //Metodi, joka muotoilee UI-elementin vastaanottamaan vain numeroita
         private void OnlyNumbers(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
 
+
         private void resetYllapidonControl()
         {
-            YllapidonEtusivu.IsSelected = true;
+            YllapidonEtusivuTab.IsSelected = true;
             lbl_logout_ilmoitus.Visibility = Visibility.Collapsed;
         }
 
@@ -269,7 +283,7 @@ namespace Varausjarjestelma
                 elokuvanKesto = Int32.Parse(txt_Kesto.Text);
                 elokuvanKuvaus = txt_Kuvaus.Text;
 
-                elokuva = new Elokuva(elokuvanNimi, elokuvanKesto, elokuvanKuvaus);
+                lisattavaElokuva = new Elokuva(elokuvanNimi, elokuvanKesto, elokuvanKuvaus);
 
                 Perustiedot_Grid.Visibility = Visibility.Collapsed;
                 Naytokset_Lisays_Grid.Visibility = Visibility.Visible;
@@ -287,11 +301,22 @@ namespace Varausjarjestelma
         {
             dg_Lisattavat_Naytokset.Items.Add(new
             {
-                Paikkakunta = txt_Paikkakunta.Text,
                 Elokuvateatteri = txt_Elokuvateatteri.Text,
                 Pvm = datep_Naytoksen_pvm.Text,
                 Klo = txt_Aika.Text
             });
+
+            /*Näytös naytos = new Näytös();
+            Elokuvasali sali = new Elokuvasali();
+            Teatteri teatteri = new Teatteri();
+            teatteri.Nimi = txt_Elokuvateatteri.Text;
+            teatteri.Kaupunki = "Turku"; //debuggausta
+
+            sali.Teatteri = teatteri;
+
+            naytos.Elokuva = this.lisattavaElokuva;
+            naytos.Sali = sali;*/
+
         }
 
         private void btn_Poista_Lisattava_Naytos_Click(object sender, RoutedEventArgs e)
@@ -299,16 +324,12 @@ namespace Varausjarjestelma
             var myNaytokset = dg_Lisattavat_Naytokset;
             var naytokset = dg_Lisattavat_Naytokset;
 
-            if (myNaytokset.SelectedItems.Count > 1)
+            if (myNaytokset.SelectedItems.Count >= 1)
             {
                 for (int i = 0; i < myNaytokset.SelectedItems.Count; i++)
                 {
                     naytokset.Items.Remove(myNaytokset.SelectedItems[i]);
                 }
-            }
-            else
-            {
-                myNaytokset.Items.Remove(naytokset.SelectedItem);
             }
 
             myNaytokset = naytokset;
@@ -316,7 +337,7 @@ namespace Varausjarjestelma
 
         private async void btn_Lisaa_Elokuva_Click_(object sender, RoutedEventArgs e)
         {
-            if (txt_Paikkakunta.Text.Equals(null) || txt_Elokuvateatteri.Equals(null) || datep_Naytoksen_pvm.Text.Equals(null) || txt_Aika.Text.Equals(null))
+            if (txt_Elokuvateatteri.Equals(null) || datep_Naytoksen_pvm.Text.Equals(null) || txt_Aika.Text.Equals(null))
             {
                 lbl_lisays_ilmoitus.Foreground = red;
                 lbl_lisays_ilmoitus.Content = "Tarvittavia tietoja puuttuu! Tarkista tiedot";
@@ -326,17 +347,8 @@ namespace Varausjarjestelma
             }
             else
             {
-
-                for (int i = 0; i < dg_Lisattavat_Naytokset.Items.Count; i++)
-                {
-                    //naytoksenPaikkakunta = dg_Lisattavat_Naytokset.Items[i];
-                }
-                naytoksenPaikkakunta = txt_Paikkakunta.Text;
-                naytoksenTeatteri = txt_Elokuvateatteri.Text;
-                naytoksenPvm = datep_Naytoksen_pvm.Text;
-                naytoksenKlo = txt_Aika.Text;
-
-                lisaaElokuvaTietokantaan();
+                lisattavatNaytokset = dg_Lisattavat_Naytokset.Items.Cast<Näytös>().ToList();
+                lisaaElokuvaTietokantaan(this.lisattavaElokuva, this.lisattavatNaytokset);
                 lbl_lisays_ilmoitus.Foreground = white;
                 lbl_lisays_ilmoitus.Content = "Elokuvan lisääminen onnistui. Palataan alkuun...";
                 lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
@@ -345,8 +357,76 @@ namespace Varausjarjestelma
             }
         }
 
-        private void lisaaElokuvaTietokantaan()
+        private void ValittuTab(object sender, RoutedEventArgs e)
         {
+            var tab = sender as TabItem;
+            if (tab != null)
+            {
+                // this tab is selected!
+                if (tab.Name == "YllapidonEtusivuTab")
+                {
+                    paivitaElokuvatDG();
+
+                    dg_Elokuvat.Items.Add(new
+                    {
+                        ElokuvaID = "1",
+                        Elokuvan_Nimi = "Ihmeotukset ja niiden olinpaikat",
+                        Elokuvan_Vuosi = "2016",
+                        Elokuvan_Kesto = "120",
+                        Elokuvan_Kuvaus = "Lorem ipsum dolor sit amet,consectetur adipiscing elit"
+                    });
+                }
+            }
+        }
+
+        private void paivitaElokuvatDG()
+        {
+            dg_Elokuvat.Items.Clear();
+            //Haetaan elokuvat tietokannasta
+        }
+
+        private void rekisteroiKayttaja(String nimi, String salasana)
+        {
+
+        }
+
+        private void lisaaElokuvaTietokantaan(Elokuva elokuva, List<Näytös> naytokset)
+        {
+
+        }
+
+        private void haeElokuva(Elokuva elokuva)
+        {
+
+        }
+
+        //Poistaa elokuvan ja siihen liittyvät näytökset tietokannasta
+        private void poistaElokuva(Elokuva elokuva)
+        {
+
+        }
+
+        private void dg_Elokuvat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var elokuva = dg_Elokuvat.SelectedItem;
+           // haeElokuva((Elokuva)elokuva);
+
+            lbl_Naytokset.Visibility = Visibility.Visible;
+            dg_Naytokset.Visibility = Visibility.Visible;
+            btn_Avaa_Elokuvan_Muokkaus.Visibility = Visibility.Visible;
+            btn_Poista_Elokuva.Visibility = Visibility.Visible;
+        }
+
+        private void btn_Poista_Elokuva_Click(object sender, RoutedEventArgs e)
+        {
+            var elokuva = dg_Elokuvat.SelectedItem;
+            MessageBoxResult varmistus = System.Windows.MessageBox.Show("Haluatko varmasti poistaa elokuvan: " + elokuva.ToString(), "Delete Confirmation", System.Windows.MessageBoxButton.OKCancel);
+            if (varmistus == MessageBoxResult.OK)
+            {
+                //poistaElokuva(elokuva);
+                dg_Elokuvat.Items.Remove(elokuva); //Testaamista varten
+                //paivitaElokuvatDG();
+            }
 
         }
     }
