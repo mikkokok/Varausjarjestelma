@@ -70,7 +70,7 @@
                     </Grid.ColumnDefinitions>
                     <Label x:Name="label" Content="ELOKUVAT" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="20"/>
                     <Label x:Name="lbl_Naytokset" Content="ELOKUVAN NÄYTÖKSET" Visibility="Collapsed" Style="{StaticResource LabelHeaderStyle}" Grid.Column="1" HorizontalAlignment="Left" Margin="123,7,0,0" VerticalAlignment="Top"/>
-                    <Button x:Name="btn_Avaa_Elokuvan_Muokkaus" Content="Muokkaa Elokuvaa" Visibility="Collapsed" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="161,434,0,0" VerticalAlignment="Top" Width="120" Height="36"/>
+                    <Button x:Name="btn_Avaa_Elokuvan_Muokkaus" Content="Muokkaa Elokuvaa" Visibility="Collapsed" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="161,434,0,0" VerticalAlignment="Top" Width="120" Height="36" Click="btn_Avaa_Elokuvan_Muokkaus_Click"/>
                     <Button x:Name="button" Content="Muokkaa näytöstä" Visibility="Collapsed" Grid.Column="1" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="278,434,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
                     <Button x:Name="btn_Avaa_Naytoksen_Lisays" Visibility="Collapsed" Content="Lisää Näytös" Style="{StaticResource ButtonStyle}"  Grid.Column="1" HorizontalAlignment="Left" Margin="123,434,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
                     <Button x:Name="btn_Avaa_Elokuvan_Lisays" Content="Lisää Elokuva" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="10,434,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
@@ -111,7 +111,7 @@
                         <TextBox x:Name="txt_Vuosi" HorizontalAlignment="Left" Height="23" Margin="137,113,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                     </Grid>
 
-                    <Grid x:Name="Naytokset_Lisays_Grid" Visibility="Visible" Margin="-10,-23,10,23">
+                    <Grid x:Name="Naytokset_Lisays_Grid" Visibility="Collapsed" Margin="-10,-23,10,23">
                         <Label x:Name="lbl_Lisää_Naytokset" Content="LISAA ELOKUVAN NÄYTÖKSET" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="26,30,0,0" VerticalAlignment="Top"/>
                         <Button x:Name="btn_Takaisin_Lisays" Content="Takaisin" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="401,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Takaisin_Lisays_Click"/>
                         <Label x:Name="lbl_Elokuvateatteri" Content="Elokuvateatteri" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="26,84,0,0" VerticalAlignment="Top"/>
@@ -132,6 +132,53 @@
                         </DataGrid>
                         <Label x:Name="lbl_Elokuvan_Lisays_Ilmoitus" Content="LisaysIlmoitus" Style="{StaticResource FadeAnimation}" FontSize="18" HorizontalAlignment="Left" Margin="40,364,0,0" VerticalAlignment="Top" Height="151" Width="286"/>
                     </Grid>
+
+                    <Grid x:Name="Perustietojen_Paivitys_Grid" Visibility="Collapsed">
+                        <Label x:Name="lbl_Päivitä_Elokuva" Content="PÄIVITÄ ELOKUVA" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="lbl_NimiP" Content="Nimi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,63,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.295,0.604"/>
+                        <Label x:Name="lbl_KestoP" Content="Kesto(min)" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.173,0.625"/>
+                        <Label x:Name="lb_lKuvausP" Content="Kuvaus" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="200,222,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="lbl_vuosiP" Content="Vuosi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.743,0.705"/>
+                        <TextBox x:Name="txt_Elokuvan_NimiP" HorizontalAlignment="Left" Height="23" Margin="137,68,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="339"/>
+                        <TextBox x:Name="txt_KestoP" PreviewTextInput="OnlyNumbers" HorizontalAlignment="Left" Height="24" Margin="137,174,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                        <TextBox x:Name="txt_KuvausP" HorizontalAlignment="Left" Height="251" Margin="20,269,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456"/>
+                        <Button x:Name="btn_Paivitys_Seuraava" Content="Seuraava" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="568,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Paivitys_Seuraava_Click"/>
+                        <Label x:Name="lbl_Paivitys_ilmoitus" Content="Lisays ilmoitus" FontSize="18" Style="{StaticResource FadeAnimation}" HorizontalAlignment="Left" Margin="568,174,0,0" VerticalAlignment="Top" Height="159" Width="187"/>
+                        <TextBox x:Name="txt_VuosiP" HorizontalAlignment="Left" Height="23" Margin="137,113,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                    </Grid>
+
+                    <Grid x:Name="Naytosten_Paivitys_Grid" Visibility="Visible" Margin="-10,-23,10,23">
+                        <Label x:Name="lbl_Paivita_Naytokset" Content="PÄIVITÄ ELOKUVAN NÄYTÖKSET" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="26,30,0,0" VerticalAlignment="Top"/>
+                        <Button x:Name="btn_Takaisin_Paivitys" Content="Takaisin" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="401,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Takaisin_Paivitys_Click" />
+                        <Label x:Name="lbl_Lisaa_NaytosP" Content="LISÄÄ UUSI NÄYTÖS" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,302,0,0"/>
+                        <Label x:Name="lbl_ElokuvateatteriP" Content="Elokuvateatteri" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="26,84,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="lbl_PvmP" Content="Pvm." Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="26,132,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="lbl_kloP" Content="Klo. (hh:mm)" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="26,177,0,0" VerticalAlignment="Top"/>
+                        <TextBox x:Name="txt_ElokuvateatteriP" HorizontalAlignment="Left" Height="23" Margin="178,89,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                        <DatePicker x:Name="datep_Naytoksen_pvmP" HorizontalAlignment="Left" Margin="178,137,0,0" VerticalAlignment="Top" Width="148" Height="23"/>
+                        <Button x:Name="btn_Paivita_Naytos" Content="Päivitä näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="26,230,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Paivita_Naytos_Click" />
+                        <Button x:Name="btn_Poista_Valittu_NaytosP" Content="Poista näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="211,230,0,0" VerticalAlignment="Top" Width="135" Height="53" Click="btn_Poista_Valittu_NaytosP_Click"/>
+                        <TextBox x:Name="txt_AikaP" HorizontalAlignment="Left" Height="23" Margin="178,182,0,0" TextWrapping="Wrap" Text="{Binding TreatmentTime, StringFormat=hh:mm}"  VerticalAlignment="Top" Width="120"/>
+                        <Button x:Name="btn_Paivita_Elokuva" Content="Päivitä elokuva" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="601,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Paivita_Elokuva_Click"/>
+                        <DataGrid x:Name="dg_Paivitettavat_Naytokset" Background=" #80c1ff" HorizontalAlignment="Left" Margin="364,135,0,0" VerticalAlignment="Top" Height="409" Width="414">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Elokuvateatteri}" ClipboardContentBinding="{x:Null}" Header="Elokuvateatteri"/>
+                                <DataGridTextColumn Binding="{Binding Pvm}" ClipboardContentBinding="{x:Null}" Header="Pvm."/>
+                                <DataGridTextColumn Binding="{Binding Klo}" ClipboardContentBinding="{x:Null}" Header="Klo."/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <Label x:Name="lbl_ElokuvateatteriP2" Content="Elokuvateatteri" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,345,0,0"/>
+                        <Label x:Name="lbl_PvmP2" Content="Pvm." Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,388,0,0" RenderTransformOrigin="0.488,-0.152"/>
+                        <Label x:Name="lbl_kloP2" Content="Klo. (hh:mm)" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,435,0,0"/>
+                        <TextBox x:Name="txt_ElokuvateatteriP2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Margin="178,350,0,0"/>
+                        <DatePicker x:Name="datep_Naytoksen_pvmP2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="148" Height="23" Margin="178,401,0,0"/>
+                        <TextBox x:Name="txt_AikaP2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding TreatmentTime, StringFormat=hh:mm}"  VerticalAlignment="Top" Width="120" Margin="178,440,0,0"/>
+                        <Button x:Name="btn_Lisaa_NaytosP" Content="Lisää näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="160" Height="53" Margin="26,481,0,0"/>
+                        
+                        <Label x:Name="lbl_Elokuvan_Paivitys_Ilmoitus" Content="LisaysIlmoitus" Style="{StaticResource FadeAnimation}" FontSize="18" HorizontalAlignment="Left" Margin="40,364,0,0" VerticalAlignment="Top" Height="151" Width="286"/>
+                    </Grid>
+
                 </Grid>
             </TabItem>
             <TabItem x:Name="Ohjeet_Tab" Header="Ohje" Selector.Selected="ValittuTab" />
@@ -144,6 +191,7 @@
 
                 </Grid>
             </TabItem>
+
         </TabControl>
 
         <TabControl Name="AsiakkaanControl" Visibility="Collapsed" Background="#3385ff" Width="800" Height="600">

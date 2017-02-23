@@ -49,18 +49,12 @@ namespace Varausjarjestelma
         private int rooli = 1; // 0 = asiakas 1 = ylläpitäjä, Testausta varten
 
         private Elokuva lisattavaElokuva;
-        private Näytös naytos;
-        //private ArrayList lisattavatNaytokset;
         private List<Näytös>  lisattavatNaytokset;
 
         private String elokuvanNimi;
         private int elokuvanVuosi;
         private int elokuvanKesto;
         private String elokuvanKuvaus;
-
-        private String naytoksenTeatteri;
-        private String naytoksenPvm;
-        private String naytoksenKlo;
 
         private SolidColorBrush red = new SolidColorBrush(Colors.Red);
         private SolidColorBrush white = new SolidColorBrush(Colors.White);
@@ -427,6 +421,68 @@ namespace Varausjarjestelma
                 dg_Elokuvat.Items.Remove(elokuva); //Testaamista varten
                 //paivitaElokuvatDG();
             }
+
+        }
+
+        private void btn_Avaa_Elokuvan_Muokkaus_Click(object sender, RoutedEventArgs e)
+        {
+            Perustiedot_Grid.Visibility = Visibility.Collapsed;
+            Perustietojen_Paivitys_Grid.Visibility = Visibility.Visible;
+            Lisaa_Elokuva_Tab.IsSelected = true;
+        }
+
+        private async void btn_Paivitys_Seuraava_Click(object sender, RoutedEventArgs e)
+        {
+            if (txt_Elokuvan_Nimi.Text.Equals("") || txt_Vuosi.Text.Equals("") || txt_Kesto.Text.Equals("") || txt_Kuvaus.Text.Equals(""))
+            {
+                lbl_lisays_ilmoitus.Foreground = red;
+                lbl_lisays_ilmoitus.Content = "Vaadittavia tietoja puuttuu! Tarkista tiedot";
+                lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
+                await Task.Delay(3000);
+                lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                elokuvanNimi = txt_Elokuvan_NimiP.Text;
+                elokuvanVuosi = Int32.Parse(txt_VuosiP.Text);
+                elokuvanKesto = Int32.Parse(txt_KestoP.Text);
+                elokuvanKuvaus = txt_KuvausP.Text;
+
+                lisattavaElokuva = new Elokuva(elokuvanNimi, elokuvanKesto, elokuvanKuvaus);
+
+                Perustietojen_Paivitys_Grid.Visibility = Visibility.Collapsed;
+                Naytosten_Paivitys_Grid.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void btn_Lisaa_NaytosP_Click(object sender, RoutedEventArgs e)
+        {
+            dg_Paivitettavat_Naytokset.Items.Add(new
+            {
+                Elokuvateatteri = txt_ElokuvateatteriP.Text,
+                Pvm = datep_Naytoksen_pvmP.Text,
+                Klo = txt_AikaP.Text
+            });
+        }
+
+        private void btn_Paivita_Naytos_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btn_Poista_Valittu_NaytosP_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btn_Takaisin_Paivitys_Click(object sender, RoutedEventArgs e)
+        {
+            Naytosten_Paivitys_Grid.Visibility = Visibility.Collapsed;
+            Perustietojen_Paivitys_Grid.Visibility = Visibility.Visible;
+        }
+
+        private void btn_Paivita_Elokuva_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }
