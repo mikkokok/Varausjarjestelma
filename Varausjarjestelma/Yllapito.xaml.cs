@@ -30,6 +30,7 @@ namespace Varausjarjestelma
         private int elokuvanVuosi;
         private int elokuvanKesto;
         private String elokuvanKuvaus;
+        private DateTime aika;
 
         private SolidColorBrush red = new SolidColorBrush(Colors.Red);
         private SolidColorBrush white = new SolidColorBrush(Colors.White);
@@ -38,6 +39,7 @@ namespace Varausjarjestelma
         {
             InitializeComponent();
             kaikkiElokuvat = new List<Elokuva>();
+            lisattavatNaytokset = new List<Näytös>();
         }
 
         //Lisää käyttäjän tietokantaan
@@ -69,6 +71,18 @@ namespace Varausjarjestelma
 
         //Hakee kaikki elokuvat tietokannasta
         private List<Elokuva> haeKaikkiElokuvat()
+        {
+            return null;
+        }
+
+        //Hakee kaikki elokuvateatterit tietokannasta
+        private List<Teatteri> haeTeatterit()
+        {
+            return null;
+        }
+
+        //Hakee kaikki tietokannassa olevat elokuvasalit
+        private List<Elokuvasali> haeElokuvaSalit()
         {
             return null;
         }
@@ -149,32 +163,40 @@ namespace Varausjarjestelma
             Näytös naytos = new Näytös();
             Elokuvasali sali = new Elokuvasali();
             Teatteri teatteri = new Teatteri();
-            teatteri.Nimi = txt_Elokuvateatteri.Text;
+            teatteri.Nimi = cmb_Elokuvateatteri.Text;
             teatteri.Kaupunki = "Turku"; //debuggausta
 
             sali.Teatteri = teatteri;
+            sali.Nimi = cmb_Salit.Text;
 
             naytos.Elokuva = this.lisattavaElokuva;
             naytos.Sali = sali;
 
+            aika = Convert.ToDateTime(datep_Naytoksen_aika.Text);
+            naytos.Aika = aika;
+
+            lisattavatNaytokset.Add(naytos);
+
             dg_Lisattavat_Naytokset.Items.Add(new
             {
-                Elokuvateatteri = teatteri,
-                Pvm = datep_Naytoksen_pvm.Text,
+                naytos,
+                Elokuvateatteri = teatteri.Nimi,
+                Sali = naytos.Sali.Nimi,
+                Pvm = naytos.Aika.ToShortDateString(),
+                Klo = naytos.Aika.ToShortTimeString()
             });
-
-            /*dg_Lisattavat_Naytokset.Items.Add(new
-             {
-                 Elokuvateatteri = txt_Elokuvateatteri.Text,
-                 Pvm = datep_Naytoksen_pvm.Text,
-                 Klo = txt_Aika.Text
-             });*/
 
         }
 
         private void btn_Poista_Lisattava_Naytos_Click(object sender, RoutedEventArgs e)
         {
-            var myNaytokset = dg_Lisattavat_Naytokset;
+
+            /*Näytös poistettavaNaytos = dg_Lisattavat_Naytokset.SelectedItem;
+
+            lisattavatNaytokset.Remove(poistettavaNaytos);
+            dg_Lisattavat_Naytokset.Items.Remove(poistettavaNaytos);*/
+
+            /*var myNaytokset = dg_Lisattavat_Naytokset;
             var naytokset = dg_Lisattavat_Naytokset;
 
             if (myNaytokset.SelectedItems.Count >= 1)
@@ -185,12 +207,12 @@ namespace Varausjarjestelma
                 }
             }
 
-            myNaytokset = naytokset;
+            myNaytokset = naytokset;*/
         }
 
         private async void btn_Lisaa_Elokuva_Click_(object sender, RoutedEventArgs e)
         {
-            if (txt_Elokuvateatteri.Equals(null) || datep_Naytoksen_pvm.Text.Equals(null))
+            if (cmb_Elokuvateatteri.Equals(null) || datep_Naytoksen_aika.Text.Equals(null))
             {
                 lbl_lisays_ilmoitus.Foreground = red;
                 lbl_lisays_ilmoitus.Content = "Tarvittavia tietoja puuttuu! Tarkista tiedot";
@@ -200,13 +222,15 @@ namespace Varausjarjestelma
             }
             else
             {
-                //lisattavatNaytokset = dg_Lisattavat_Naytokset.Items.Cast<Näytös>().ToList();
                 lisaaElokuvaTietokantaan(this.lisattavaElokuva, this.lisattavatNaytokset);
                 lbl_lisays_ilmoitus.Foreground = white;
                 lbl_lisays_ilmoitus.Content = "Elokuvan lisääminen onnistui. Palataan alkuun...";
                 lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
                 await Task.Delay(3000);
                 lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+                lisattavaElokuva = null;
+                lisattavatNaytokset.Clear();
+                YllapidonEtusivuTab.IsSelected = true;
             }
         }
 
@@ -325,6 +349,24 @@ namespace Varausjarjestelma
         private void btn_Paivita_Elokuva_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void cmb_Elokuvateatteri_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ElokuvaT1.Content.Equals("Elokuvateatteri1"))
+            {
+                Elokuva1_Sali1.Visibility = Visibility.Visible;
+                Elokuva1_Sali2.Visibility = Visibility.Visible;
+                Elokuva2_Sali1.Visibility = Visibility.Collapsed;
+                Elokuva2_Sali2.Visibility = Visibility.Collapsed;
+            }
+            else if (ElokuvaT1.Content.Equals("Elokuvateatteri2"))
+            {
+                Elokuva2_Sali1.Visibility = Visibility.Visible;
+                Elokuva2_Sali2.Visibility = Visibility.Visible;
+                Elokuva1_Sali1.Visibility = Visibility.Collapsed;
+                Elokuva1_Sali2.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

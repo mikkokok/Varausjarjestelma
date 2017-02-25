@@ -95,20 +95,31 @@
                         <Label x:Name="lbl_Lisää_Naytokset" Content="LISÄÄ ELOKUVAN NÄYTÖKSET" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="26,30,0,0" VerticalAlignment="Top"/>
                         <Button x:Name="btn_Takaisin_Lisays" Content="Takaisin" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="401,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Takaisin_Lisays_Click"/>
                         <Label x:Name="lbl_Elokuvateatteri" Content="Elokuvateatteri" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="26,84,0,0" VerticalAlignment="Top"/>
-                        <Label x:Name="lbl_Pvm" Content="Aika" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="26,132,0,0" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txt_Elokuvateatteri" HorizontalAlignment="Left" Height="23" Margin="178,89,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-                        <wpfTool:DateTimePicker  x:Name="datep_Naytoksen_pvm" HorizontalAlignment="Left" Margin="127,140,0,0" VerticalAlignment="Top" Width="171" CultureInfo="fi-FI" Format="Custom" CurrentDateTimePart="Hour24" FormatString="dd.MM.yyyy HH:mm"/>
-                        <Button x:Name="btn_Lisaa_Naytos" Content="Lisää näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="26,230,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Naytos_Click"/>
-                        <Button x:Name="btn_Poista_Lisattava_Naytos" Content="Poista näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="211,230,0,0" VerticalAlignment="Top" Width="135" Height="53" Click="btn_Poista_Lisattava_Naytos_Click"/>
+                        <Label x:Name="lbl_Pvm" Content="Aika" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="26,208,0,0" VerticalAlignment="Top"/>
+                        <wpfTool:DateTimePicker  x:Name="datep_Naytoksen_aika" HorizontalAlignment="Left" Margin="127,216,0,0" VerticalAlignment="Top" Width="171" CultureInfo="fi-FI" Format="Custom" CurrentDateTimePart="Hour24" FormatString="dd.MM.yyyy HH:mm"/>
+                        <ComboBox x:Name="cmb_Elokuvateatteri" HorizontalAlignment="Left" Height="23" Margin="178,89,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cmb_Elokuvateatteri_SelectionChanged">
+                            <ComboBoxItem x:Name="ElokuvaT1" Content="Elokuvateatteri1"/>
+                            <ComboBoxItem x:Name="ElokuvaT2" Content="Elokuvateatteri2"/>
+                        </ComboBox>
+                        <ComboBox x:Name="cmb_Salit" SelectedValuePath="Content" HorizontalAlignment="Left" Margin="178,154,0,0" VerticalAlignment="Top" Width="120">
+                            <ComboBoxItem x:Name="Elokuva1_Sali1" Content="ElokuvaTeatteri1_Sali1" Visibility="Collapsed"/>
+                            <ComboBoxItem x:Name="Elokuva1_Sali2" Content="Elokuvateatteri1_Sali2" Visibility="Collapsed"/>
+                            <ComboBoxItem x:Name="Elokuva2_Sali1" Content="Elokuvateatteri2_Sali1" Visibility="Collapsed"/>
+                            <ComboBoxItem x:Name="Elokuva2_Sali2" Content="Elokuvateatteri2_Sali1" Visibility="Collapsed"/>
+                        </ComboBox>
+                        <Button x:Name="btn_Lisaa_Naytos" Content="Lisää näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="26,306,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Naytos_Click"/>
+                        <Button x:Name="btn_Poista_Lisattava_Naytos" Content="Poista näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="214,306,0,0" VerticalAlignment="Top" Width="134" Height="53" Click="btn_Poista_Lisattava_Naytos_Click"/>
                         <Button x:Name="btn_Lisaa_Elokuva" Content="Lisää elokuva" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="601,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Elokuva_Click_"/>
                         <DataGrid x:Name="dg_Lisattavat_Naytokset" Background=" #80c1ff" HorizontalAlignment="Left" Margin="364,135,0,0" VerticalAlignment="Top" Height="409" Width="414">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Elokuvateatteri}" ClipboardContentBinding="{x:Null}" Header="Elokuvateatteri"/>
+                                <DataGridTextColumn Binding="{Binding Sali}" ClipboardContentBinding="{x:Null}" Header="Sali"/>
                                 <DataGridTextColumn Binding="{Binding Pvm}" ClipboardContentBinding="{x:Null}" Header="Pvm."/>
-                                <DataGridTextColumn Binding="{Binding Klo}" ClipboardContentBinding="{x:Null}" Header="Klo."/>
+                                <DataGridTextColumn Binding="{Binding Klo}" ClipboardContentBinding="{x:Null}" Header="Klo"/>
                             </DataGrid.Columns>
                         </DataGrid>
                         <Label x:Name="lbl_Elokuvan_Lisays_Ilmoitus" Content="LisaysIlmoitus" Style="{StaticResource FadeAnimation}" FontSize="18" HorizontalAlignment="Left" Margin="40,364,0,0" VerticalAlignment="Top" Height="151" Width="286"/>
+                        <Label x:Name="lbl_Sali" Content="Sali" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="26,146,0,0" VerticalAlignment="Top"/>
                     </Grid>
 
                     <Grid x:Name="Perustietojen_Paivitys_Grid" Visibility="Collapsed">
