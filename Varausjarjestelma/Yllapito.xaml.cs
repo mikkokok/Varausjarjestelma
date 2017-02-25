@@ -20,7 +20,7 @@ namespace Varausjarjestelma
     /// </summary>
     public partial class Yllapito : Window
     {
-
+        private List<Elokuva> kaikkiElokuvat;
         private Elokuva lisattavaElokuva;
         private List<Näytös> lisattavatNaytokset;
 
@@ -35,6 +35,54 @@ namespace Varausjarjestelma
         public Yllapito()
         {
             InitializeComponent();
+            kaikkiElokuvat = new List<Elokuva>();
+        }
+
+        //Lisää käyttäjän tietokantaan
+        ////Palauttaa true jos onnistuu
+        private bool rekisteroiKayttaja(String nimi, String salasana)
+        {
+            return true;
+        }
+
+        //Lisää elokuvan tietokantaan
+        //Palauttaa true jos onnistuu
+        private bool lisaaElokuvaTietokantaan(Elokuva elokuva, List<Näytös> naytokset)
+        {
+            return true;
+        }
+
+        //Poistaa elokuvan ja siihen liittyvät näytökset tietokannasta
+        //Palauttaa true jos onnistuu
+        private bool poistaElokuva(Elokuva elokuva)
+        {
+            return true;
+        }
+
+        //Etsii ja palauttaa halutun elokuvan tietokannasta
+        private Elokuva haeElokuva(Elokuva elokuva)
+        {
+            return null;
+        }
+
+        //Hakee kaikki elokuvat tietokannasta
+        private List<Elokuva> haeKaikkiElokuvat()
+        {
+            return null;
+        }
+
+        //Päivittää annetun elokuvan tiedot tietokannassa
+        //Palauttaa true jos onnistuu
+        private bool paivitaElokuva(Elokuva elokuva, List<Näytös> elokuvanNäytökset)
+        {
+            return true;
+        }
+
+        //Päivittää annetun elokuvan näytökset
+        //Palauttaa true jos onnistuu
+        private bool paivitaElokuvanNaytokset(Elokuva elokuva, List<Näytös> elokuvanNäytökset)
+        {
+            return true;
         }
 
         //Toiminnot Enter-painikkeelle
@@ -179,34 +227,10 @@ namespace Varausjarjestelma
         private void paivitaElokuvatDG()
         {
             dg_Elokuvat.Items.Clear();
+
             //Haetaan elokuvat tietokannasta
-        }
-
-        //Lisää käyttäjän tietokantaan
-        ////Palauttaa true:n jos onnistuu
-        private bool rekisteroiKayttaja(String nimi, String salasana)
-        {
-            return true;
-        }
-
-        //Lisää elokuvan tietokantaan
-        //Palauttaa true:n jos onnistuu
-        private bool lisaaElokuvaTietokantaan(Elokuva elokuva, List<Näytös> naytokset)
-        {
-            return true;
-        }
-
-        //Etsii ja palauttaa halutun elokuvan tietokannasta
-        private Elokuva haeElokuva(Elokuva elokuva)
-        {
-            return null;
-        }
-
-        //Poistaa elokuvan ja siihen liittyvät näytökset tietokannasta
-        //Palauttaa true:n jos onnistuu
-        private bool poistaElokuva(Elokuva elokuva)
-        {
-            return true;
+            kaikkiElokuvat = haeKaikkiElokuvat();
+            dg_Elokuvat.ItemsSource = kaikkiElokuvat;
         }
 
         private void dg_Elokuvat_SelectionChanged(object sender, SelectionChangedEventArgs e)
