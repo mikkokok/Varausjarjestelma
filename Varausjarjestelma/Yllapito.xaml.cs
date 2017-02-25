@@ -12,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit;
+using Xceed.Wpf.DataGrid;
 
 namespace Varausjarjestelma
 {
@@ -144,7 +146,7 @@ namespace Varausjarjestelma
 
         private void btn_Lisaa_Naytos_Click(object sender, RoutedEventArgs e)
         {
-            /*Näytös naytos = new Näytös();
+            Näytös naytos = new Näytös();
             Elokuvasali sali = new Elokuvasali();
             Teatteri teatteri = new Teatteri();
             teatteri.Nimi = txt_Elokuvateatteri.Text;
@@ -153,14 +155,20 @@ namespace Varausjarjestelma
             sali.Teatteri = teatteri;
 
             naytos.Elokuva = this.lisattavaElokuva;
-            naytos.Sali = sali;*/
+            naytos.Sali = sali;
 
             dg_Lisattavat_Naytokset.Items.Add(new
+            {
+                Elokuvateatteri = teatteri,
+                Pvm = datep_Naytoksen_pvm.Text,
+            });
+
+            /*dg_Lisattavat_Naytokset.Items.Add(new
              {
                  Elokuvateatteri = txt_Elokuvateatteri.Text,
                  Pvm = datep_Naytoksen_pvm.Text,
                  Klo = txt_Aika.Text
-             });
+             });*/
 
         }
 
@@ -182,7 +190,7 @@ namespace Varausjarjestelma
 
         private async void btn_Lisaa_Elokuva_Click_(object sender, RoutedEventArgs e)
         {
-            if (txt_Elokuvateatteri.Equals(null) || datep_Naytoksen_pvm.Text.Equals(null) || txt_Aika.Text.Equals(null))
+            if (txt_Elokuvateatteri.Equals(null) || datep_Naytoksen_pvm.Text.Equals(null))
             {
                 lbl_lisays_ilmoitus.Foreground = red;
                 lbl_lisays_ilmoitus.Content = "Tarvittavia tietoja puuttuu! Tarkista tiedot";
@@ -192,7 +200,7 @@ namespace Varausjarjestelma
             }
             else
             {
-                lisattavatNaytokset = dg_Lisattavat_Naytokset.Items.Cast<Näytös>().ToList();
+                //lisattavatNaytokset = dg_Lisattavat_Naytokset.Items.Cast<Näytös>().ToList();
                 lisaaElokuvaTietokantaan(this.lisattavaElokuva, this.lisattavatNaytokset);
                 lbl_lisays_ilmoitus.Foreground = white;
                 lbl_lisays_ilmoitus.Content = "Elokuvan lisääminen onnistui. Palataan alkuun...";
