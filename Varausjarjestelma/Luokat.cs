@@ -25,6 +25,12 @@ namespace Varausjarjestelma
     {
         public string Nimi { get; set; }
         public string Kaupunki { get; set; }
+
+        public Teatteri(string nimi, string kaupunki)
+        {
+            this.Nimi = nimi;
+            this.Kaupunki = kaupunki;
+        }
     }
     
     public class Elokuvasali
@@ -42,12 +48,8 @@ namespace Varausjarjestelma
 
         // sovitaan vaikka, että paikkojen numerointi alkaa 1:stä
         //
-        public int PaikkojaYhteensä { get
-            {
-                return this.Rivejä * this.PaikkojaRivissä;
-            }
-        }
-        
+        public int PaikkojaYhteensä => this.Rivejä * this.PaikkojaRivissä;
+
         public int IstumapaikkaNro(int rivi, int rivipaikka)
         {
             return ((rivi - 1) * PaikkojaRivissä) + rivipaikka;
@@ -62,6 +64,16 @@ namespace Varausjarjestelma
         {
             return nro - ((RiviNrosta(nro) - 1) * PaikkojaRivissä);
         }
+
+        public Elokuvasali(string nimi, int paikkojarivissa, int riveja, Teatteri teatteri)
+        {
+            this.Nimi = nimi;
+            this.PaikkojaRivissä = paikkojarivissa;
+            this.Rivejä = riveja;
+            this.Teatteri = teatteri;
+        }
+
+
     }
 
     public class Paikka
@@ -69,15 +81,9 @@ namespace Varausjarjestelma
         public Elokuvasali Sali { get; set; }
         public int PaikkaNro { get; set; }
 
-        public int Rivi { get {
-                return Sali.RiviNrosta(PaikkaNro);
-            }
-        }
+        public int Rivi => Sali.RiviNrosta(PaikkaNro);
 
-        public int PaikkaRivissä { get {
-                return Sali.PaikkaRivissäNrosta(PaikkaNro);
-            }
-        }
+        public int PaikkaRivissä => Sali.PaikkaRivissäNrosta(PaikkaNro);
 
         public Paikka(Elokuvasali sali, int paikkaNro)
         {
@@ -90,10 +96,7 @@ namespace Varausjarjestelma
     {
         public Elokuva Elokuva { get; set; }
         public Elokuvasali Sali { get; set; }
-        public Teatteri Teatteri { get {
-                return Sali.Teatteri;
-            }
-        }
+        public Teatteri Teatteri => Sali.Teatteri;
 
         public int VapaitaPaikkoja { get; set; }
 
@@ -120,6 +123,19 @@ namespace Varausjarjestelma
 
     public class Kayttaja
     {
-        
+        public string Etunimi;
+        public string Sukunimi;
+        public string Tunnus;
+        public string Salasana;
+        public string Rooli;
+
+        public Kayttaja(string etunimi, string sukunimi, string tunnus, string salasana, string rooli)
+        {
+            this.Etunimi = etunimi;
+            this.Sukunimi = sukunimi;
+            this.Tunnus = tunnus;
+            this.Salasana = salasana;
+            this.Rooli = rooli;
+        }
     }
 }

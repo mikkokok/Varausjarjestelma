@@ -38,55 +38,55 @@ namespace Varausjarjestelma
             if (_kantaYhteys == null) // Alustetaan kantayhteys jos sitä ei ole vielä tehty
                 YhdistaTietokantaan();
 
-            _sql = "CREATE TABLE IF NOT EXISTS kayttajat" +           // Taulu kayttajat
-                        "(id INTEGER PRIMARY KEY, " +
-                        "etunimi VARCHAR(255), " +
-                        "sukunimi VARCHAR(255), " +
-                        "tunnus VARCHAR(255), " +
-                        "salasana VARCHAR(255), " +
-                        "rooli VARCHAR(255))";
-            Ajasql(_sql);
-            _sql = "CREATE TABLE IF NOT EXISTS elokuvat" +           // Taulu elokuvat
+            _sql = "CREATE TABLE IF NOT EXISTS kayttajat" +   // Taulu kayttajat
             "(id INTEGER PRIMARY KEY, " +
-            "nimi VARCHAR(255), " +
-            "vuosi VARCHAR(255), " +
-            "ohjelmistossa VARCHAR(255))";
-            Ajasql(_sql);
-            _sql = "CREATE TABLE IF NOT EXISTS elokuvateatterit" +           // Taulu elokuvateatterit
-            "(id INTEGER PRIMARY KEY, " +
-            "nimi VARCHAR(255), " +
-            "paikkakunta VARCHAR(255), " +
+            "etunimi VARCHAR(255), " +
+            "sukunimi VARCHAR(255), " +
             "tunnus VARCHAR(255), " +
             "salasana VARCHAR(255), " +
             "rooli VARCHAR(255))";
             Ajasql(_sql);
-            _sql = "CREATE TABLE IF NOT EXISTS liput" +           // Taulu liput
+            _sql = "CREATE TABLE IF NOT EXISTS elokuvat" +  // Taulu elokuvat
+            "(id INTEGER PRIMARY KEY, " +
+            "elokuvannimi VARCHAR(255), " +
+            "vuosi VARCHAR(255), " +
+            "ohjelmistossa VARCHAR(255))";
+            Ajasql(_sql);
+            _sql = "CREATE TABLE IF NOT EXISTS elokuvasalit" +   // Taulu elokuvasalit
+            "(id INTEGER PRIMARY KEY, " +
+            "nimi VARCHAR(255), " +
+            "paikkojarivissa VARCHAR(255), " +
+            "riveja VARCHAR(255), " +
+            "teatterinnimi VARCHAR(255), " +
+            "teatterinkaupunki VARCHAR(255))";
+            _sql = "CREATE TABLE IF NOT EXISTS liput" + // Taulu liput
             "(id INTEGER PRIMARY KEY, " +
             "varaajannimi VARCHAR(255), " +
-            "elokuva VARCHAR(255), " +
+            "elokuvannimi VARCHAR(255), " +
             "paikka VARCHAR(255), " +
-            "elokuvateatteri VARCHAR(255))";
+            "teatteri VARCHAR(255))";
             Ajasql(_sql);
-            _sql = "CREATE TABLE IF NOT EXISTS naytokset" +           // Taulu naytokset
+            _sql = "CREATE TABLE IF NOT EXISTS naytokset" +   // Taulu naytokset
             "(id INTEGER PRIMARY KEY, " +
             "elokuvannimi VARCHAR(255), " +
             "aika VARCHAR(255), " +
-            "elokuvateatteri VARCHAR(255))";
+            "teatteri VARCHAR(255))";
             Ajasql(_sql);
+            // Luo admin kayttaja tauluun
+            Ajasql($"INSERT INTO kayttajat VALUES (null, 'Ylla', 'Pitaja', 'Admin', 'nimdA', 'Yllapitaja')");
         }
 
         public List<string> Ajasql(string sql)
         {
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
-            Console.WriteLine($"SQL kysely: {sql}");
+            //Console.WriteLine($"SQL kysely: {sql}");
             var palautettava = new List<string>();
-            var luku = _sqllukija.FieldCount;
-            if (luku == 0) return palautettava;
+            if (_sqllukija.FieldCount == 0) return palautettava; // Kysely on tyhjä
             var sb = new StringBuilder();
             while (_sqllukija.Read())
             {
-                for (var i = 1; i < luku; i++)
+                for (var i = 1; i < _sqllukija.FieldCount; i++)
                 {
                     sb.Append(_sqllukija.GetString(i));
                     sb.Append(", ");
@@ -95,27 +95,38 @@ namespace Varausjarjestelma
             }
             return palautettava;
         }
+        #region käyttäjäkyselyt
+        public List<Kayttaja> GetKayttajat()
+        {
+            var res = new List<Kayttaja>();
+            const string sql = "(SELECT * FROM kayttajat)";
+            _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
+            _sqllukija = _sqlkomento.ExecuteReader();
+            if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
+            while (_sqllukija.Read())
+            {
+                res.Add(new Kayttaja(_sqllukija.GetString(1), _sqllukija.GetString(2), _sqllukija.GetString(3), _sqllukija.GetString(4), _sqllukija.GetString(5)));
+            }
+            return res;
+        }
 
+        public void SetKayttaja(Kayttaja kayttaja)
+        {
+            Ajasql($"INSERT INTO kayttajat VALUES (null, '{kayttaja.Etunimi}', '{kayttaja.Sukunimi}', '{kayttaja.Rooli}', '{kayttaja.Salasana}', '{kayttaja.Tunnus}')");
+        }
+        #endregion
+        #region elokuvakyselyt
         public List<Elokuva> GetElokuvat()
         {
             var res = new List<Elokuva>();
             const string sql = "(SELECT * FROM elokuvat)";
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
-            var luku = _sqllukija.FieldCount;
-            if (luku == 0) return res; // Taulu on tyhja
+            if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
             while (_sqllukija.Read())
             {
-               res.Add(new Elokuva(_sqllukija.GetString(1), int.Parse(_sqllukija.GetString(2)), _sqllukija.GetString(3)));
+                res.Add(new Elokuva(_sqllukija.GetString(1), int.Parse(_sqllukija.GetString(2)), _sqllukija.GetString(3)));
             }
-            /*var res = new List<Elokuva>
-            {
-                new Elokuva("Elokuva 1", 163,
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ligula felis, tincidunt a maximus quis, vestibulum eu magna. Etiam ac dolor at lectus consectetur tempor id quis felis. In vitae vehicula eros, quis tristique urna. Ut tristique odio urna, vel dapibus felis vestibulum sit amet."),
-                new Elokuva("Elokuva: II osa", 163,
-                    "Etiam pretium, justo posuere pellentesque egestas, eros sem convallis turpis, \n\n sed fermentum justo ante ut turpis. Proin viverra sed lacus at ultrices. Sed fermentum ultricies gravida. Quisque at bibendum ante, quis porta ipsum.")
-            };
-            */
             return res;
         }
 
@@ -124,6 +135,28 @@ namespace Varausjarjestelma
             Ajasql($"INSERT INTO elokuvat VALUES (null, '{elokuva.Nimi}', '{elokuva.Kesto}', '{elokuva.Teksti}')");
         }
 
+        #endregion
+        #region Elokuvasalit
+        public List<Elokuvasali> GetElokuvasalit()
+        {
+            var res = new List<Elokuvasali>();
+            const string sql = "(SELECT * FROM elokuvasalit)";
+            _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
+            _sqllukija = _sqlkomento.ExecuteReader();
+            if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
+            while (_sqllukija.Read())
+            {
+                res.Add(new Elokuvasali(_sqllukija.GetString(1), int.Parse(_sqllukija.GetString(2)), int.Parse(_sqllukija.GetString(3)), new Teatteri(_sqllukija.GetString(4), _sqllukija.GetString(5))));
+            }
+            return res;
+        }
+
+        public void SetElokuvasali(Elokuvasali elokuvasali)
+        {
+            Ajasql($"INSERT INTO elokuvasalit VALUES (null, '{elokuvasali.Nimi}', '{elokuvasali.PaikkojaRivissä}', '{elokuvasali.Rivejä}', '{elokuvasali.Teatteri.Nimi}, '{elokuvasali.Teatteri.Kaupunki}')");
+        }
+
+        #endregion
         public List<Näytös> Näytökset(Elokuva elokuva)
         {
             var res = new List<Näytös>();
@@ -131,22 +164,22 @@ namespace Varausjarjestelma
             var näytös = new Näytös();
             var aika = DateTime.Now.AddDays(2);
 
-            var sali = new Elokuvasali
-            {
-                Rivejä = 6,
-                PaikkojaRivissä = 8,
-                Nimi = "Suurin ja kaunein -sali"
-            };
+            //var sali = new Elokuvasali
+            //{
+            //    Rivejä = 6,
+            //    PaikkojaRivissä = 8,
+            //    Nimi = "Suurin ja kaunein -sali"
+            //};
 
-            näytös.Aika = aika;
-            näytös.Elokuva = elokuva;
-            näytös.Sali = sali;
+            //näytös.Aika = aika;
+            //näytös.Elokuva = elokuva;
+            //näytös.Sali = sali;
 
-            näytös.Sali.Teatteri = new Teatteri
-            {
-                Nimi = "KyberKino",
-                Kaupunki = "City 17"
-            };
+            //näytös.Sali.Teatteri = new Teatteri
+            //{
+            //    Nimi = "KyberKino",
+            //    Kaupunki = "City 17"
+            //};
 
             // koko varmaan parmepi erillään
             // esim. HaeVapaatPaikat(Näytös näytös) ?
