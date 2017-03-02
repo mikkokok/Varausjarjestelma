@@ -28,8 +28,10 @@ namespace Varausjarjestelma
         private string kayttajanimi;
         private string salasana;
         private string salasanaVarmistus;
+        private List<Kayttaja> _kayttajat;
+        public Tietokanta Tietokanta;
 
-        private int rooli = 1; // 0 = asiakas 1 = ylläpitäjä, Testausta varten
+        private bool _rooli = false; // false jos user, true jos admin
 
         private SolidColorBrush red = new SolidColorBrush(Colors.Red);
         private SolidColorBrush white = new SolidColorBrush(Colors.White);
@@ -38,27 +40,21 @@ namespace Varausjarjestelma
         {
             InitializeComponent();
             Application.Current.MainWindow = this;
-
-            //var tietokanta = new Tietokanta(); // Debuggia varten / mikko
-            //for (var i = 0; i < 10; i++)
-            //{
-            //    tietokanta.Ajasql($"INSERT INTO elokuvat VALUES(null, 'Elokuva {i}', '2005', 'Kylla')");
-            //}
-            //var testi = tietokanta.Ajasql("SELECT * FROM elokuvat");
-            //foreach (var testib in testi)
-            //{
-            //    Console.Write(testib);
-            //}
+            Tietokanta = new Tietokanta();
+            
         }
 
         private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
         {
+            // Luetaan käyttäjät tietokannasta
+            _kayttajat = Tietokanta.GetKayttajat();
             //Alustetaan muuttujat tekstilaatikoiden avulla
             this.kayttajanimi = txt_kayttajaNimi.Text;
             this.salasana = txt_salasana.Password;
 
             //Toiminnot jos käyttäjänimi ja salasana ovat oikein
-            if (this.kayttajanimi == "Matti" && this.salasana == "Matti")
+            //if (this.kayttajanimi == "Matti" && this.salasana == "Matti")
+            if (_kayttajat.Any(n => n.Salasana == salasana && n.Tunnus == kayttajanimi))
             {
                 //Tulostetaan ilmoitus käyttäjälle
                 lbl_ilmoitus.Foreground = white;
@@ -67,15 +63,16 @@ namespace Varausjarjestelma
 
                 await Task.Delay(2000);
 
+                _rooli = _kayttajat.Any(k => k.Rooli.Equals("Admin") && k.Tunnus == kayttajanimi);
                 //Käyttäjän roolin mukaan avataan käyttäjälle tarkoitettu näkymä
-                if (this.rooli == 0)
+                if (!_rooli)
                 {
                     Window AsiakasWindow = new Window();
                     AsiakasWindow.Content = new Asiakas();
                     AsiakasWindow.Show();
                     this.Close();
                 }
-                else if(this.rooli == 1)
+                else if (_rooli)
                 {
                     new Yllapito().Show();
                     this.Close();
@@ -90,7 +87,6 @@ namespace Varausjarjestelma
                 lbl_ilmoitus.Visibility = Visibility.Visible;
                 await Task.Delay(3000);
                 lbl_ilmoitus.Visibility = Visibility.Collapsed;
-
             }
         }
 
@@ -135,14 +131,14 @@ namespace Varausjarjestelma
         //Painike joka lisää käyttäjän tietokantaan
         private async void btn_rekisteroi_Click(object sender, RoutedEventArgs e)
         {
-            this.kayttajanimi= txt_kayttajaNimiR.Text;
+            this.kayttajanimi = txt_kayttajaNimiR.Text;
             this.salasana = txt_salasanaR.Password;
             this.salasanaVarmistus = txt_salasanan_vahvistus.Password;
 
             if (this.salasana == this.salasanaVarmistus)
             {
                 //Rekisteöi käyttäjäjän tietokantaan
-                rekisteroiKayttaja(this.kayttajanimi, this.salasana);
+                RekisteroiKayttaja(this.kayttajanimi, this.salasana);
 
                 //Ilmoitetaan käyttäjälle että rekisteöinti onnistui,
                 //tyhjennetään tekstilaatikot ja siirrytään login-formiin
@@ -185,9 +181,9 @@ namespace Varausjarjestelma
 
         //Metodi joka lisää käyttäjän tietokantaan
         //Palauttaa true:n jos onnistuu
-        private bool rekisteroiKayttaja(String username, String password)
+        private void RekisteroiKayttaja(string username, string password)
         {
-            return true;
+            this.Tietokanta.SetKayttaja(new Kayttaja("Etunimi", "Sukunimi", username, password, "User"));
         }
     }
 }

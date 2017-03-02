@@ -31,6 +31,10 @@ namespace Varausjarjestelma
             this.Nimi = nimi;
             this.Kaupunki = kaupunki;
         }
+
+        public Teatteri()
+        {
+        }
     }
     
     public class Elokuvasali
@@ -73,7 +77,9 @@ namespace Varausjarjestelma
             this.Teatteri = teatteri;
         }
 
-
+        public Elokuvasali()
+        {
+        }
     }
 
     public class Paikka

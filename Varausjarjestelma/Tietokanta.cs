@@ -29,8 +29,10 @@ namespace Varausjarjestelma
         private void LuoTietokanta()
         {
             if (!File.Exists(_tietokannannimi))
+            {
                 SQLiteConnection.CreateFile(_tietokannannimi); // Luo tietokannan samaan hakemistoon missä .exe ajetaan
-            LuoTaulut(); // Tarkista taulut
+                LuoTaulut(); // Luo taulut vain jos kantaa ei ole olemassa
+            }
         }
 
         private void LuoTaulut()
@@ -59,7 +61,7 @@ namespace Varausjarjestelma
             "riveja VARCHAR(255), " +
             "teatterinnimi VARCHAR(255), " +
             "teatterinkaupunki VARCHAR(255))";
-            _sql = "CREATE TABLE IF NOT EXISTS liput" + // Taulu liput
+            _sql = "CREATE TABLE IF NOT EXISTS varaus" + // Taulu varaus
             "(id INTEGER PRIMARY KEY, " +
             "varaajannimi VARCHAR(255), " +
             "elokuvannimi VARCHAR(255), " +
@@ -73,7 +75,8 @@ namespace Varausjarjestelma
             "teatteri VARCHAR(255))";
             Ajasql(_sql);
             // Luo admin kayttaja tauluun
-            Ajasql($"INSERT INTO kayttajat VALUES (null, 'Ylla', 'Pitaja', 'Admin', 'nimdA', 'Yllapitaja')");
+            Ajasql($"INSERT INTO kayttajat VALUES (null, 'Ylla', 'Pitaja', 'yllapitaja', 'nimda', 'Admin')");
+            Ajasql($"INSERT INTO kayttajat VALUES (null, 'Antti', 'Virtanen', 'vantti', 'anttiv', 'User')");
         }
 
         public List<string> Ajasql(string sql)
@@ -99,7 +102,7 @@ namespace Varausjarjestelma
         public List<Kayttaja> GetKayttajat()
         {
             var res = new List<Kayttaja>();
-            const string sql = "(SELECT * FROM kayttajat)";
+            const string sql = "SELECT * FROM kayttajat";
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
             if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
@@ -119,7 +122,7 @@ namespace Varausjarjestelma
         public List<Elokuva> GetElokuvat()
         {
             var res = new List<Elokuva>();
-            const string sql = "(SELECT * FROM elokuvat)";
+            const string sql = "SELECT * FROM elokuvat";
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
             if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
@@ -140,7 +143,7 @@ namespace Varausjarjestelma
         public List<Elokuvasali> GetElokuvasalit()
         {
             var res = new List<Elokuvasali>();
-            const string sql = "(SELECT * FROM elokuvasalit)";
+            const string sql = "SELECT * FROM elokuvasalit";
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
             if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
@@ -156,6 +159,29 @@ namespace Varausjarjestelma
             Ajasql($"INSERT INTO elokuvasalit VALUES (null, '{elokuvasali.Nimi}', '{elokuvasali.PaikkojaRivissä}', '{elokuvasali.Rivejä}', '{elokuvasali.Teatteri.Nimi}, '{elokuvasali.Teatteri.Kaupunki}')");
         }
 
+
+        #endregion
+        #region Varaukset
+        public List<Elokuvasali> GetVaraukset()
+        {
+            var res = new List<Elokuvasali>();
+            const string sql = "(SELECT * FROM elokuvasalit)";
+            _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
+            _sqllukija = _sqlkomento.ExecuteReader();
+            if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
+            while (_sqllukija.Read())
+            {
+                res.Add(new Elokuvasali(_sqllukija.GetString(1), int.Parse(_sqllukija.GetString(2)), int.Parse(_sqllukija.GetString(3)), new Teatteri(_sqllukija.GetString(4), _sqllukija.GetString(5))));
+            }
+            return res;
+        }
+
+        public void SetVaraukset(Elokuvasali elokuvasali)
+        {
+            Ajasql($"INSERT INTO elokuvasalit VALUES (null, '{elokuvasali.Nimi}', '{elokuvasali.PaikkojaRivissä}', '{elokuvasali.Rivejä}', '{elokuvasali.Teatteri.Nimi}, '{elokuvasali.Teatteri.Kaupunki}')");
+        }
+
+
         #endregion
         public List<Näytös> Näytökset(Elokuva elokuva)
         {
@@ -163,27 +189,16 @@ namespace Varausjarjestelma
 
             var näytös = new Näytös();
             var aika = DateTime.Now.AddDays(2);
+            
+            var sali = new Elokuvasali("Suurin ja kaunein -sali", 6, 8, new Teatteri("City 17", "KyberKino"));
 
-            //var sali = new Elokuvasali
-            //{
-            //    Rivejä = 6,
-            //    PaikkojaRivissä = 8,
-            //    Nimi = "Suurin ja kaunein -sali"
-            //};
+            näytös.Aika = aika;
+            näytös.Elokuva = elokuva;
+            näytös.Sali = sali;
 
-            //näytös.Aika = aika;
-            //näytös.Elokuva = elokuva;
-            //näytös.Sali = sali;
-
-            //näytös.Sali.Teatteri = new Teatteri
-            //{
-            //    Nimi = "KyberKino",
-            //    Kaupunki = "City 17"
-            //};
-
-            // koko varmaan parmepi erillään
-            // esim. HaeVapaatPaikat(Näytös näytös) ?
-            // (jolloin myös täytyy muuttaa Näytös-luokkaa)
+            //koko varmaan parmepi erillään
+            // esim.HaeVapaatPaikat(Näytös näytös) ?
+            // (jolloin myös täytyy muuttaa Näytös - luokkaa)
 
             res.Add(näytös);
             return res;
