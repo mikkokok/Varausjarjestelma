@@ -41,7 +41,6 @@ namespace Varausjarjestelma
             InitializeComponent();
             Application.Current.MainWindow = this;
             Tietokanta = new Tietokanta();
-            
         }
 
         private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
@@ -180,10 +179,9 @@ namespace Varausjarjestelma
         }
 
         //Metodi joka lisää käyttäjän tietokantaan
-        //Palauttaa true:n jos onnistuu
         private void RekisteroiKayttaja(string username, string password)
         {
-            this.Tietokanta.SetKayttaja(new Kayttaja("Etunimi", "Sukunimi", username, password, "User"));
+            Tietokanta.SetKayttaja(new Kayttaja("Etunimi", "Sukunimi", username, password, "User"));
         }
     }
 }

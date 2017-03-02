@@ -78,7 +78,7 @@ namespace Varausjarjestelma
             TulevatNäytökset.ItemsSource = näytökset;
             Siirry("varaa_näytös");
         }
-        
+
         private void Button_VaraaPaikat(object sender, RoutedEventArgs e)
         {
             Näytös n = (TulevatNäytökset.SelectedItem as Näytös);
@@ -95,7 +95,7 @@ namespace Varausjarjestelma
             VahvistaPaikat.ItemsSource = ValitsePaikat.ValitutPaikat.OrderBy(p => p.PaikkaNro); // kivan näköistä
             Siirry("varaa_vahvista");
         }
-        
+
         private void Button_TeeVaraus(object sender, RoutedEventArgs e)
         {
             Näytös n = TulevatNäytökset.SelectedItem as Näytös;

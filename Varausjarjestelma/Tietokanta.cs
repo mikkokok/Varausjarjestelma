@@ -8,7 +8,7 @@ namespace Varausjarjestelma
 {
     public class Tietokanta
     {
-        private string _tietokannannimi = "Varausjarjestelma.sqlite";
+        private const string _tietokannannimi = "Varausjarjestelma.sqlite";
         private string _sql;
         private static SQLiteConnection _kantaYhteys;
         private SQLiteCommand _sqlkomento;
@@ -28,11 +28,9 @@ namespace Varausjarjestelma
         }
         private void LuoTietokanta()
         {
-            if (!File.Exists(_tietokannannimi))
-            {
-                SQLiteConnection.CreateFile(_tietokannannimi); // Luo tietokannan samaan hakemistoon missä .exe ajetaan
-                LuoTaulut(); // Luo taulut vain jos kantaa ei ole olemassa
-            }
+            if (File.Exists(_tietokannannimi)) return;
+            SQLiteConnection.CreateFile(_tietokannannimi); // Luo tietokannan samaan hakemistoon missä .exe ajetaan
+            LuoTaulut(); // Luo taulut vain jos kantaa ei ole olemassa
         }
 
         private void LuoTaulut()
@@ -74,9 +72,13 @@ namespace Varausjarjestelma
             "aika VARCHAR(255), " +
             "teatteri VARCHAR(255))";
             Ajasql(_sql);
-            // Luo admin kayttaja tauluun
+            // Luo pari kayttajaa tauluun
             Ajasql($"INSERT INTO kayttajat VALUES (null, 'Ylla', 'Pitaja', 'yllapitaja', 'nimda', 'Admin')");
             Ajasql($"INSERT INTO kayttajat VALUES (null, 'Antti', 'Virtanen', 'vantti', 'anttiv', 'User')");
+            // Luo muutama elokuva
+            Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '2005', 'Kylla')");
+            Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', 'Ei')");
+
         }
 
         public List<string> Ajasql(string sql)
@@ -189,7 +191,7 @@ namespace Varausjarjestelma
 
             var näytös = new Näytös();
             var aika = DateTime.Now.AddDays(2);
-            
+
             var sali = new Elokuvasali("Suurin ja kaunein -sali", 6, 8, new Teatteri("City 17", "KyberKino"));
 
             näytös.Aika = aika;
