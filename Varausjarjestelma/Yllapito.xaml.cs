@@ -22,8 +22,10 @@ namespace Varausjarjestelma
     /// </summary>
     public partial class Yllapito : Window
     {
+        private Tietokanta tietokanta;
         private List<Elokuva> kaikkiElokuvat;
         private Elokuva lisattavaElokuva;
+        private List<Näytös> elokuvanNaytokset;
         private List<Näytös> lisattavatNaytokset;
 
         private String elokuvanNimi;
@@ -38,21 +40,24 @@ namespace Varausjarjestelma
         public Yllapito()
         {
             InitializeComponent();
-            kaikkiElokuvat = new List<Elokuva>();
+            tietokanta = new Tietokanta();
+            kaikkiElokuvat = tietokanta.GetElokuvat();
+            elokuvanNaytokset = new List<Näytös>();
+            dg_Elokuvat.ItemsSource = kaikkiElokuvat;
             lisattavatNaytokset = new List<Näytös>();
-        }
-
-        //Lisää käyttäjän tietokantaan
-        ////Palauttaa true jos onnistuu
-        private bool rekisteroiKayttaja(String nimi, String salasana)
-        {
-            return true;
         }
 
         //Lisää elokuvan tietokantaan
         //Palauttaa true jos onnistuu
         private bool lisaaElokuvaTietokantaan(Elokuva elokuva, List<Näytös> naytokset)
         {
+            tietokanta.SetElokuva(elokuva);
+
+            foreach (Näytös naytos in naytokset)
+            {
+                tietokanta.Ajasql("INSERT INTO naytokset(elokuvannimi, aika, teatteri) VALUES (" + elokuva.Nimi + ", " + naytos.Aika + ", " + naytos.Teatteri + ")");
+            }
+
             return true;
         }
 
@@ -69,12 +74,6 @@ namespace Varausjarjestelma
             return null;
         }
 
-        //Hakee kaikki elokuvat tietokannasta
-        private List<Elokuva> haeKaikkiElokuvat()
-        {
-            return null;
-        }
-
         //Hakee kaikki elokuvateatterit tietokannasta
         private List<Teatteri> haeTeatterit()
         {
@@ -84,7 +83,7 @@ namespace Varausjarjestelma
         //Hakee kaikki tietokannassa olevat elokuvasalit
         private List<Elokuvasali> haeElokuvaSalit()
         {
-            return null;
+            return tietokanta.GetElokuvasalit();
         }
 
         //Päivittää annetun elokuvan tiedot tietokannassa
@@ -161,13 +160,8 @@ namespace Varausjarjestelma
         private void btn_Lisaa_Naytos_Click(object sender, RoutedEventArgs e)
         {
             Näytös naytos = new Näytös();
-            Elokuvasali sali = new Elokuvasali();
-            Teatteri teatteri = new Teatteri();
-            teatteri.Nimi = cmb_Elokuvateatteri.Text;
-            teatteri.Kaupunki = "Turku"; //debuggausta
-
-            sali.Teatteri = teatteri;
-            sali.Nimi = cmb_Salit.Text;
+            Teatteri teatteri = new Teatteri(cmb_Elokuvateatteri.Text, "Turku");
+            Elokuvasali sali = new Elokuvasali(cmb_Salit.Text, 20, 10, teatteri);
 
             naytos.Elokuva = this.lisattavaElokuva;
             naytos.Sali = sali;
@@ -244,25 +238,38 @@ namespace Varausjarjestelma
                 {
                     paivitaElokuvatDG();
 
-                    dg_Elokuvat.Items.Add(new
+                    /*foreach(Elokuva elokuva in kaikkiElokuvat)
                     {
-                        ElokuvaID = "1",
-                        Elokuvan_Nimi = "Ihmeotukset ja niiden olinpaikat",
-                        Elokuvan_Vuosi = "2016",
-                        Elokuvan_Kesto = "120",
-                        Elokuvan_Kuvaus = "Lorem ipsum dolor sit amet,consectetur adipiscing elit"
-                    });
+                        dg_Elokuvat.Items.Add(new
+                        {
+                            ElokuvaID = elokuva.Id,
+                            Elokuvan_Nimi = elokuva.Nimi,
+                            Elokuvan_Vuosi = "2017",
+                            Elokuvan_Kesto = elokuva.Kesto,
+                            Elokuvan_Kuvaus = elokuva.Kesto
+                        });
+                    }*/
                 }
             }
         }
 
         private void paivitaElokuvatDG()
         {
-            dg_Elokuvat.Items.Clear();
-
             //Haetaan elokuvat tietokannasta
-            kaikkiElokuvat = haeKaikkiElokuvat();
+            kaikkiElokuvat = tietokanta.GetElokuvat();
             dg_Elokuvat.ItemsSource = kaikkiElokuvat;
+
+            /*foreach (Elokuva elokuva in kaikkiElokuvat)
+            {
+                dg_Elokuvat.Items.Add(new
+                {
+                    ElokuvaID = elokuva.Id,
+                    Elokuvan_Nimi = elokuva.Nimi,
+                    Elokuvan_Vuosi = "2017",
+                    Elokuvan_Kesto = elokuva.Kesto,
+                    Elokuvan_Kuvaus = elokuva.Kesto
+                });
+            }*/
         }
 
         private void dg_Elokuvat_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -10,14 +10,18 @@ namespace Varausjarjestelma
     {
         public int Id { get; set; } 
         public string Nimi { get; set; }
+        //public int Vuosi { get; set; }
         public int Kesto { get; set; } // minuutteja
         public string Teksti { get; set; }
+       // public string Ohjelmistossa { get; set; }
 
-        public Elokuva(string nimi, int kesto, string teksti)
+        public Elokuva(string nimi, /*int vuosi,*/ int kesto, string teksti /*,string ohjelmistossa*/)
         {
             this.Nimi = nimi;
+            //this.Vuosi = vuosi;
             this.Kesto = kesto;
             this.Teksti = teksti;
+            //this.Ohjelmistossa = ohjelmistossa;
         }
     }
 
