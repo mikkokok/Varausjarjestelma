@@ -45,6 +45,9 @@ namespace Varausjarjestelma
 
         private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
         {
+            // TODO: luo käyttäjä-olio
+            Kayttaja kayttaja = null;
+
             // Luetaan käyttäjät tietokannasta
             _kayttajat = Tietokanta.GetKayttajat();
             //Alustetaan muuttujat tekstilaatikoiden avulla
@@ -66,9 +69,7 @@ namespace Varausjarjestelma
                 //Käyttäjän roolin mukaan avataan käyttäjälle tarkoitettu näkymä
                 if (!_rooli)
                 {
-                    Window AsiakasWindow = new Window();
-                    AsiakasWindow.Content = new Asiakas();
-                    AsiakasWindow.Show();
+                    new Asiakas(kayttaja).Show();
                     this.Close();
                 }
                 else if (_rooli)

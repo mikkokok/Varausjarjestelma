@@ -18,12 +18,15 @@ namespace Varausjarjestelma
     /// Käyttäjän näkymä lipunvarausjärjestelmään
     /// TabControlia käyttäen siirtymät eteen-/taaksepäin
     /// 
-    public partial class Asiakas : UserControl
+    public partial class Asiakas : Window
     {
         private Tietokanta _tietokanta;
+        private Kayttaja kayttaja;
 
-        public Asiakas()
+        public Asiakas(Kayttaja k)
         {
+            kayttaja = k;
+
             InitializeComponent();
 
             // toistaiseksi näin, lopullisessa pärjää varmaan yhdellä instanssilla
@@ -102,8 +105,7 @@ namespace Varausjarjestelma
 
             foreach (Paikka p in ValitsePaikat.ValitutPaikat)
             {
-                // Huom: Käyttäjä! puuttuu
-                _tietokanta.VaraaPaikka(null, n, p);
+                _tietokanta.VaraaPaikka(kayttaja, n, p);
                 System.Windows.MessageBox.Show("Lippu paikalle: " + p.PaikkaNro.ToString() + "\n(rivi: " + p.Rivi.ToString() + ", paikka: " + p.PaikkaRivissä.ToString() + ")");
             }
 
