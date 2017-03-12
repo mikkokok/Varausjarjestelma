@@ -143,7 +143,7 @@ namespace Varausjarjestelma
                 elokuvanKesto = Int32.Parse(txt_Kesto.Text);
                 elokuvanKuvaus = txt_Kuvaus.Text;
 
-                lisattavaElokuva = new Elokuva(elokuvanNimi, elokuvanKesto, elokuvanKuvaus);
+                lisattavaElokuva = new Elokuva(elokuvanNimi, elokuvanVuosi , elokuvanKesto, elokuvanKuvaus, "Kylla");
 
                 Perustiedot_Grid.Visibility = Visibility.Collapsed;
                 Naytokset_Lisays_Grid.Visibility = Visibility.Visible;
@@ -320,7 +320,7 @@ namespace Varausjarjestelma
                 elokuvanKesto = Int32.Parse(txt_KestoP.Text);
                 elokuvanKuvaus = txt_KuvausP.Text;
 
-                lisattavaElokuva = new Elokuva(elokuvanNimi, elokuvanKesto, elokuvanKuvaus);
+                lisattavaElokuva = new Elokuva(elokuvanNimi, elokuvanVuosi, elokuvanKesto, elokuvanKuvaus, "Kylla");
 
                 Perustietojen_Paivitys_Grid.Visibility = Visibility.Collapsed;
                 Naytosten_Paivitys_Grid.Visibility = Visibility.Visible;

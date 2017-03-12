@@ -8,20 +8,20 @@ namespace Varausjarjestelma
 {
     public class Elokuva
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public string Nimi { get; set; }
-        //public int Vuosi { get; set; }
+        public int Vuosi { get; set; }
         public int Kesto { get; set; } // minuutteja
         public string Teksti { get; set; }
-       // public string Ohjelmistossa { get; set; }
+        public string Ohjelmistossa { get; set; }
 
-        public Elokuva(string nimi, /*int vuosi,*/ int kesto, string teksti /*,string ohjelmistossa*/)
+        public Elokuva(string nimi, int vuosi, int kesto, string teksti, string ohjelmistossa)
         {
             this.Nimi = nimi;
-            //this.Vuosi = vuosi;
+            this.Vuosi = vuosi;
             this.Kesto = kesto;
             this.Teksti = teksti;
-            //this.Ohjelmistossa = ohjelmistossa;
+            this.Ohjelmistossa = ohjelmistossa;
         }
     }
 
@@ -40,7 +40,7 @@ namespace Varausjarjestelma
         {
         }
     }
-    
+
     public class Elokuvasali
     {
         public Teatteri Teatteri { set; get; }
@@ -101,7 +101,7 @@ namespace Varausjarjestelma
             PaikkaNro = paikkaNro;
         }
     }
-    
+
     public class Näytös
     {
         public Elokuva Elokuva { get; set; }

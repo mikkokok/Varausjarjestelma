@@ -166,10 +166,10 @@
             <TabItem x:Name="Ohjeet_Tab" Header="Ohje" Selector.Selected="ValittuTab" />
             <TabItem x:Name="Kayttajat_tab" Header="Käyttäjät" Selector.Selected="ValittuTab">
 
-                <Grid x:FieldModifier="Kayttajat_Grid">
+                <!--<Grid x:FieldModifier="Kayttajat_Grid">
                     
-                </Grid>
-
+                </Grid>-->
+                
             </TabItem>
             <TabItem x:Name="Kirjaudu_Ulos_Tab" Header="Kirjaudu ulos"  Selector.Selected="ValittuTab">
                 <Grid x:Name="Yllapidon_Logout">

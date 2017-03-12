@@ -8,7 +8,7 @@ namespace Varausjarjestelma
 {
     public class Tietokanta
     {
-        private const string _tietokannannimi = "Varausjarjestelma.sqlite";
+        private const string Tietokannannimi = "Varausjarjestelma.sqlite";
         private string _sql;
         private static SQLiteConnection _kantaYhteys;
         private SQLiteCommand _sqlkomento;
@@ -19,17 +19,17 @@ namespace Varausjarjestelma
             YhdistaTietokantaan();
         }
 
-        private void YhdistaTietokantaan()
+        private static void YhdistaTietokantaan()
         {
             if (_kantaYhteys != null) return; // Yhteys on jo olemassa
-            _kantaYhteys = new SQLiteConnection($"Data Source={_tietokannannimi};Version=3;");
+            _kantaYhteys = new SQLiteConnection($"Data Source={Tietokannannimi};Version=3;");
             _kantaYhteys.Open();
 
         }
         private void LuoTietokanta()
         {
-            if (File.Exists(_tietokannannimi)) return;
-            SQLiteConnection.CreateFile(_tietokannannimi); // Luo tietokannan samaan hakemistoon missä .exe ajetaan
+            if (File.Exists(Tietokannannimi)) return;
+            SQLiteConnection.CreateFile(Tietokannannimi); // Luo tietokannan samaan hakemistoon missä .exe ajetaan
             LuoTaulut(); // Luo taulut vain jos kantaa ei ole olemassa
         }
 
@@ -50,6 +50,8 @@ namespace Varausjarjestelma
             "(id INTEGER PRIMARY KEY, " +
             "elokuvannimi VARCHAR(255), " +
             "vuosi VARCHAR(255), " +
+            "kesto VARCHAR(255), " +
+            "kuvaus VARCHAR(255), " +
             "ohjelmistossa VARCHAR(255))";
             Ajasql(_sql);
             _sql = "CREATE TABLE IF NOT EXISTS elokuvasalit" +   // Taulu elokuvasalit
@@ -70,22 +72,21 @@ namespace Varausjarjestelma
             "(id INTEGER PRIMARY KEY, " +
             "elokuvannimi VARCHAR(255), " +
             "aika VARCHAR(255), " +
+            "sali VARCHAR(255), " +
             "teatteri VARCHAR(255))";
             Ajasql(_sql);
             // Luo pari kayttajaa tauluun
             Ajasql($"INSERT INTO kayttajat VALUES (null, 'Ylla', 'Pitaja', 'yllapitaja', 'nimda', 'Admin')");
             Ajasql($"INSERT INTO kayttajat VALUES (null, 'Antti', 'Virtanen', 'vantti', 'anttiv', 'User')");
             // Luo muutama elokuva
-            Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '2005', 'Kylla')");
-            Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', 'Ei')");
-
+            Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '120', '2005', 'Kissoja ja koiria ' 'Kylla')");
+            Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '145', '2002', 'Kirahveja ja elefantteja', 'Ei')");
         }
 
         public List<string> Ajasql(string sql)
         {
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
-            //Console.WriteLine($"SQL kysely: {sql}");
             var palautettava = new List<string>();
             if (_sqllukija.FieldCount == 0) return palautettava; // Kysely on tyhjä
             var sb = new StringBuilder();
@@ -130,14 +131,14 @@ namespace Varausjarjestelma
             if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
             while (_sqllukija.Read())
             {
-                res.Add(new Elokuva(_sqllukija.GetString(1), int.Parse(_sqllukija.GetString(2)), _sqllukija.GetString(3)));
+                res.Add(new Elokuva(_sqllukija.GetString(1), int.Parse(_sqllukija.GetString(2)), int.Parse(_sqllukija.GetString(3)), _sqllukija.GetString(4), _sqllukija.GetString(5)));
             }
             return res;
         }
 
         public void SetElokuva(Elokuva elokuva)
         {
-            Ajasql($"INSERT INTO elokuvat VALUES (null, '{elokuva.Nimi}', '{elokuva.Kesto}', '{elokuva.Teksti}')");
+            Ajasql($"INSERT INTO elokuvat VALUES (null, '{elokuva.Nimi}', '{elokuva.Vuosi}','{elokuva.Kesto}', '{elokuva.Teksti}', '{elokuva.Ohjelmistossa}')");
         }
 
         #endregion
