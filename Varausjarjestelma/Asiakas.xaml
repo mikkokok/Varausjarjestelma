@@ -29,8 +29,9 @@
         <TabItem Header="Etusivu" x:Name="etusivu" >
             <Grid Background="#FFE5E5E5">
                 <Grid HorizontalAlignment="Center" Height="100" VerticalAlignment="Center" Width="250" Margin="0">
-                    <Button Content="Selaa elokuvia" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="10,0,0,0" Click="Button_SelaaElokuvia"/>
+                    <Button Content="Selaa ohjelmistoa" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="10,0,0,0" Click="Button_SelaaElokuvia"/>
                     <Button Tag="nayta_varaukset" Content="Näytä varaukset" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="130,0,0,0" Click="Button_Siirry"/>
+                    <Button Content="Kirjaudu ulos" HorizontalAlignment="Center" Margin="0,50,0,0" Width="125" VerticalAlignment="Top" Click="Button_KirjauduUlos"/>
                 </Grid>
 
             </Grid>
@@ -56,8 +57,8 @@
             <Grid Background="#FFE5E5E5">
                 <ListBox x:Name="TulevatNäytökset" ItemsSource="{Binding}" Margin="10,45,10,35" ItemTemplate="{DynamicResource Näytökset}"/>
                 <Button Content="Etusivulle" Margin="10,0,0,10" Height="20" VerticalAlignment="Bottom" Click="Button_Siirry" Tag="etusivu" Width="80" HorizontalAlignment="Left"/>
-                <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" RenderTransformOrigin="0.053,0.85" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen"/>
-                <Button IsEnabled="{Binding ElementName=TulevatNäytökset, Path=SelectedItems.Count}" Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_VaraaPaikat"/>
+                <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen"/>
+                <Button IsEnabled="{Binding ElementName=TulevatNäytökset, Path=SelectedItems.Count}" Content="Seuraava" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_VaraaPaikat"/>
                 <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Tulevat näytökset:" VerticalAlignment="Top" Margin="10,10,0,0" Height="30" Width="178" FontSize="18"/>
             </Grid>
         </TabItem>
@@ -73,8 +74,8 @@
                     <local:PaikanValinta x:Name="ValitsePaikat" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Grid>
                 <Button Content="Etusivulle" Margin="10,0,0,10" Height="20" VerticalAlignment="Bottom" Click="Button_Siirry" Tag="etusivu" Grid.Row="1" HorizontalAlignment="Left" Width="80"/>
-                <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" RenderTransformOrigin="0.053,0.85" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen" Grid.Row="1" Grid.ColumnSpan="2"/>
-                <Button Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_VahvistaVaraus" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=ValitsePaikat, Path=ValitutPaikat.Count}"/>
+                <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen" Grid.Row="1" Grid.ColumnSpan="2"/>
+                <Button Content="Seuraava" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_VahvistaVaraus" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding ElementName=ValitsePaikat, Path=ValitutPaikat.Count}"/>
                 <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Valitse istumapaikat" VerticalAlignment="Top" FontSize="18"/>
                 <TextBlock HorizontalAlignment="Left" Margin="10,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" DataContext="{Binding ElementName=TulevatNäytökset}" FontSize="14" FontStyle="Italic">
 
@@ -138,8 +139,8 @@
                     </StackPanel>
                 </Grid>
                 <Button Content="Etusivulle" Margin="10,0,0,10" Height="20" VerticalAlignment="Bottom" Click="Button_Siirry" Tag="etusivu" Grid.Row="1" HorizontalAlignment="Left" Width="80"/>
-                <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" RenderTransformOrigin="0.053,0.85" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen" Grid.Row="1"/>
-                <Button Content="Varaa lippuja" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_TeeVaraus" Grid.Row="1"/>
+                <Button Content="Edellinen" HorizontalAlignment="Right" Margin="0,0,165,10" Width="75" Height="20" VerticalAlignment="Bottom" Click="Button_Edellinen" Grid.Row="1"/>
+                <Button Content="Vahvista varaus" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" Click="Button_TeeVaraus" Grid.Row="1"/>
 
             </Grid>
         </TabItem>

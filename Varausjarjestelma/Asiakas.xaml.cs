@@ -132,5 +132,11 @@ namespace Varausjarjestelma
             Siirry(nimi);
         }
 
+        private void Button_KirjauduUlos(object sender, RoutedEventArgs e)
+        {
+            new Login().Show();
+            this.Close();
+        }
+
     }
 }
