@@ -79,7 +79,7 @@ namespace Varausjarjestelma
             Ajasql($"INSERT INTO kayttajat VALUES (null, 'Ylla', 'Pitaja', 'yllapitaja', 'nimda', 'Admin')");
             Ajasql($"INSERT INTO kayttajat VALUES (null, 'Antti', 'Virtanen', 'vantti', 'anttiv', 'User')");
             // Luo muutama elokuva
-            Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '120', '2005', 'Kissoja ja koiria ' 'Kylla')");
+            Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '120', '2005', 'Kissoja ja koiria', 'Kylla')");
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '145', '2002', 'Kirahveja ja elefantteja', 'Ei')");
         }
 
@@ -139,6 +139,11 @@ namespace Varausjarjestelma
         public void SetElokuva(Elokuva elokuva)
         {
             Ajasql($"INSERT INTO elokuvat VALUES (null, '{elokuva.Nimi}', '{elokuva.Vuosi}','{elokuva.Kesto}', '{elokuva.Teksti}', '{elokuva.Ohjelmistossa}')");
+        }
+
+        public void DelElokuva(Elokuva elokuva)
+        {
+            Ajasql($"DELETE FROM elokuvat WHERE elokuvannimi={elokuva.Nimi}");
         }
 
         #endregion

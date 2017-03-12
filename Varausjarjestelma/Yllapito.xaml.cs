@@ -88,8 +88,11 @@ namespace Varausjarjestelma
 
         //Päivittää annetun elokuvan tiedot tietokannassa
         //Palauttaa true jos onnistuu
-        private bool paivitaElokuva(Elokuva elokuva, List<Näytös> elokuvanNäytökset)
+        private bool PaivitaElokuva(Elokuva elokuva)
         {
+            tietokanta.DelElokuva(elokuva);
+            tietokanta.SetElokuva(elokuva);
+            kaikkiElokuvat = tietokanta.GetElokuvat();
             return true;
         }
 
