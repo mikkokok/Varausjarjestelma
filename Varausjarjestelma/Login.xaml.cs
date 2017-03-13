@@ -45,18 +45,17 @@ namespace Varausjarjestelma
 
         private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: luo käyttäjä-olio
-            Kayttaja kayttaja = null;
-
             // Luetaan käyttäjät tietokannasta
             _kayttajat = Tietokanta.GetKayttajat();
             //Alustetaan muuttujat tekstilaatikoiden avulla
             this.kayttajanimi = txt_kayttajaNimi.Text;
             this.salasana = txt_salasana.Password;
 
+            Kayttaja kayttaja = _kayttajat.SingleOrDefault(n => n.Salasana == salasana && n.Tunnus == kayttajanimi);
+
             //Toiminnot jos käyttäjänimi ja salasana ovat oikein
             //if (this.kayttajanimi == "Matti" && this.salasana == "Matti")
-            if (_kayttajat.Any(n => n.Salasana == salasana && n.Tunnus == kayttajanimi))
+            if (kayttaja != null)
             {
                 //Tulostetaan ilmoitus käyttäjälle
                 lbl_ilmoitus.Foreground = white;
@@ -78,7 +77,6 @@ namespace Varausjarjestelma
                     this.Close();
                 }
             }
-
             //Virheilmoitus jos käyttäjänimi/salasana ovat väärin
             else
             {
