@@ -24,8 +24,10 @@ namespace Varausjarjestelma
     public partial class Login : Window
     {
 
-        //Annetut käyttäjänimi ja salasana
+        //Käyttäjän tiedot
         private string kayttajanimi;
+        private string etunimi;
+        private string sukunimi;
         private string salasana;
         private string salasanaVarmistus;
         private List<Kayttaja> _kayttajat;
@@ -43,7 +45,7 @@ namespace Varausjarjestelma
             Tietokanta = new Tietokanta();
         }
 
-        private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
+        private void btnkirjaudu_Click(object sender, RoutedEventArgs e)
         {
             // Luetaan käyttäjät tietokannasta
             _kayttajat = Tietokanta.GetKayttajat();
@@ -57,12 +59,7 @@ namespace Varausjarjestelma
             //if (this.kayttajanimi == "Matti" && this.salasana == "Matti")
             if (kayttaja != null)
             {
-                //Tulostetaan ilmoitus käyttäjälle
-                lbl_ilmoitus.Foreground = white;
-                lbl_ilmoitus.Content = "Kirjautuminen onnistui. Ladataan...";
-                lbl_ilmoitus.Visibility = Visibility.Visible;
-
-                await Task.Delay(2000);
+                tulostaIlmoitusLogin("Kirjautuminen onnistui. Ladataan...", false);
 
                 _rooli = _kayttajat.Any(k => k.Rooli.Equals("Admin") && k.Tunnus == kayttajanimi);
                 //Käyttäjän roolin mukaan avataan käyttäjälle tarkoitettu näkymä
@@ -80,11 +77,7 @@ namespace Varausjarjestelma
             //Virheilmoitus jos käyttäjänimi/salasana ovat väärin
             else
             {
-                lbl_ilmoitus.Content = "Väärä käyttäjänimi tai salasana";
-                lbl_ilmoitus.Foreground = red;
-                lbl_ilmoitus.Visibility = Visibility.Visible;
-                await Task.Delay(3000);
-                lbl_ilmoitus.Visibility = Visibility.Collapsed;
+                tulostaIlmoitusLogin("Väärä käyttäjänimi tai salasana", true);
             }
         }
 
@@ -95,6 +88,8 @@ namespace Varausjarjestelma
             txt_salasana.Clear();
             Login_Grid.Visibility = Visibility.Collapsed;
             Register_Grid.Visibility = Visibility.Visible;
+            this.Width = 300;
+            this.Height = 385;           
             this.Title = "Rekisteröidy";
         }
 
@@ -127,41 +122,51 @@ namespace Varausjarjestelma
         }
 
         //Painike joka lisää käyttäjän tietokantaan
-        private async void btn_rekisteroi_Click(object sender, RoutedEventArgs e)
+        private void btn_rekisteroi_Click(object sender, RoutedEventArgs e)
         {
             this.kayttajanimi = txt_kayttajaNimiR.Text;
+            this.etunimi = txt_etunimi.Text;
+            this.sukunimi = txt_sukunimi.Text;
             this.salasana = txt_salasanaR.Password;
             this.salasanaVarmistus = txt_salasanan_vahvistus.Password;
 
-            if (this.salasana == this.salasanaVarmistus)
+            if (!kayttajanimi.Equals("") && !etunimi.Equals("") && !sukunimi.Equals("") && !salasana.Equals("") && !salasanaVarmistus.Equals("") )
             {
-                //Rekisteöi käyttäjäjän tietokantaan
-                RekisteroiKayttaja(this.kayttajanimi, this.salasana);
+                //Tarkistetaan onko sama käyttäjänimi jo tietokannassa
+                //Kayttaja kayttaja = getKayttaja(kayttajanimi);
 
-                //Ilmoitetaan käyttäjälle että rekisteöinti onnistui,
-                //tyhjennetään tekstilaatikot ja siirrytään login-formiin
-                lbl_ilmoitusR.Foreground = white;
-                lbl_ilmoitusR.Visibility = Visibility.Visible;
-                lbl_ilmoitusR.Content = "Rekisteröinti onnistui. Ladataan...";
-                await Task.Delay(2000);
-                lbl_ilmoitusR.Visibility = Visibility.Collapsed;
+                //Jos käyttäjää ei löydy tietokannasta niin jatketaan rekisteröintiä
+                /*if (kayttaja == null)
+                {
 
-                txt_kayttajaNimiR.Clear();
-                txt_salasanaR.Clear();
-                txt_salasanan_vahvistus.Clear();
+                }
+                else
+                {
 
-                Register_Grid.Visibility = Visibility.Collapsed;
-                Login_Grid.Visibility = Visibility.Visible;
-                this.Title = "Kirjaudu Sisään";
+                }*/
+
+                if (this.salasana.Equals(this.salasanaVarmistus))
+                {
+                    //Rekisteröi käyttäjäjän tietokantaan
+                    Kayttaja uusiKayttaja = new Kayttaja(etunimi, sukunimi, kayttajanimi, salasana, "User");
+
+                    Tietokanta.SetKayttaja(uusiKayttaja);
+
+                    //Ilmoitetaan käyttäjälle että rekisteöinti onnistui,
+                    //tyhjennetään tekstilaatikot ja siirrytään login-formiin
+                    tulostaIlmoitusR("Rekisteröinti onnistui. Ladataan...", false);
+                    btn_takaisinR_Click(sender, e);
+                }
+                else
+                {
+                    tulostaIlmoitusR("Salasanat eivät täsmää!", true);
+
+                }
 
             }
             else
             {
-                lbl_ilmoitusR.Foreground = red;
-                lbl_ilmoitusR.Content = "Salasanat eivät täsmää!";
-                lbl_ilmoitusR.Visibility = Visibility.Visible;
-                await Task.Delay(3000);
-                lbl_ilmoitusR.Visibility = Visibility.Collapsed;
+                tulostaIlmoitusR("Tarvittavia tietoja puuttuu", true);
             }
         }
 
@@ -174,13 +179,58 @@ namespace Varausjarjestelma
 
             Register_Grid.Visibility = Visibility.Collapsed;
             Login_Grid.Visibility = Visibility.Visible;
+            this.Width = 300;
+            this.Height = 218;
             this.Title = "Kirjaudu Sisään";
         }
 
-        //Metodi joka lisää käyttäjän tietokantaan
-        private void RekisteroiKayttaja(string username, string password)
+        //Metodi joka tulostaa ilmoituksen kirjautumis
+        //jos virheilmoitus niin false muuten true
+        private async void tulostaIlmoitusLogin(string ilmoitus, Boolean virheilmoitus)
         {
-            Tietokanta.SetKayttaja(new Kayttaja("Etunimi", "Sukunimi", username, password, "User"));
+            if (virheilmoitus)
+            {
+                lbl_ilmoitus.Foreground = red;
+            }
+
+            else
+            {
+                lbl_ilmoitus.Foreground = white;
+            }
+
+            lbl_ilmoitus.Content = ilmoitus;
+            lbl_ilmoitus.Visibility = Visibility.Visible;
+            await Task.Delay(2000);
+            lbl_ilmoitus.Visibility = Visibility.Collapsed;
+
         }
+
+        //Metodi joka tulostaa ilmoituksen rekisteröintilomakkeella
+        //jos virheilmoitus niin false muuten true
+        private async void tulostaIlmoitusR(string ilmoitus, Boolean virheilmoitus)
+        {
+            if (virheilmoitus)
+            {
+                lbl_ilmoitusR.Foreground = red;
+            }
+            else
+            {
+                lbl_ilmoitusR.Foreground = white;
+            }
+
+            lbl_ilmoitusR.Visibility = Visibility.Visible;
+            lbl_ilmoitusR.Content = ilmoitus;
+            await Task.Delay(2000);
+            lbl_ilmoitusR.Visibility = Visibility.Collapsed;
+
+        }
+        
+        //Metodi joka etsii ja palauttaa käyttäjän tietokannasta
+        //käyttäjänimen perusteella
+        private Kayttaja getKayttaja(String kayttajatunnus)
+        {
+            return null;
+        }
+
     }
 }

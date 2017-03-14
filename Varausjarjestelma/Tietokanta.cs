@@ -79,8 +79,8 @@ namespace Varausjarjestelma
             Ajasql($"INSERT INTO kayttajat VALUES (null, 'Ylla', 'Pitaja', 'yllapitaja', 'nimda', 'Admin')");
             Ajasql($"INSERT INTO kayttajat VALUES (null, 'Antti', 'Virtanen', 'vantti', 'anttiv', 'User')");
             // Luo muutama elokuva
-            Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '120', '2005', 'Kissoja ja koiria', 'Kylla')");
-            Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '145', '2002', 'Kirahveja ja elefantteja', 'Ei')");
+            Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '2005', '120', 'Kissoja ja koiria', 'Kylla')");
+            Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', '145', 'Kirahveja ja elefantteja', 'Ei')");
         }
 
         public List<string> Ajasql(string sql)
@@ -118,7 +118,7 @@ namespace Varausjarjestelma
 
         public void SetKayttaja(Kayttaja kayttaja)
         {
-            Ajasql($"INSERT INTO kayttajat VALUES (null, '{kayttaja.Etunimi}', '{kayttaja.Sukunimi}', '{kayttaja.Rooli}', '{kayttaja.Salasana}', '{kayttaja.Tunnus}')");
+            Ajasql($"INSERT INTO kayttajat VALUES (null, '{kayttaja.Etunimi}', '{kayttaja.Sukunimi}', '{kayttaja.Tunnus}', '{kayttaja.Salasana}', '{kayttaja.Rooli}')");
         }
         #endregion
         #region elokuvakyselyt

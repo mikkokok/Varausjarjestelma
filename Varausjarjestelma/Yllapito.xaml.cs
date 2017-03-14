@@ -55,7 +55,7 @@ namespace Varausjarjestelma
 
             foreach (Näytös naytos in naytokset)
             {
-                tietokanta.Ajasql("INSERT INTO naytokset(elokuvannimi, aika, teatteri) VALUES (" + elokuva.Nimi + ", " + naytos.Aika + ", " + naytos.Teatteri + ")");
+                tietokanta.Ajasql("INSERT INTO naytokset(elokuvannimi, aika, teatteri) VALUES (" + elokuva.Nimi + ", " + naytos.Aika + ", " + naytos.Teatteri.Nimi + ")");
             }
 
             return true;
@@ -70,6 +70,12 @@ namespace Varausjarjestelma
 
         //Etsii ja palauttaa halutun elokuvan tietokannasta
         private Elokuva haeElokuva(Elokuva elokuva)
+        {
+            return null;
+        }
+
+        //Etsii ja palauttaa elokuvaan liittyvät näytökset
+        private List<Näytös> haeElokuvanNaytokset(Elokuva elokuva)
         {
             return null;
         }
