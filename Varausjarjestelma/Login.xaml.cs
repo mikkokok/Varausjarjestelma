@@ -13,8 +13,10 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Varausjarjestelma
 {
@@ -32,6 +34,7 @@ namespace Varausjarjestelma
         private string salasanaVarmistus;
         private List<Kayttaja> _kayttajat;
         public Tietokanta Tietokanta;
+        DispatcherTimer ajastin;
 
         private bool _rooli = false; // false jos user, true jos admin
 
@@ -43,10 +46,12 @@ namespace Varausjarjestelma
             InitializeComponent();
             Application.Current.MainWindow = this;
             Tietokanta = new Tietokanta();
+            ajastin = new DispatcherTimer();
         }
 
-        private void btnkirjaudu_Click(object sender, RoutedEventArgs e)
+        private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
         {
+
             // Luetaan käyttäjät tietokannasta
             _kayttajat = Tietokanta.GetKayttajat();
             //Alustetaan muuttujat tekstilaatikoiden avulla
@@ -59,7 +64,8 @@ namespace Varausjarjestelma
             //if (this.kayttajanimi == "Matti" && this.salasana == "Matti")
             if (kayttaja != null)
             {
-                tulostaIlmoitusLogin("Kirjautuminen onnistui. Ladataan...", false);
+                tulostaIlmoitus("Kirjautuminen onnistui. Ladataan...", lbl_ilmoitus, false);
+                await Task.Delay(100);
 
                 _rooli = _kayttajat.Any(k => k.Rooli.Equals("Admin") && k.Tunnus == kayttajanimi);
                 //Käyttäjän roolin mukaan avataan käyttäjälle tarkoitettu näkymä
@@ -77,7 +83,7 @@ namespace Varausjarjestelma
             //Virheilmoitus jos käyttäjänimi/salasana ovat väärin
             else
             {
-                tulostaIlmoitusLogin("Väärä käyttäjänimi tai salasana", true);
+                tulostaIlmoitus("Väärä käyttäjänimi tai salasana", lbl_ilmoitus, true);
             }
         }
 
@@ -122,7 +128,7 @@ namespace Varausjarjestelma
         }
 
         //Painike joka lisää käyttäjän tietokantaan
-        private void btn_rekisteroi_Click(object sender, RoutedEventArgs e)
+        private async void btn_rekisteroi_Click(object sender, RoutedEventArgs e)
         {
             this.kayttajanimi = txt_kayttajaNimiR.Text;
             this.etunimi = txt_etunimi.Text;
@@ -154,19 +160,20 @@ namespace Varausjarjestelma
 
                     //Ilmoitetaan käyttäjälle että rekisteöinti onnistui,
                     //tyhjennetään tekstilaatikot ja siirrytään login-formiin
-                    tulostaIlmoitusR("Rekisteröinti onnistui. Ladataan...", false);
+                    tulostaIlmoitus("Rekisteröinti onnistui. Ladataan...", lbl_ilmoitusR, false);
+                    await Task.Delay(200);
                     btn_takaisinR_Click(sender, e);
                 }
                 else
                 {
-                    tulostaIlmoitusR("Salasanat eivät täsmää!", true);
+                    tulostaIlmoitus("Salasanat eivät täsmää!", lbl_ilmoitusR, true);
 
                 }
 
             }
             else
             {
-                tulostaIlmoitusR("Tarvittavia tietoja puuttuu", true);
+                tulostaIlmoitus("Tarvittavia tietoja puuttuu", lbl_ilmoitusR, true);
             }
         }
 
@@ -184,44 +191,29 @@ namespace Varausjarjestelma
             this.Title = "Kirjaudu Sisään";
         }
 
-        //Metodi joka tulostaa ilmoituksen kirjautumis
-        //jos virheilmoitus niin false muuten true
-        private async void tulostaIlmoitusLogin(string ilmoitus, Boolean virheilmoitus)
+        //Metodi joka tulostaa ilmoituksen haluttuun labeliin
+        private void tulostaIlmoitus(string tuloste, Label lbl, Boolean virheilmoitus)
         {
             if (virheilmoitus)
             {
-                lbl_ilmoitus.Foreground = red;
+                lbl.Foreground = red;
             }
 
             else
             {
-                lbl_ilmoitus.Foreground = white;
+                lbl.Foreground = white;
             }
 
-            lbl_ilmoitus.Content = ilmoitus;
-            lbl_ilmoitus.Visibility = Visibility.Visible;
-            await Task.Delay(2000);
-            lbl_ilmoitus.Visibility = Visibility.Collapsed;
+            lbl.Content = tuloste;
+            lbl.Visibility = Visibility.Visible;
 
-        }
-
-        //Metodi joka tulostaa ilmoituksen rekisteröintilomakkeella
-        //jos virheilmoitus niin false muuten true
-        private async void tulostaIlmoitusR(string ilmoitus, Boolean virheilmoitus)
-        {
-            if (virheilmoitus)
+            ajastin.Interval = new TimeSpan(0, 0, 3);
+            ajastin.Tick += (EventHandler)delegate (object snd, EventArgs ea)
             {
-                lbl_ilmoitusR.Foreground = red;
-            }
-            else
-            {
-                lbl_ilmoitusR.Foreground = white;
-            }
-
-            lbl_ilmoitusR.Visibility = Visibility.Visible;
-            lbl_ilmoitusR.Content = ilmoitus;
-            await Task.Delay(2000);
-            lbl_ilmoitusR.Visibility = Visibility.Collapsed;
+                lbl.Visibility = Visibility.Collapsed;
+                ((DispatcherTimer)snd).Stop();
+            };
+            ajastin.Start();
 
         }
         

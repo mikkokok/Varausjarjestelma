@@ -80,7 +80,7 @@
                         <TextBox x:Name="txt_Kesto" PreviewTextInput="vainNumeroita" HorizontalAlignment="Left" Height="24" Margin="137,174,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                         <TextBox x:Name="txt_Kuvaus" HorizontalAlignment="Left" Height="251" Margin="20,269,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456"/>
                         <Button x:Name="btn_Lisays_Seuraava" Content="Seuraava" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="568,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Elokuvan_Perustiedot_Click"/>
-                        <Label x:Name="lbl_lisays_ilmoitus" Content="Lisays ilmoitus" FontSize="18" Style="{StaticResource FadeAnimation}" HorizontalAlignment="Left" Margin="568,174,0,0" VerticalAlignment="Top" Height="159" Width="187"/>
+                        <Label x:Name="lbl_lisays_ilmoitus" Content="Lisays ilmoitus" FontSize="18" Style="{StaticResource FadeAnimation}" Visibility="Collapsed" HorizontalAlignment="Left" Margin="568,174,0,0" VerticalAlignment="Top" Height="159" Width="187"/>
                         <TextBox x:Name="txt_Vuosi" HorizontalAlignment="Left" Height="23" Margin="137,113,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                     </Grid>
 
@@ -158,19 +158,19 @@
                         <TextBox x:Name="txt_AikaP2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding TreatmentTime, StringFormat=hh:mm}"  VerticalAlignment="Top" Width="120" Margin="178,440,0,0"/>
                         <Button x:Name="btn_Lisaa_NaytosP" Content="Lisää näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="160" Height="53" Margin="26,481,0,0"/>
 
-                        <Label x:Name="lbl_Elokuvan_Paivitys_Ilmoitus" Content="LisaysIlmoitus" Style="{StaticResource FadeAnimation}" FontSize="18" HorizontalAlignment="Left" Margin="40,364,0,0" VerticalAlignment="Top" Height="151" Width="286"/>
+                        <Label x:Name="lbl_Elokuvan_Paivitys_Ilmoitus" Content="PaivitysIlmoitus" Style="{StaticResource FadeAnimation}" FontSize="18" HorizontalAlignment="Left" Margin="40,364,0,0" VerticalAlignment="Top" Height="151" Width="286"/>
                     </Grid>
 
                 </Grid>
             </TabItem>
-            <TabItem x:Name="Ohjeet_Tab" Header="Ohje" Selector.Selected="ValittuTab" />
             <TabItem x:Name="Kayttajat_tab" Header="Käyttäjät" Selector.Selected="ValittuTab">
 
                 <!--<Grid x:FieldModifier="Kayttajat_Grid">
                     
                 </Grid>-->
-                
+
             </TabItem>
+            <TabItem x:Name="Ohjeet_Tab" Header="Ohje" Selector.Selected="ValittuTab" />
             <TabItem x:Name="Kirjaudu_Ulos_Tab" Header="Kirjaudu ulos"  Selector.Selected="ValittuTab">
                 <Grid x:Name="Yllapidon_Logout">
                     <Label x:Name="lbl_kirjaudu_ulos" Content="OLET KIRJAUTUMASSA ULOS." Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="24,51,0,0" VerticalAlignment="Top"/>

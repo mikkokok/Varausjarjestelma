@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Xceed.Wpf.Toolkit;
 using Xceed.Wpf.DataGrid;
+using System.Windows.Threading;
 
 namespace Varausjarjestelma
 {
@@ -33,6 +34,7 @@ namespace Varausjarjestelma
         private int elokuvanKesto;
         private String elokuvanKuvaus;
         private DateTime aika;
+        private DispatcherTimer ajastin;
 
         private SolidColorBrush red = new SolidColorBrush(Colors.Red);
         private SolidColorBrush white = new SolidColorBrush(Colors.White);
@@ -41,6 +43,7 @@ namespace Varausjarjestelma
         {
             InitializeComponent();
             tietokanta = new Tietokanta();
+            ajastin = new DispatcherTimer();
             kaikkiElokuvat = tietokanta.GetElokuvat();
             elokuvanNaytokset = new List<Näytös>();
             dg_Elokuvat.ItemsSource = kaikkiElokuvat;
@@ -55,7 +58,7 @@ namespace Varausjarjestelma
 
             foreach (Näytös naytos in naytokset)
             {
-                tietokanta.Ajasql("INSERT INTO naytokset(elokuvannimi, aika, teatteri) VALUES (" + elokuva.Nimi + ", " + naytos.Aika + ", " + naytos.Teatteri.Nimi + ")");
+                tietokanta.Ajasql("INSERT INTO naytokset(elokuvannimi, aika, sali, teatteri) VALUES (" + elokuva.Nimi + ", " + naytos.Aika + ", " + naytos.Sali.Nimi + "," + naytos.Teatteri.Nimi + ")");
             }
 
             return true;
@@ -109,6 +112,32 @@ namespace Varausjarjestelma
             return true;
         }
 
+        //Metodi joka tulostaa ilmoituksen haluttuun labeliin
+        private void tulostaIlmoitus(string tuloste, Label lbl, Boolean virheilmoitus)
+        {
+            if (virheilmoitus)
+            {
+                lbl.Foreground = red;
+            }
+
+            else
+            {
+                lbl.Foreground = white;
+            }
+
+            lbl.Content = tuloste;
+            lbl.Visibility = Visibility.Visible;
+
+            ajastin.Interval = new TimeSpan(0, 0, 3);
+            ajastin.Tick += (EventHandler)delegate (object snd, EventArgs ea)
+            {
+                lbl.Visibility = Visibility.Collapsed;
+                ((DispatcherTimer)snd).Stop();
+            };
+            ajastin.Start();
+
+        }
+
         //Toiminnot Enter-painikkeelle
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -135,15 +164,11 @@ namespace Varausjarjestelma
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private async void btn_Lisaa_Elokuvan_Perustiedot_Click(object sender, RoutedEventArgs e)
+        private void btn_Lisaa_Elokuvan_Perustiedot_Click(object sender, RoutedEventArgs e)
         {
             if (txt_Elokuvan_Nimi.Text.Equals("") || txt_Vuosi.Text.Equals("") || txt_Kesto.Text.Equals("") || txt_Kuvaus.Text.Equals(""))
             {
-                lbl_lisays_ilmoitus.Foreground = red;
-                lbl_lisays_ilmoitus.Content = "Vaadittavia tietoja puuttuu! Tarkista tiedot";
-                lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
-                await Task.Delay(3000);
-                lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+                tulostaIlmoitus("Vaadittavia tietoja puuttuu! Tarkista tiedot", lbl_lisays_ilmoitus, true);
             }
             else
             {
@@ -163,7 +188,6 @@ namespace Varausjarjestelma
         {
             Naytokset_Lisays_Grid.Visibility = Visibility.Collapsed;
             Perustiedot_Grid.Visibility = Visibility.Visible;
-
         }
 
         private void btn_Lisaa_Naytos_Click(object sender, RoutedEventArgs e)
@@ -182,7 +206,6 @@ namespace Varausjarjestelma
 
             dg_Lisattavat_Naytokset.Items.Add(new
             {
-                naytos,
                 Elokuvateatteri = teatteri.Nimi,
                 Sali = naytos.Sali.Nimi,
                 Pvm = naytos.Aika.ToShortDateString(),
@@ -217,21 +240,21 @@ namespace Varausjarjestelma
         {
             if (cmb_Elokuvateatteri.Equals(null) || datep_Naytoksen_aika.Text.Equals(null))
             {
-                lbl_lisays_ilmoitus.Foreground = red;
-                lbl_lisays_ilmoitus.Content = "Tarvittavia tietoja puuttuu! Tarkista tiedot";
-                lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
-                await Task.Delay(3000);
-                lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+                tulostaIlmoitus("Tarvittavia tietoja puuttuu! Tarkista tiedot", lbl_lisays_ilmoitus, true);
             }
             else
             {
                 lisaaElokuvaTietokantaan(this.lisattavaElokuva, this.lisattavatNaytokset);
-                lbl_lisays_ilmoitus.Foreground = white;
-                lbl_lisays_ilmoitus.Content = "Elokuvan lisääminen onnistui. Palataan alkuun...";
-                lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
-                await Task.Delay(3000);
-                lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+                tulostaIlmoitus("Elokuvan lisääminen onnistui. Palataan alkuun...", lbl_lisays_ilmoitus, false);
+                await Task.Delay(1000);
                 lisattavaElokuva = null;
+                txt_Elokuvan_Nimi.Clear();
+                txt_Vuosi.Clear();
+                txt_Kesto.Clear();
+                txt_Kuvaus.Clear();
+                cmb_Elokuvateatteri.SelectedIndex = -1;
+                cmb_Salit.SelectedIndex = -1;
+                datep_Naytoksen_aika.Text = "";
                 lisattavatNaytokset.Clear();
                 YllapidonEtusivuTab.IsSelected = true;
             }
@@ -246,18 +269,6 @@ namespace Varausjarjestelma
                 if (tab.Name == "YllapidonEtusivuTab")
                 {
                     paivitaElokuvatDG();
-
-                    /*foreach(Elokuva elokuva in kaikkiElokuvat)
-                    {
-                        dg_Elokuvat.Items.Add(new
-                        {
-                            ElokuvaID = elokuva.Id,
-                            Elokuvan_Nimi = elokuva.Nimi,
-                            Elokuvan_Vuosi = "2017",
-                            Elokuvan_Kesto = elokuva.Kesto,
-                            Elokuvan_Kuvaus = elokuva.Kesto
-                        });
-                    }*/
                 }
             }
         }
@@ -267,18 +278,6 @@ namespace Varausjarjestelma
             //Haetaan elokuvat tietokannasta
             kaikkiElokuvat = tietokanta.GetElokuvat();
             dg_Elokuvat.ItemsSource = kaikkiElokuvat;
-
-            /*foreach (Elokuva elokuva in kaikkiElokuvat)
-            {
-                dg_Elokuvat.Items.Add(new
-                {
-                    ElokuvaID = elokuva.Id,
-                    Elokuvan_Nimi = elokuva.Nimi,
-                    Elokuvan_Vuosi = "2017",
-                    Elokuvan_Kesto = elokuva.Kesto,
-                    Elokuvan_Kuvaus = elokuva.Kesto
-                });
-            }*/
         }
 
         private void dg_Elokuvat_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -312,15 +311,11 @@ namespace Varausjarjestelma
             Lisaa_Elokuva_Tab.IsSelected = true;
         }
 
-        private async void btn_Paivitys_Seuraava_Click(object sender, RoutedEventArgs e)
+        private void btn_Paivitys_Seuraava_Click(object sender, RoutedEventArgs e)
         {
-            if (txt_Elokuvan_Nimi.Text.Equals("") || txt_Vuosi.Text.Equals("") || txt_Kesto.Text.Equals("") || txt_Kuvaus.Text.Equals(""))
+            if (txt_Elokuvan_NimiP.Text.Equals("") || txt_VuosiP.Text.Equals("") || txt_KestoP.Text.Equals("") || txt_KuvausP.Text.Equals(""))
             {
-                lbl_lisays_ilmoitus.Foreground = red;
-                lbl_lisays_ilmoitus.Content = "Vaadittavia tietoja puuttuu! Tarkista tiedot";
-                lbl_lisays_ilmoitus.Visibility = Visibility.Visible;
-                await Task.Delay(3000);
-                lbl_lisays_ilmoitus.Visibility = Visibility.Collapsed;
+                tulostaIlmoitus("Vaadittavia tietoja puuttuu! Tarkista tiedot", lbl_Paivitys_ilmoitus, true);
             }
             else
             {

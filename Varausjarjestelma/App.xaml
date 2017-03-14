@@ -34,17 +34,18 @@
             <Setter Property="Label.FontFamily" Value="Garamond"></Setter>
             <Setter Property="Label.Foreground" Value="White"></Setter>
             <Setter Property="Label.FontSize" Value="16px"></Setter>
-            <Style.Triggers>
+            <!--<Style.Triggers>
                 <Trigger Property="Visibility" Value="Visible">
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" BeginTime="00:00:00" From="0.0" To="1.0"  />
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.3" BeginTime="00:00:00" From="0.0" To="1.0"  />
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.3" BeginTime="00:00:00" From="1.0" To="0.0"  />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
                 </Trigger>
-            </Style.Triggers>
+            </Style.Triggers>-->
         </Style>
         
         <!-- Otsikoiden tyyli-->
@@ -55,19 +56,19 @@
          </Style>
 
         <!-- Häivytysanimaation määritykset-->
-        <Style TargetType="Label" x:Key="FadeAnimation">
-            <Setter Property="Visibility" Value="Collapsed"/>
+        <Style TargetType="{x:Type Label}" x:Key="FadeAnimation">
             <Style.Triggers>
                 <Trigger Property="Visibility" Value="Visible">
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" BeginTime="00:00:00" From="0.0" To="1.0"  />
-                                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2"  BeginTime="00:00:02" From="1.0" To="0.0" />
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.0" BeginTime="00:00:00" From="0.0" To="1.0"  />
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.3" BeginTime="00:00:02" From="1.0" To="0.0" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
                 </Trigger>
+
             </Style.Triggers>
         </Style>
         
