@@ -28,6 +28,7 @@ namespace Varausjarjestelma
         private Elokuva lisattavaElokuva;
         private List<Näytös> elokuvanNaytokset;
         private List<Näytös> lisattavatNaytokset;
+        private List<Kayttaja> kayttajat;
 
         private String elokuvanNimi;
         private int elokuvanVuosi;
@@ -35,7 +36,6 @@ namespace Varausjarjestelma
         private String elokuvanKuvaus;
         private DateTime aika;
         private DispatcherTimer ajastin;
-        private List<int> poistettavatIndeksit;
 
         private SolidColorBrush red = new SolidColorBrush(Colors.Red);
         private SolidColorBrush white = new SolidColorBrush(Colors.White);
@@ -45,10 +45,10 @@ namespace Varausjarjestelma
             InitializeComponent();
             tietokanta = new Tietokanta();
             ajastin = new DispatcherTimer();
-            poistettavatIndeksit = new List<int>();
             kaikkiElokuvat = tietokanta.GetElokuvat();
-            elokuvanNaytokset = new List<Näytös>();
+            kayttajat = tietokanta.GetKayttajat();          
             dg_Elokuvat.ItemsSource = kaikkiElokuvat;
+            elokuvanNaytokset = new List<Näytös>();
             lisattavatNaytokset = new List<Näytös>();
         }
 
@@ -158,24 +158,6 @@ namespace Varausjarjestelma
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
-        }
-
-        private void ValittuTab(object sender, RoutedEventArgs e)
-        {
-            var tab = sender as TabItem;
-            if (tab != null)
-            {
-                //toiminnot, jotka suoritetaan kun joku tabi valitaan
-                if (tab.Name == "YllapidonEtusivuTab")
-                {
-                    paivitaElokuvatDG();
-                }
-
-                if (tab.Name == "Lisaa_Elokuva_Tab ")
-                {
-
-                }
-            }
         }
         #endregion UImetodit
         #region etusivu
@@ -371,6 +353,25 @@ namespace Varausjarjestelma
 
         }
         #endregion
+        #region kayttajat
+
+        private void paivitaKayttajat()
+        {
+            dg_kayttajat.Items.Clear();
+            foreach (Kayttaja kayttaja in kayttajat)
+            {
+
+                dg_kayttajat.Items.Add(new
+                {
+                    Kayttajatunnus = kayttaja.Tunnus,
+                    Etunimi = kayttaja.Etunimi,
+                    Sukunimi = kayttaja.Sukunimi,
+                    Rooli = kayttaja.Rooli
+                });
+            }
+        }
+
+        #endregion
 
         //Hoitaa käyttäjän kirjautumisen ulos järjestelmästä ja 
         //avaa login-formin ja tyhjentää muuttujat
@@ -384,18 +385,24 @@ namespace Varausjarjestelma
 
         private void YllapidonControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            /*if (e.Source is TabControl && Lisaa_Elokuva_Tab.IsSelected)
+            if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 2)
+            {
+                paivitaKayttajat();
+            }
+
+
+            if (e.OriginalSource == Lisaa_Elokuva_Tab)
             {
                 MessageBoxResult result = Xceed.Wpf.Toolkit.MessageBox.Show("Haluatko varmasti keskeyttää elokuvan lisäyksen ? Tallentamattomat tiedot menetetään.", 
                                                                             "Varoitus", MessageBoxButton.OKCancel);
                 if (result == MessageBoxResult.OK)
                 {
-
+                    e.Handled = true;
                 }
                 else
                 {
-
-                }*/
+                    YllapidonControl.SelectedIndex = 1;
+                }
             }
         }
     }

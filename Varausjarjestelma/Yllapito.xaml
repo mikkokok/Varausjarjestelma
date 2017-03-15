@@ -16,7 +16,7 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <TabControl Name="YllapidonControl" IsSynchronizedWithCurrentItem="True" Visibility="Visible" Background="#3385ff" SelectionChanged="YllapidonControl_SelectionChanged">
+        <TabControl Name="YllapidonControl" Visibility="Visible" Background="#3385ff" SelectionChanged="YllapidonControl_SelectionChanged">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">
@@ -42,7 +42,7 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem x:Name="YllapidonEtusivuTab" Header="Etusivu" Selector.Selected="ValittuTab">
+            <TabItem x:Name="YllapidonEtusivuTab" Header="Etusivu">
                 <Grid x:Name="Yllapidon_Etusivun_Grid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="78*"/>
@@ -61,7 +61,7 @@
                     <DataGrid x:Name="dg_Naytokset" IsReadOnly="True" Background=" #80c1ff" Visibility="Collapsed" Grid.Column="1" HorizontalAlignment="Left" Margin="123,46,0,0" VerticalAlignment="Top" Width="343" Height="368"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="Lisaa_Elokuva_Tab" Header="Lisää elokuva"  Selector.Selected="ValittuTab">
+            <TabItem x:Name="Lisaa_Elokuva_Tab" Header="Lisää elokuva">
                 <Grid x:Name="Elokuvan_Lisays_Grid">
                     <Grid x:Name="Perustiedot_Grid" Visibility="Visible">
                         <Label x:Name="lbl_Lisää_Elokuva" Content="LISÄÄ ELOKUVA" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
@@ -156,15 +156,26 @@
 
                 </Grid>
             </TabItem>
-            <TabItem x:Name="Kayttajat_tab" Header="Käyttäjät" Selector.Selected="ValittuTab">
+            <TabItem x:Name="Kayttajat_tab" Header="Käyttäjät">
 
-                <!--<Grid x:FieldModifier="Kayttajat_Grid">
-                    
-                </Grid>-->
+                <Grid x:Name="Kayttajat_Grid">
+                    <DataGrid x:Name="dg_kayttajat" HorizontalAlignment="Left" Margin="24,76,0,0" VerticalAlignment="Top" Height="329" Width="209">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Kayttajatunnus}" ClipboardContentBinding="{x:Null}" Header="Tunnus"/>
+                            <DataGridTextColumn Binding="{Binding Etunimi}" ClipboardContentBinding="{x:Null}" Header="Etunimi"/>
+                            <DataGridTextColumn Binding="{Binding Sukunimi}" ClipboardContentBinding="{x:Null}" Header="Sukunimi"/>
+                            <DataGridTextColumn Binding="{Binding Rooli}" ClipboardContentBinding="{x:Null}" Header="Rooli"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Label x:Name="lbl_Kayttajat" Style="{StaticResource LabelHeaderStyle}" Content="Käyttäjät" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="btn_Ylenna" Style="{StaticResource ButtonStyle}" Content="Ylennä ylläpitäjäksi" HorizontalAlignment="Left" Margin="335,76,0,0" VerticalAlignment="Top" Width="145" Height="51"/>
+                    <Button x:Name="btn_Poista" Style="{StaticResource ButtonStyle}" Content="Poista Käyttäjä" HorizontalAlignment="Left" Margin="335,179,0,0" VerticalAlignment="Top" Width="145" Height="51"/>
+
+                </Grid>
 
             </TabItem>
-            <TabItem x:Name="Ohjeet_Tab" Header="Ohje" Selector.Selected="ValittuTab" />
-            <TabItem x:Name="Kirjaudu_Ulos_Tab" Header="Kirjaudu ulos"  Selector.Selected="ValittuTab">
+            <TabItem x:Name="Ohjeet_Tab" Header="Ohje"/>
+            <TabItem x:Name="Kirjaudu_Ulos_Tab" Header="Kirjaudu ulos">
                 <Grid x:Name="Yllapidon_Logout">
                     <Label x:Name="lbl_kirjaudu_ulos" Content="OLET KIRJAUTUMASSA ULOS." Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="24,51,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="label1" Content="TALLENTAMATTOMAT TIEDOT MENETETÄÄN" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="24,103,0,0" VerticalAlignment="Top"/>
