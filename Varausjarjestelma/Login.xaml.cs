@@ -49,6 +49,63 @@ namespace Varausjarjestelma
             ajastin = new DispatcherTimer();
         }
 
+        #region yleisetUImetodit
+
+        //Metodi joka tulostaa ilmoituksen haluttuun labeliin
+        private void tulostaIlmoitus(string tuloste, Label lbl, Boolean virheilmoitus)
+        {
+            if (virheilmoitus)
+            {
+                lbl.Foreground = red;
+            }
+
+            else
+            {
+                lbl.Foreground = white;
+            }
+
+            lbl.Content = tuloste;
+            lbl.Visibility = Visibility.Visible;
+
+            ajastin.Interval = new TimeSpan(0, 0, 3);
+            ajastin.Tick += (EventHandler)delegate (object snd, EventArgs ea)
+            {
+                lbl.Visibility = Visibility.Collapsed;
+                ((DispatcherTimer)snd).Stop();
+            };
+            ajastin.Start();
+
+        }
+
+        //Toiminnot Enter-painikkeelle
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Jos käyttäjä on login formissa ja painaa enteriä niin yritetään kirjautua sisään
+            if (e.Key == Key.Enter && Login_Grid.IsVisible)
+            {
+                btnkirjaudu_Click(sender, e);
+            }
+            //Jos käyttäjä on rekisteröinti formissa ja painaa enteriä niin yritetään rekisteröityä
+            else if (e.Key == Key.Enter && Register_Grid.IsVisible)
+            {
+                btn_rekisteroidy_Click(sender, e);
+            }
+        }
+
+        //Metodi joka sijoittaa ikkunan keskelle tietokoneen näyttöä kun ikkunan koko muuttuu
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.PreviousSize == e.NewSize)
+                return;
+
+            var width = SystemParameters.PrimaryScreenWidth;
+            var height = SystemParameters.PrimaryScreenHeight;
+
+            this.Left = (width - e.NewSize.Width) / 2;
+            this.Top = (height - e.NewSize.Height) / 2;
+        }
+        #endregion
+        #region kirjautuminen
         private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
         {
 
@@ -95,38 +152,11 @@ namespace Varausjarjestelma
             Login_Grid.Visibility = Visibility.Collapsed;
             Register_Grid.Visibility = Visibility.Visible;
             this.Width = 300;
-            this.Height = 385;           
+            this.Height = 385;
             this.Title = "Rekisteröidy";
         }
-
-        //Toiminnot Enter-painikkeelle
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            //Jos käyttäjä on login formissa ja painaa enteriä niin yritetään kirjautua sisään
-            if (e.Key == Key.Enter && Login_Grid.IsVisible)
-            {
-                btnkirjaudu_Click(sender, e);
-            }
-            //Jos käyttäjä on rekisteröinti formissa ja painaa enteriä niin yritetään rekisteröityä
-            else if (e.Key == Key.Enter && Register_Grid.IsVisible)
-            {
-                btn_rekisteroidy_Click(sender, e);
-            }
-        }
-
-        //Metodi joka sijoittaa ikkunan keskelle tietokoneen näyttöä kun ikkunan koko muuttuu
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (e.PreviousSize == e.NewSize)
-                return;
-
-            var width = SystemParameters.PrimaryScreenWidth;
-            var height = SystemParameters.PrimaryScreenHeight;
-
-            this.Left = (width - e.NewSize.Width) / 2;
-            this.Top = (height - e.NewSize.Height) / 2;
-        }
-
+        #endregion
+        #region rekisterointi
         //Painike joka lisää käyttäjän tietokantaan
         private async void btn_rekisteroi_Click(object sender, RoutedEventArgs e)
         {
@@ -136,7 +166,7 @@ namespace Varausjarjestelma
             this.salasana = txt_salasanaR.Password;
             this.salasanaVarmistus = txt_salasanan_vahvistus.Password;
 
-            if (!kayttajanimi.Equals("") && !etunimi.Equals("") && !sukunimi.Equals("") && !salasana.Equals("") && !salasanaVarmistus.Equals("") )
+            if (!kayttajanimi.Equals("") && !etunimi.Equals("") && !sukunimi.Equals("") && !salasana.Equals("") && !salasanaVarmistus.Equals(""))
             {
                 //Tarkistetaan onko sama käyttäjänimi jo tietokannassa
                 //Kayttaja kayttaja = getKayttaja(kayttajanimi);
@@ -190,32 +220,7 @@ namespace Varausjarjestelma
             this.Height = 218;
             this.Title = "Kirjaudu Sisään";
         }
-
-        //Metodi joka tulostaa ilmoituksen haluttuun labeliin
-        private void tulostaIlmoitus(string tuloste, Label lbl, Boolean virheilmoitus)
-        {
-            if (virheilmoitus)
-            {
-                lbl.Foreground = red;
-            }
-
-            else
-            {
-                lbl.Foreground = white;
-            }
-
-            lbl.Content = tuloste;
-            lbl.Visibility = Visibility.Visible;
-
-            ajastin.Interval = new TimeSpan(0, 0, 3);
-            ajastin.Tick += (EventHandler)delegate (object snd, EventArgs ea)
-            {
-                lbl.Visibility = Visibility.Collapsed;
-                ((DispatcherTimer)snd).Stop();
-            };
-            ajastin.Start();
-
-        }
+        #endregion
         
         //Metodi joka etsii ja palauttaa käyttäjän tietokannasta
         //käyttäjänimen perusteella

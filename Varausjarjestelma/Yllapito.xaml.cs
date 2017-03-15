@@ -35,6 +35,7 @@ namespace Varausjarjestelma
         private String elokuvanKuvaus;
         private DateTime aika;
         private DispatcherTimer ajastin;
+        private List<int> poistettavatIndeksit;
 
         private SolidColorBrush red = new SolidColorBrush(Colors.Red);
         private SolidColorBrush white = new SolidColorBrush(Colors.White);
@@ -44,12 +45,14 @@ namespace Varausjarjestelma
             InitializeComponent();
             tietokanta = new Tietokanta();
             ajastin = new DispatcherTimer();
+            poistettavatIndeksit = new List<int>();
             kaikkiElokuvat = tietokanta.GetElokuvat();
             elokuvanNaytokset = new List<Näytös>();
             dg_Elokuvat.ItemsSource = kaikkiElokuvat;
             lisattavatNaytokset = new List<Näytös>();
         }
 
+        #region tietokantametodit
         //Lisää elokuvan tietokantaan
         //Palauttaa true jos onnistuu
         private bool lisaaElokuvaTietokantaan(Elokuva elokuva, List<Näytös> naytokset)
@@ -58,7 +61,7 @@ namespace Varausjarjestelma
 
             foreach (Näytös naytos in naytokset)
             {
-                tietokanta.Ajasql("INSERT INTO naytokset(elokuvannimi, aika, sali, teatteri) VALUES (" + elokuva.Nimi + ", " + naytos.Aika + ", " + naytos.Sali.Nimi + "," + naytos.Teatteri.Nimi + ")");
+                tietokanta.Ajasql("INSERT INTO naytokset(elokuvannimi, aika, sali, teatteri) VALUES ('" + elokuva.Nimi + "', '" + naytos.Aika + "', '" + naytos.Sali.Nimi + "', '" + naytos.Teatteri.Nimi + "')");
             }
 
             return true;
@@ -112,6 +115,9 @@ namespace Varausjarjestelma
             return true;
         }
 
+        #endregion tietokantametodit
+        #region yleisetUImetodit
+
         //Metodi joka tulostaa ilmoituksen haluttuun labeliin
         private void tulostaIlmoitus(string tuloste, Label lbl, Boolean virheilmoitus)
         {
@@ -147,22 +153,70 @@ namespace Varausjarjestelma
             }
         }
 
-        //Hoitaa käyttäjän kirjautumisen ulos järjestelmästä ja 
-        //avaa login-formin ja tyhjentää muuttujat
-        private async void btn_kirjaudu_ulos_Click(object sender, RoutedEventArgs e)
-        {
-            lbl_logout_ilmoitus.Visibility = Visibility.Visible;
-            await Task.Delay(2000);
-            new Login().Show();
-            this.Close();
-        }
-
         //Metodi, joka muotoilee UI-elementin vastaanottamaan vain numeroita
         private void vainNumeroita(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
+
+        private void ValittuTab(object sender, RoutedEventArgs e)
+        {
+            var tab = sender as TabItem;
+            if (tab != null)
+            {
+                //toiminnot, jotka suoritetaan kun joku tabi valitaan
+                if (tab.Name == "YllapidonEtusivuTab")
+                {
+                    paivitaElokuvatDG();
+                }
+
+                if (tab.Name == "Lisaa_Elokuva_Tab ")
+                {
+
+                }
+            }
+        }
+        #endregion UImetodit
+        #region etusivu
+        private void paivitaElokuvatDG()
+        {
+            //Haetaan elokuvat tietokannasta
+            kaikkiElokuvat = tietokanta.GetElokuvat();
+            dg_Elokuvat.ItemsSource = kaikkiElokuvat;
+        }
+
+        private void dg_Elokuvat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var elokuva = dg_Elokuvat.SelectedItem;
+
+            lbl_Naytokset.Visibility = Visibility.Visible;
+            dg_Naytokset.Visibility = Visibility.Visible;
+            btn_Avaa_Elokuvan_Muokkaus.Visibility = Visibility.Visible;
+            btn_Poista_Elokuva.Visibility = Visibility.Visible;
+        }
+
+        private void btn_Poista_Elokuva_Click(object sender, RoutedEventArgs e)
+        {
+            var elokuva = dg_Elokuvat.SelectedItem;
+            MessageBoxResult varmistus = System.Windows.MessageBox.Show("Haluatko varmasti poistaa elokuvan: " + elokuva.ToString(), "Delete Confirmation", System.Windows.MessageBoxButton.OKCancel);
+            if (varmistus == MessageBoxResult.OK)
+            {
+                //poistaElokuva(elokuva);
+                dg_Elokuvat.Items.Remove(elokuva); //Testaamista varten
+                //paivitaElokuvatDG();
+            }
+
+        }
+
+        private void btn_Avaa_Elokuvan_Muokkaus_Click(object sender, RoutedEventArgs e)
+        {
+            Perustiedot_Grid.Visibility = Visibility.Collapsed;
+            Perustietojen_Paivitys_Grid.Visibility = Visibility.Visible;
+            Lisaa_Elokuva_Tab.IsSelected = true;
+        }
+        #endregion
+        #region elokuvanLisays
 
         private void btn_Lisaa_Elokuvan_Perustiedot_Click(object sender, RoutedEventArgs e)
         {
@@ -177,7 +231,7 @@ namespace Varausjarjestelma
                 elokuvanKesto = Int32.Parse(txt_Kesto.Text);
                 elokuvanKuvaus = txt_Kuvaus.Text;
 
-                lisattavaElokuva = new Elokuva(elokuvanNimi, elokuvanVuosi , elokuvanKesto, elokuvanKuvaus, "Kylla");
+                lisattavaElokuva = new Elokuva(elokuvanNimi, elokuvanVuosi, elokuvanKesto, elokuvanKuvaus, "Kylla");
 
                 Perustiedot_Grid.Visibility = Visibility.Collapsed;
                 Naytokset_Lisays_Grid.Visibility = Visibility.Visible;
@@ -188,6 +242,24 @@ namespace Varausjarjestelma
         {
             Naytokset_Lisays_Grid.Visibility = Visibility.Collapsed;
             Perustiedot_Grid.Visibility = Visibility.Visible;
+        }
+
+        private void cmb_Elokuvateatteri_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ElokuvaT1.Content.Equals("Elokuvateatteri1"))
+            {
+                Elokuva1_Sali1.Visibility = Visibility.Visible;
+                Elokuva1_Sali2.Visibility = Visibility.Visible;
+                Elokuva2_Sali1.Visibility = Visibility.Collapsed;
+                Elokuva2_Sali2.Visibility = Visibility.Collapsed;
+            }
+            else if (ElokuvaT1.Content.Equals("Elokuvateatteri2"))
+            {
+                Elokuva2_Sali1.Visibility = Visibility.Visible;
+                Elokuva2_Sali2.Visibility = Visibility.Visible;
+                Elokuva1_Sali1.Visibility = Visibility.Collapsed;
+                Elokuva1_Sali2.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void btn_Lisaa_Naytos_Click(object sender, RoutedEventArgs e)
@@ -216,36 +288,21 @@ namespace Varausjarjestelma
 
         private void btn_Poista_Lisattava_Naytos_Click(object sender, RoutedEventArgs e)
         {
-
-            /*Näytös poistettavaNaytos = dg_Lisattavat_Naytokset.SelectedItem;
-
-            lisattavatNaytokset.Remove(poistettavaNaytos);
-            dg_Lisattavat_Naytokset.Items.Remove(poistettavaNaytos);*/
-
-            /*var myNaytokset = dg_Lisattavat_Naytokset;
-            var naytokset = dg_Lisattavat_Naytokset;
-
-            if (myNaytokset.SelectedItems.Count >= 1)
-            {
-                for (int i = 0; i < myNaytokset.SelectedItems.Count; i++)
-                {
-                    naytokset.Items.Remove(myNaytokset.SelectedItems[i]);
-                }
-            }
-
-            myNaytokset = naytokset;*/
+            int naytoksenIndeksi = dg_Lisattavat_Naytokset.SelectedIndex;
+            lisattavatNaytokset.RemoveAt(naytoksenIndeksi);
+            dg_Lisattavat_Naytokset.Items.RemoveAt(naytoksenIndeksi);
         }
 
         private async void btn_Lisaa_Elokuva_Click_(object sender, RoutedEventArgs e)
         {
             if (cmb_Elokuvateatteri.Equals(null) || datep_Naytoksen_aika.Text.Equals(null))
             {
-                tulostaIlmoitus("Tarvittavia tietoja puuttuu! Tarkista tiedot", lbl_lisays_ilmoitus, true);
+                tulostaIlmoitus("Tarvittavia tietoja puuttuu! Tarkista tiedot", lbl_Elokuvan_Lisays_Ilmoitus, true);
             }
             else
             {
                 lisaaElokuvaTietokantaan(this.lisattavaElokuva, this.lisattavatNaytokset);
-                tulostaIlmoitus("Elokuvan lisääminen onnistui. Palataan alkuun...", lbl_lisays_ilmoitus, false);
+                tulostaIlmoitus("Elokuvan lisääminen onnistui. Palataan alkuun...", lbl_Elokuvan_Lisays_Ilmoitus, false);
                 await Task.Delay(1000);
                 lisattavaElokuva = null;
                 txt_Elokuvan_Nimi.Clear();
@@ -256,61 +313,13 @@ namespace Varausjarjestelma
                 cmb_Salit.SelectedIndex = -1;
                 datep_Naytoksen_aika.Text = "";
                 lisattavatNaytokset.Clear();
+                dg_Lisattavat_Naytokset.Items.Clear();
+                btn_Takaisin_Lisays_Click(sender, e);
                 YllapidonEtusivuTab.IsSelected = true;
             }
         }
-
-        private void ValittuTab(object sender, RoutedEventArgs e)
-        {
-            var tab = sender as TabItem;
-            if (tab != null)
-            {
-                //toiminnot, jotka suoritetaan kun joku tabi valitaan
-                if (tab.Name == "YllapidonEtusivuTab")
-                {
-                    paivitaElokuvatDG();
-                }
-            }
-        }
-
-        private void paivitaElokuvatDG()
-        {
-            //Haetaan elokuvat tietokannasta
-            kaikkiElokuvat = tietokanta.GetElokuvat();
-            dg_Elokuvat.ItemsSource = kaikkiElokuvat;
-        }
-
-        private void dg_Elokuvat_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var elokuva = dg_Elokuvat.SelectedItem;
-            // haeElokuva((Elokuva)elokuva);
-
-            lbl_Naytokset.Visibility = Visibility.Visible;
-            dg_Naytokset.Visibility = Visibility.Visible;
-            btn_Avaa_Elokuvan_Muokkaus.Visibility = Visibility.Visible;
-            btn_Poista_Elokuva.Visibility = Visibility.Visible;
-        }
-
-        private void btn_Poista_Elokuva_Click(object sender, RoutedEventArgs e)
-        {
-            var elokuva = dg_Elokuvat.SelectedItem;
-            MessageBoxResult varmistus = System.Windows.MessageBox.Show("Haluatko varmasti poistaa elokuvan: " + elokuva.ToString(), "Delete Confirmation", System.Windows.MessageBoxButton.OKCancel);
-            if (varmistus == MessageBoxResult.OK)
-            {
-                //poistaElokuva(elokuva);
-                dg_Elokuvat.Items.Remove(elokuva); //Testaamista varten
-                //paivitaElokuvatDG();
-            }
-
-        }
-
-        private void btn_Avaa_Elokuvan_Muokkaus_Click(object sender, RoutedEventArgs e)
-        {
-            Perustiedot_Grid.Visibility = Visibility.Collapsed;
-            Perustietojen_Paivitys_Grid.Visibility = Visibility.Visible;
-            Lisaa_Elokuva_Tab.IsSelected = true;
-        }
-
+        #endregion
+        #region elokuvanPaivitys
         private void btn_Paivitys_Seuraava_Click(object sender, RoutedEventArgs e)
         {
             if (txt_Elokuvan_NimiP.Text.Equals("") || txt_VuosiP.Text.Equals("") || txt_KestoP.Text.Equals("") || txt_KuvausP.Text.Equals(""))
@@ -361,22 +370,32 @@ namespace Varausjarjestelma
         {
 
         }
+        #endregion
 
-        private void cmb_Elokuvateatteri_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //Hoitaa käyttäjän kirjautumisen ulos järjestelmästä ja 
+        //avaa login-formin ja tyhjentää muuttujat
+        private async void btn_kirjaudu_ulos_Click(object sender, RoutedEventArgs e)
         {
-            if (ElokuvaT1.Content.Equals("Elokuvateatteri1"))
+            lbl_logout_ilmoitus.Visibility = Visibility.Visible;
+            await Task.Delay(2000);
+            new Login().Show();
+            this.Close();
+        }
+
+        private void YllapidonControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            /*if (e.Source is TabControl && Lisaa_Elokuva_Tab.IsSelected)
             {
-                Elokuva1_Sali1.Visibility = Visibility.Visible;
-                Elokuva1_Sali2.Visibility = Visibility.Visible;
-                Elokuva2_Sali1.Visibility = Visibility.Collapsed;
-                Elokuva2_Sali2.Visibility = Visibility.Collapsed;
-            }
-            else if (ElokuvaT1.Content.Equals("Elokuvateatteri2"))
-            {
-                Elokuva2_Sali1.Visibility = Visibility.Visible;
-                Elokuva2_Sali2.Visibility = Visibility.Visible;
-                Elokuva1_Sali1.Visibility = Visibility.Collapsed;
-                Elokuva1_Sali2.Visibility = Visibility.Collapsed;
+                MessageBoxResult result = Xceed.Wpf.Toolkit.MessageBox.Show("Haluatko varmasti keskeyttää elokuvan lisäyksen ? Tallentamattomat tiedot menetetään.", 
+                                                                            "Varoitus", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.OK)
+                {
+
+                }
+                else
+                {
+
+                }*/
             }
         }
     }

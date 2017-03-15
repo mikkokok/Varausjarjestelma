@@ -16,7 +16,7 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <TabControl Name="YllapidonControl" Visibility="Visible" Background="#3385ff">
+        <TabControl Name="YllapidonControl" IsSynchronizedWithCurrentItem="True" Visibility="Visible" Background="#3385ff" SelectionChanged="YllapidonControl_SelectionChanged">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">
@@ -58,14 +58,7 @@
                     <Button x:Name="btn_Poista_Naytos" Content="Poista Näytös" Visibility="Collapsed" Style="{StaticResource ButtonStyle}" Grid.Column="1" HorizontalAlignment="Left" Margin="123,482,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
                     <DataGrid x:Name="dg_Elokuvat" IsReadOnly="True" Background=" #80c1ff" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Height="368" Width="400" Grid.ColumnSpan="2" SelectionChanged="dg_Elokuvat_SelectionChanged"  >
                     </DataGrid>
-                    <DataGrid x:Name="dg_Naytokset" IsReadOnly="True" Background=" #80c1ff" Visibility="Collapsed" Grid.Column="1" HorizontalAlignment="Left" Margin="123,46,0,0" VerticalAlignment="Top" Width="343" Height="368">
-                        <!--<DataGrid.Columns>
-                            <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Sijainti"/>
-                            <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Elokuvateatteri"/>
-                            <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Pvm."/>
-                            <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Klo."/>
-                        </DataGrid.Columns>-->
-                    </DataGrid>
+                    <DataGrid x:Name="dg_Naytokset" IsReadOnly="True" Background=" #80c1ff" Visibility="Collapsed" Grid.Column="1" HorizontalAlignment="Left" Margin="123,46,0,0" VerticalAlignment="Top" Width="343" Height="368"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="Lisaa_Elokuva_Tab" Header="Lisää elokuva"  Selector.Selected="ValittuTab">
@@ -111,7 +104,7 @@
                                 <DataGridTextColumn Binding="{Binding Klo}" ClipboardContentBinding="{x:Null}" Header="Klo"/>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Label x:Name="lbl_Elokuvan_Lisays_Ilmoitus" Content="LisaysIlmoitus" Style="{StaticResource FadeAnimation}" FontSize="18" HorizontalAlignment="Left" Margin="40,364,0,0" VerticalAlignment="Top" Height="151" Width="286"/>
+                        <Label x:Name="lbl_Elokuvan_Lisays_Ilmoitus" Visibility="Collapsed" Content="LisaysIlmoitus" Style="{StaticResource FadeAnimation}" FontSize="18" HorizontalAlignment="Left" Margin="26,383,0,0" VerticalAlignment="Top" Height="151" Width="286"/>
                         <Label x:Name="lbl_Sali" Content="Sali" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="26,146,0,0" VerticalAlignment="Top"/>
                     </Grid>
 
