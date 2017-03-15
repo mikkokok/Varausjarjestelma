@@ -159,7 +159,7 @@
             <TabItem x:Name="Kayttajat_tab" Header="Käyttäjät">
 
                 <Grid x:Name="Kayttajat_Grid">
-                    <DataGrid x:Name="dg_kayttajat" HorizontalAlignment="Left" Margin="24,76,0,0" VerticalAlignment="Top" Height="329" Width="209">
+                    <DataGrid x:Name="dg_kayttajat" HorizontalAlignment="Left" Margin="24,76,0,0" VerticalAlignment="Top" Height="329" Width="253" SelectionChanged="dg_kayttajat_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Kayttajatunnus}" ClipboardContentBinding="{x:Null}" Header="Tunnus"/>
                             <DataGridTextColumn Binding="{Binding Etunimi}" ClipboardContentBinding="{x:Null}" Header="Etunimi"/>
@@ -168,8 +168,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <Label x:Name="lbl_Kayttajat" Style="{StaticResource LabelHeaderStyle}" Content="Käyttäjät" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top"/>
-                    <Button x:Name="btn_Ylenna" Style="{StaticResource ButtonStyle}" Content="Ylennä ylläpitäjäksi" HorizontalAlignment="Left" Margin="335,76,0,0" VerticalAlignment="Top" Width="145" Height="51"/>
-                    <Button x:Name="btn_Poista" Style="{StaticResource ButtonStyle}" Content="Poista Käyttäjä" HorizontalAlignment="Left" Margin="335,179,0,0" VerticalAlignment="Top" Width="145" Height="51"/>
+                    <Button x:Name="btn_Ylenna_Kayttaja" Style="{StaticResource ButtonStyle}" Content="Ylennä ylläpitäjäksi" Visibility="Collapsed" HorizontalAlignment="Left" Margin="335,76,0,0" VerticalAlignment="Top" Width="145" Height="51" Click="btn_Ylenna_Kayttaja_Click"/>
 
                 </Grid>
 

@@ -36,6 +36,7 @@ namespace Varausjarjestelma
         private String elokuvanKuvaus;
         private DateTime aika;
         private DispatcherTimer ajastin;
+        private int kayttajaIndeksi;
 
         private SolidColorBrush red = new SolidColorBrush(Colors.Red);
         private SolidColorBrush white = new SolidColorBrush(Colors.White);
@@ -358,6 +359,7 @@ namespace Varausjarjestelma
         private void paivitaKayttajat()
         {
             dg_kayttajat.Items.Clear();
+            kayttajat = tietokanta.GetKayttajat();
             foreach (Kayttaja kayttaja in kayttajat)
             {
 
@@ -402,6 +404,31 @@ namespace Varausjarjestelma
                 else
                 {
                     YllapidonControl.SelectedIndex = 1;
+                }
+            }
+        }
+
+        private void btn_Ylenna_Kayttaja_Click(object sender, RoutedEventArgs e)
+        {
+            Kayttaja kayttaja = kayttajat[kayttajaIndeksi];
+            tietokanta.Ajasql("UPDATE kayttajat SET rooli = 'Admin' WHERE tunnus='" + kayttaja.Tunnus + "'");
+            paivitaKayttajat();
+            btn_Ylenna_Kayttaja.Visibility = Visibility.Collapsed;
+        }
+
+        private void dg_kayttajat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dg_kayttajat.SelectedIndex != -1)
+            {
+                kayttajaIndeksi = dg_kayttajat.SelectedIndex;
+                Kayttaja kayttaja = kayttajat[kayttajaIndeksi];
+                if (kayttaja.Rooli.Equals("User"))
+                {
+                    btn_Ylenna_Kayttaja.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    btn_Ylenna_Kayttaja.Visibility = Visibility.Collapsed;
                 }
             }
         }
