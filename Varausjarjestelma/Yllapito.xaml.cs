@@ -45,12 +45,11 @@ namespace Varausjarjestelma
         {
             InitializeComponent();
             tietokanta = new Tietokanta();
-            ajastin = new DispatcherTimer();
-            kaikkiElokuvat = tietokanta.GetElokuvat();
-            kayttajat = tietokanta.GetKayttajat();          
-            dg_Elokuvat.ItemsSource = kaikkiElokuvat;
+            ajastin = new DispatcherTimer();        
             elokuvanNaytokset = new List<Näytös>();
             lisattavatNaytokset = new List<Näytös>();
+            paivitaElokuvatDG();
+            paivitaKayttajat();
         }
 
         #region tietokantametodit
@@ -66,37 +65,6 @@ namespace Varausjarjestelma
             }
 
             return true;
-        }
-
-        //Poistaa elokuvan ja siihen liittyvät näytökset tietokannasta
-        //Palauttaa true jos onnistuu
-        private bool poistaElokuva(Elokuva elokuva)
-        {
-            return true;
-        }
-
-        //Etsii ja palauttaa halutun elokuvan tietokannasta
-        private Elokuva haeElokuva(Elokuva elokuva)
-        {
-            return null;
-        }
-
-        //Etsii ja palauttaa elokuvaan liittyvät näytökset
-        private List<Näytös> haeElokuvanNaytokset(Elokuva elokuva)
-        {
-            return null;
-        }
-
-        //Hakee kaikki elokuvateatterit tietokannasta
-        private List<Teatteri> haeTeatterit()
-        {
-            return null;
-        }
-
-        //Hakee kaikki tietokannassa olevat elokuvasalit
-        private List<Elokuvasali> haeElokuvaSalit()
-        {
-            return tietokanta.GetElokuvasalit();
         }
 
         //Päivittää annetun elokuvan tiedot tietokannassa
@@ -164,9 +132,22 @@ namespace Varausjarjestelma
         #region etusivu
         private void paivitaElokuvatDG()
         {
-            //Haetaan elokuvat tietokannasta
+            dg_Elokuvat.Items.Clear();
             kaikkiElokuvat = tietokanta.GetElokuvat();
-            dg_Elokuvat.ItemsSource = kaikkiElokuvat;
+
+            foreach (Elokuva elokuva in kaikkiElokuvat)
+            {
+                dg_Elokuvat.Items.Add(new
+                {
+                    ElokuvanNimi = elokuva.Nimi,
+                    Vuosi = elokuva.Vuosi,
+                    Kesto = elokuva.Kesto,
+                    Kuvaus = elokuva.Teksti,
+                    Ohjelmistossa = elokuva.Ohjelmistossa
+                });
+            }
+
+
         }
 
         private void dg_Elokuvat_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -221,13 +221,6 @@ namespace Varausjarjestelma
             this.Title = "Kirjaudu Sisään";
         }
         #endregion
-        
-        //Metodi joka etsii ja palauttaa käyttäjän tietokannasta
-        //käyttäjänimen perusteella
-        private Kayttaja getKayttaja(String kayttajatunnus)
-        {
-            return null;
-        }
 
     }
 }

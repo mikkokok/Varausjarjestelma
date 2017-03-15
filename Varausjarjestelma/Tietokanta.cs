@@ -116,6 +116,13 @@ namespace Varausjarjestelma
             return res;
         }
 
+        //Metodi joka etsii ja palauttaa käyttäjän tietokannasta
+        //käyttäjänimen perusteella
+        public Kayttaja getKayttaja(String kayttajatunnus)
+        {
+            return null;
+        }
+
         public void SetKayttaja(Kayttaja kayttaja)
         {
             Ajasql($"INSERT INTO kayttajat VALUES (null, '{kayttaja.Etunimi}', '{kayttaja.Sukunimi}', '{kayttaja.Tunnus}', '{kayttaja.Salasana}', '{kayttaja.Rooli}')");
@@ -134,6 +141,12 @@ namespace Varausjarjestelma
                 res.Add(new Elokuva(_sqllukija.GetString(1), int.Parse(_sqllukija.GetString(2)), int.Parse(_sqllukija.GetString(3)), _sqllukija.GetString(4), _sqllukija.GetString(5)));
             }
             return res;
+        }
+
+        //Etsii ja palauttaa halutun elokuvan tietokannasta
+        public Elokuva GetElokuva(string elokuvaNimi)
+        {
+            return null;
         }
 
         public void SetElokuva(Elokuva elokuva)

@@ -56,7 +56,60 @@
                     <Button x:Name="btn_Avaa_Elokuvan_Lisays" Content="Lisää Elokuva" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="10,434,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
                     <Button x:Name="btn_Poista_Elokuva" Content="Poista Elokuva" Visibility="Collapsed" Style="{StaticResource ButtonStyle}" Width="119" Height="36" HorizontalAlignment="Left" Margin="10,482,0,0" VerticalAlignment="Top" Click="btn_Poista_Elokuva_Click"/>
                     <Button x:Name="btn_Poista_Naytos" Content="Poista Näytös" Visibility="Collapsed" Style="{StaticResource ButtonStyle}" Grid.Column="1" HorizontalAlignment="Left" Margin="123,482,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
-                    <DataGrid x:Name="dg_Elokuvat" IsReadOnly="True" Background=" #80c1ff" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Height="368" Width="400" Grid.ColumnSpan="2" SelectionChanged="dg_Elokuvat_SelectionChanged"  >
+                    <DataGrid x:Name="dg_Elokuvat" IsReadOnly="True" Background=" #80c1ff" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Height="368" Width="420" Grid.ColumnSpan="2" SelectionChanged="dg_Elokuvat_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding ElokuvanNimi}" ClipboardContentBinding="{x:Null}" Header="Nimi" Width="70" FontSize="10">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Vuosi}" ClipboardContentBinding="{x:Null}" Header="Vuosi" Width="40" FontSize="10">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Kesto}" ClipboardContentBinding="{x:Null}" Header="Kesto" Width="40" FontSize="10">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Kuvaus}" ClipboardContentBinding="{x:Null}" Header="Kuvaus" Width="170" FontSize="10">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Ohjelmistossa}" ClipboardContentBinding="{x:Null}" Header="Ohjelmistossa" Width="90" FontSize="10">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style>
+                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+
                     </DataGrid>
                     <DataGrid x:Name="dg_Naytokset" IsReadOnly="True" Background=" #80c1ff" Visibility="Collapsed" Grid.Column="1" HorizontalAlignment="Left" Margin="123,46,0,0" VerticalAlignment="Top" Width="343" Height="368"/>
                 </Grid>
