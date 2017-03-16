@@ -156,7 +156,7 @@ namespace Varausjarjestelma
 
         public void DelElokuva(Elokuva elokuva)
         {
-            Ajasql($"DELETE FROM elokuvat WHERE elokuvannimi={elokuva.Nimi}");
+            Ajasql($"DELETE FROM elokuvat WHERE elokuvannimi='{elokuva.Nimi}'");
         }
 
         #endregion

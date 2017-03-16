@@ -53,7 +53,7 @@
                     <Button x:Name="btn_Avaa_Elokuvan_Muokkaus" Content="Muokkaa Elokuvaa" Visibility="Collapsed" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="161,434,0,0" VerticalAlignment="Top" Width="120" Height="36" Click="btn_Avaa_Elokuvan_Muokkaus_Click"/>
                     <Button x:Name="button" Content="Muokkaa näytöstä" Visibility="Collapsed" Grid.Column="1" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="278,434,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
                     <Button x:Name="btn_Avaa_Naytoksen_Lisays" Visibility="Collapsed" Content="Lisää Näytös" Style="{StaticResource ButtonStyle}"  Grid.Column="1" HorizontalAlignment="Left" Margin="123,434,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
-                    <Button x:Name="btn_Avaa_Elokuvan_Lisays" Content="Lisää Elokuva" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="10,434,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
+                    <Button x:Name="btn_Avaa_Elokuvan_Lisays" Content="Lisää Elokuva" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="10,434,0,0" VerticalAlignment="Top" Width="119" Height="36" Click="btn_Avaa_Elokuvan_Lisays_Click"/>
                     <Button x:Name="btn_Poista_Elokuva" Content="Poista Elokuva" Visibility="Collapsed" Style="{StaticResource ButtonStyle}" Width="119" Height="36" HorizontalAlignment="Left" Margin="10,482,0,0" VerticalAlignment="Top" Click="btn_Poista_Elokuva_Click"/>
                     <Button x:Name="btn_Poista_Naytos" Content="Poista Näytös" Visibility="Collapsed" Style="{StaticResource ButtonStyle}" Grid.Column="1" HorizontalAlignment="Left" Margin="123,482,0,0" VerticalAlignment="Top" Width="119" Height="36"/>
                     <DataGrid x:Name="dg_Elokuvat" IsReadOnly="True" Background=" #80c1ff" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Height="368" Width="420" Grid.ColumnSpan="2" SelectionChanged="dg_Elokuvat_SelectionChanged">
@@ -116,7 +116,7 @@
             </TabItem>
             <TabItem x:Name="Lisaa_Elokuva_Tab" Header="Lisää elokuva">
                 <Grid x:Name="Elokuvan_Lisays_Grid">
-                    <Grid x:Name="Perustiedot_Grid" Visibility="Visible">
+                    <Grid x:Name="Perustiedot_Grid" Visibility="Collapsed">
                         <Label x:Name="lbl_Lisää_Elokuva" Content="LISÄÄ ELOKUVA" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="lbl_Nimi" Content="Nimi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,63,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.295,0.604"/>
                         <Label x:Name="lbl_Kesto" Content="Kesto(min)" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.173,0.625"/>
@@ -161,7 +161,7 @@
                         <Label x:Name="lbl_Sali" Content="Sali" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="26,146,0,0" VerticalAlignment="Top"/>
                     </Grid>
 
-                    <Grid x:Name="Perustietojen_Paivitys_Grid" Visibility="Collapsed">
+                    <Grid x:Name="Perustietojen_Paivitys_Grid" Visibility="Visible">
                         <Label x:Name="lbl_Päivitä_Elokuva" Content="PÄIVITÄ ELOKUVA" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="lbl_NimiP" Content="Nimi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,63,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.295,0.604"/>
                         <Label x:Name="lbl_KestoP" Content="Kesto(min)" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.173,0.625"/>
@@ -170,9 +170,10 @@
                         <TextBox x:Name="txt_Elokuvan_NimiP" HorizontalAlignment="Left" Height="23" Margin="137,68,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="339"/>
                         <TextBox x:Name="txt_KestoP" PreviewTextInput="vainNumeroita" HorizontalAlignment="Left" Height="24" Margin="137,174,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                         <TextBox x:Name="txt_KuvausP" HorizontalAlignment="Left" Height="251" Margin="20,269,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456"/>
-                        <Button x:Name="btn_Paivitys_Seuraava" Content="Seuraava" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="568,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Paivitys_Seuraava_Click"/>
-                        <Label x:Name="lbl_Paivitys_ilmoitus" Content="Lisays ilmoitus" FontSize="18" Style="{StaticResource FadeAnimation}" HorizontalAlignment="Left" Margin="568,174,0,0" VerticalAlignment="Top" Height="159" Width="187"/>
+                        <Button x:Name="btn_Paivitys_Seuraava" Content="Muokkaa näytöksiä" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="568,167,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Paivitys_Seuraava_Click"/>
+                        <Label x:Name="lbl_Paivitys_ilmoitus" Content="Paivitys Ilmoitus" FontSize="18" Style="{StaticResource FadeAnimation}" HorizontalAlignment="Left" Margin="568,269,0,0" VerticalAlignment="Top" Height="159" Width="187"/>
                         <TextBox x:Name="txt_VuosiP" HorizontalAlignment="Left" Height="23" Margin="137,113,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                        <Button x:Name="btn_Paivita_Elokuvan_Perustiedot" Style="{StaticResource ButtonStyle}" Content="Päivitä elokuva" HorizontalAlignment="Left" Margin="568,63,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Paivita_Elokuvan_Perustiedot_Click"/>
                     </Grid>
 
                     <Grid x:Name="Naytosten_Paivitys_Grid" Visibility="Collapsed" Margin="-10,-23,10,23">
