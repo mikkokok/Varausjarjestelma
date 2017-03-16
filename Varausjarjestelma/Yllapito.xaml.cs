@@ -175,6 +175,8 @@ namespace Varausjarjestelma
                 if (varmistus == MessageBoxResult.OK)
                 {
                     dg_Elokuvat.Items.RemoveAt(elokuvaIndeksi);
+
+                    tietokanta.Ajasql("DELETE FROM naytokset WHERE elokuvannimi= '" + elokuva.Nimi + "'");
                     tietokanta.DelElokuva(elokuva);
                     paivitaElokuvatDG();
                 }
