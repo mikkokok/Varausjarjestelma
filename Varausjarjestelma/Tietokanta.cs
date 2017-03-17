@@ -160,6 +160,22 @@ namespace Varausjarjestelma
         }
 
         #endregion
+
+        #region näytöskyselyt
+
+        //Palauttaa elokuvaan kuuluvat näytökset
+        public List<Näytös> getElokuvanNäytökset(Elokuva elokuva)
+        {
+            return null;
+        }
+
+        //Päivittää elokuvaan liittyvät näytökset
+        public void muokkaaNäytökset(Elokuva elokuva, List<Näytös> naytokset)
+        {
+
+        }
+        #endregion
+
         #region Elokuvasalit
         public List<Elokuvasali> GetElokuvasalit()
         {

@@ -39,6 +39,7 @@ namespace Varausjarjestelma
         private DispatcherTimer ajastin;
         private int kayttajaIndeksi;
         private int elokuvaIndeksi;
+        private string elokuvanVanhaNimi;
 
         private SolidColorBrush red = new SolidColorBrush(Colors.Red);
         private SolidColorBrush white = new SolidColorBrush(Colors.White);
@@ -71,9 +72,8 @@ namespace Varausjarjestelma
 
         //Päivittää annetun elokuvan tiedot tietokannassa
         //Palauttaa true jos onnistuu
-        private bool PaivitaElokuva(Elokuva elokuva)
+        private bool PaivitaElokuva(Elokuva elokuva, string vanhaNimi)
         {
-            //Ei toimi jos elokuvan nimeä muokataan, tulee 2 eri elokuvaa
             tietokanta.DelElokuva(elokuva);
             tietokanta.SetElokuva(elokuva);
             kaikkiElokuvat = tietokanta.GetElokuvat();
@@ -158,12 +158,28 @@ namespace Varausjarjestelma
             dg_Naytokset.Visibility = Visibility.Visible;
             btn_Avaa_Elokuvan_Muokkaus.Visibility = Visibility.Visible;
             btn_Poista_Elokuva.Visibility = Visibility.Visible;
+            
         }
 
         private void btn_Avaa_Elokuvan_Lisays_Click(object sender, RoutedEventArgs e)
         {
-            Elokuvan_Lisays_Grid.Visibility = Visibility.Visible;
+            Perustiedot_Grid.Visibility = Visibility.Visible;
+            Perustietojen_Paivitys_Grid.Visibility = Visibility.Collapsed;
+            Naytosten_Paivitys_Grid.Visibility = Visibility.Collapsed;
             Lisaa_Elokuva_Tab.IsSelected = true;
+        }
+
+        private void btn_Avaa_Elokuvan_Muokkaus_Click(object sender, RoutedEventArgs e)
+        {
+            if (elokuvaIndeksi != -1)
+            {
+                paivitettavaElokuva = kaikkiElokuvat[elokuvaIndeksi];
+                Perustiedot_Grid.Visibility = Visibility.Collapsed;
+                Naytokset_Lisays_Grid.Visibility = Visibility.Collapsed;
+                Perustietojen_Paivitys_Grid.Visibility = Visibility.Visible;
+                Lisaa_Elokuva_Tab.IsSelected = true;
+            }
+
         }
 
         private void btn_Poista_Elokuva_Click(object sender, RoutedEventArgs e)
@@ -185,17 +201,6 @@ namespace Varausjarjestelma
 
         }
 
-        private void btn_Avaa_Elokuvan_Muokkaus_Click(object sender, RoutedEventArgs e)
-        {
-            if (elokuvaIndeksi != -1)
-            {
-                paivitettavaElokuva = kaikkiElokuvat[elokuvaIndeksi];
-                Perustiedot_Grid.Visibility = Visibility.Collapsed;
-                Perustietojen_Paivitys_Grid.Visibility = Visibility.Visible;
-                Lisaa_Elokuva_Tab.IsSelected = true;
-            }
-
-        }
         #endregion
         #region elokuvanLisays
 
@@ -285,16 +290,6 @@ namespace Varausjarjestelma
                 lisaaElokuvaTietokantaan(this.lisattavaElokuva, this.lisattavatNaytokset);
                 tulostaIlmoitus("Elokuvan lisääminen onnistui. Palataan alkuun...", lbl_Elokuvan_Lisays_Ilmoitus, false);
                 await Task.Delay(1000);
-                lisattavaElokuva = null;
-                txt_Elokuvan_Nimi.Clear();
-                txt_Vuosi.Clear();
-                txt_Kesto.Clear();
-                txt_Kuvaus.Clear();
-                cmb_Elokuvateatteri.SelectedIndex = -1;
-                cmb_Salit.SelectedIndex = -1;
-                datep_Naytoksen_aika.Text = "";
-                lisattavatNaytokset.Clear();
-                dg_Lisattavat_Naytokset.Items.Clear();
                 btn_Takaisin_Lisays_Click(sender, e);
                 YllapidonEtusivuTab.IsSelected = true;
             }
@@ -326,8 +321,6 @@ namespace Varausjarjestelma
             dg_Paivitettavat_Naytokset.Items.Add(new
             {
                 Elokuvateatteri = txt_ElokuvateatteriP.Text,
-                Pvm = datep_Naytoksen_pvmP.Text,
-                Klo = txt_AikaP.Text
             });
         }
 
@@ -371,56 +364,6 @@ namespace Varausjarjestelma
             }
         }
 
-        #endregion
-
-        //Hoitaa käyttäjän kirjautumisen ulos järjestelmästä ja 
-        //avaa login-formin ja tyhjentää muuttujat
-        private async void btn_kirjaudu_ulos_Click(object sender, RoutedEventArgs e)
-        {
-            lbl_logout_ilmoitus.Visibility = Visibility.Visible;
-            await Task.Delay(2000);
-            new Login().Show();
-            this.Close();
-        }
-
-        private void YllapidonControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-
-            if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 0)
-            {
-                paivitaElokuvatDG();
-            }
-
-
-            if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 1 && paivitettavaElokuva != null)
-            {
-                txt_Elokuvan_NimiP.Text = paivitettavaElokuva.Nimi;
-                txt_VuosiP.Text = paivitettavaElokuva.Vuosi.ToString();
-                txt_KestoP.Text = paivitettavaElokuva.Kesto.ToString();
-                txt_KuvausP.Text = paivitettavaElokuva.Teksti;
-            }
-
-            if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 2)
-            {
-                paivitaKayttajat();
-            }
-
-            if (e.OriginalSource == Lisaa_Elokuva_Tab)
-            {
-                MessageBoxResult result = Xceed.Wpf.Toolkit.MessageBox.Show("Haluatko varmasti keskeyttää elokuvan lisäyksen ? Tallentamattomat tiedot menetetään.", 
-                                                                            "Varoitus", MessageBoxButton.OKCancel);
-                if (result == MessageBoxResult.OK)
-                {
-                    e.Handled = true;
-                }
-                else
-                {
-                    YllapidonControl.SelectedIndex = 1;
-                }
-            }
-        }
-
         private void btn_Ylenna_Kayttaja_Click(object sender, RoutedEventArgs e)
         {
             Kayttaja kayttaja = kayttajat[kayttajaIndeksi];
@@ -446,18 +389,94 @@ namespace Varausjarjestelma
             }
         }
 
+        #endregion
+
+        //Hoitaa käyttäjän kirjautumisen ulos järjestelmästä ja 
+        //avaa login-formin ja tyhjentää muuttujat
+        private async void btn_kirjaudu_ulos_Click(object sender, RoutedEventArgs e)
+        {
+            lbl_logout_ilmoitus.Visibility = Visibility.Visible;
+            await Task.Delay(2000);
+            new Login().Show();
+            this.Close();
+        }
+
+        private void YllapidonControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 0)
+            {
+                paivitaElokuvatDG();
+                clearElokuvanLisays();
+                clearElokuvanPaivitys();
+            }
+
+
+            if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 1 && paivitettavaElokuva != null)
+            {
+                elokuvanVanhaNimi = paivitettavaElokuva.Nimi;
+                txt_Elokuvan_NimiP.Text = paivitettavaElokuva.Nimi;
+                txt_VuosiP.Text = paivitettavaElokuva.Vuosi.ToString();
+                txt_KestoP.Text = paivitettavaElokuva.Kesto.ToString();
+                txt_KuvausP.Text = paivitettavaElokuva.Teksti;
+            }
+
+            if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 2)
+            {
+                paivitaKayttajat();
+            }
+
+            /*if (e.OriginalSource == Lisaa_Elokuva_Tab)
+            {
+                MessageBoxResult result = Xceed.Wpf.Toolkit.MessageBox.Show("Haluatko varmasti keskeyttää elokuvan lisäyksen ? Tallentamattomat tiedot menetetään.", 
+                                                                            "Varoitus", MessageBoxButton.OKCancel);
+                if (result == MessageBoxResult.OK)
+                {
+                    e.Handled = true;
+                }
+                else
+                {
+                    YllapidonControl.SelectedIndex = 1;
+                }
+            }*/
+        }
+
         private async void btn_Paivita_Elokuvan_Perustiedot_Click(object sender, RoutedEventArgs e)
         {
             paivitettavaElokuva.Nimi = txt_Elokuvan_NimiP.Text;
             paivitettavaElokuva.Vuosi = int.Parse(txt_VuosiP.Text);
             paivitettavaElokuva.Kesto = int.Parse(txt_KestoP.Text);
             paivitettavaElokuva.Teksti = txt_KuvausP.Text;
-            PaivitaElokuva(paivitettavaElokuva);
+            PaivitaElokuva(paivitettavaElokuva, elokuvanVanhaNimi);
             tulostaIlmoitus("Elokuvan päivitys onnistui. Ladataan...", lbl_Paivitys_ilmoitus, false);
             await Task.Delay(1000);
             paivitettavaElokuva = null;
             Perustiedot_Grid.Visibility = Visibility.Visible;
             YllapidonEtusivuTab.IsSelected = true;
+        }
+
+        private void clearElokuvanLisays()
+        {
+            lisattavaElokuva = null;
+            txt_Elokuvan_Nimi.Clear();
+            txt_Vuosi.Clear();
+            txt_Kesto.Clear();
+            txt_Kuvaus.Clear();
+            cmb_Elokuvateatteri.SelectedIndex = -1;
+            cmb_Salit.SelectedIndex = -1;
+            datep_Naytoksen_aika.Text = "";
+            lisattavatNaytokset.Clear();
+            dg_Lisattavat_Naytokset.Items.Clear();
+        }
+
+        private void clearElokuvanPaivitys()
+        {
+            paivitettavaElokuva = null;
+            txt_Elokuvan_NimiP.Clear();
+            txt_VuosiP.Clear();
+            txt_KestoP.Clear();
+            txt_KuvausP.Clear();
+            txt_Elokuvan_NimiP.Clear();
         }
     }
 }
