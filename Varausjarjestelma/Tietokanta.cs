@@ -2,6 +2,7 @@
 using System.Data.SQLite;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Varausjarjestelma
@@ -81,6 +82,9 @@ namespace Varausjarjestelma
             // Luo muutama elokuva
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '2005', '120', 'Kissoja ja koiria', 'Kylla')");
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', '145', 'Kirahveja ja elefantteja', 'Ei')");
+            // Luo muutama elokuvasali ja teatteri
+            Ajasql("INSET INTO elokuvasalit VALUES(null, 'Sali1', '20', '10', 'Teatteri1', 'Kaupunki1')");
+            Ajasql("INSET INTO elokuvasalit VALUES(null, 'Sali2', '10', '5', 'Teatteri1', 'Kaupunki1')");
         }
 
         public List<string> Ajasql(string sql)
@@ -120,7 +124,16 @@ namespace Varausjarjestelma
         //käyttäjänimen perusteella
         public Kayttaja getKayttaja(String kayttajatunnus)
         {
-            return null;
+            var res = new Kayttaja("","","","","");
+            string sql = $"SELECT * FROM kayttajat WHERE tunnus= {kayttajatunnus}";
+            _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
+            _sqllukija = _sqlkomento.ExecuteReader();
+            if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
+            while (_sqllukija.Read())
+            {
+                res = new Kayttaja(_sqllukija.GetString(1), _sqllukija.GetString(2), _sqllukija.GetString(3), _sqllukija.GetString(4), _sqllukija.GetString(5));
+            }
+            return res;
         }
 
         public void SetKayttaja(Kayttaja kayttaja)
@@ -146,7 +159,16 @@ namespace Varausjarjestelma
         //Etsii ja palauttaa halutun elokuvan tietokannasta
         public Elokuva GetElokuva(string elokuvaNimi)
         {
-            return null;
+            var res = new Elokuva("",1,1,"","");
+            string sql = $"SELECT * FROM elokuvat WHERE nimi='{elokuvaNimi}'";
+            _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
+            _sqllukija = _sqlkomento.ExecuteReader();
+            if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
+            while (_sqllukija.Read())
+            {
+                res = new Elokuva(_sqllukija.GetString(1), int.Parse(_sqllukija.GetString(2)), int.Parse(_sqllukija.GetString(3)), _sqllukija.GetString(4), _sqllukija.GetString(5));
+            }
+            return res;
         }
 
         public void SetElokuva(Elokuva elokuva)
@@ -164,17 +186,41 @@ namespace Varausjarjestelma
         #region näytöskyselyt
 
         //Palauttaa elokuvaan kuuluvat näytökset
-        public List<Näytös> getElokuvanNäytökset(Elokuva elokuva)
+        public List<Näytös> getElokuvanNaytokset(Elokuva elokuva)
         {
-            return null;
+            var res = new List<Näytös>();
+            var salit = GetElokuvasalit();
+            string sql = $"SELECT * FROM naytokset WHERE elokuvannimi='{elokuva.Nimi}'";
+            _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
+            _sqllukija = _sqlkomento.ExecuteReader();
+            if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
+            while (_sqllukija.Read())
+            {
+                res.Add(new Näytös(elokuva, DateTime.Parse(_sqllukija.GetString(2)), haeElokuvasali(salit, _sqllukija.GetString(3)), haeElokuvasali(salit, _sqllukija.GetString(3)).Teatteri));
+            }
+            return res;
+        }
+        private Elokuvasali haeElokuvasali(List<Elokuvasali> salit, string salinnimi)
+        {
+            return salit.First(s => s.Nimi == salinnimi);
         }
 
         //Päivittää elokuvaan liittyvät näytökset
-        public void muokkaaNäytökset(Elokuva elokuva, List<Näytös> naytokset)
+        public void muokkaaNaytokset(Elokuva elokuva, List<Näytös> naytokset)
         {
+            // Tyhjennä aikaisemmat näytökset
+            foreach (var naytos in naytokset)
+            {
+                DelNaytos(naytos);
+            }
 
         }
         #endregion
+
+        public void DelNaytos(Näytös naytos)
+        {
+            Ajasql($"DELETE FROM naytokset WHERE elokuvannimi='{naytos.Elokuva.Nimi}'");
+        }
 
         #region Elokuvasalit
         public List<Elokuvasali> GetElokuvasalit()

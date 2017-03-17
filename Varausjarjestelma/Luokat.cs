@@ -95,6 +95,7 @@ namespace Varausjarjestelma
 
         public int PaikkaRivissä => Sali.PaikkaRivissäNrosta(PaikkaNro);
 
+
         public Paikka(Elokuvasali sali, int paikkaNro)
         {
             Sali = sali;
@@ -106,12 +107,22 @@ namespace Varausjarjestelma
     {
         public Elokuva Elokuva { get; set; }
         public Elokuvasali Sali { get; set; }
-        public Teatteri Teatteri => Sali.Teatteri;
+        public Teatteri Teatteri { get; set; } //=> Sali.Teatteri;
 
         public int VapaitaPaikkoja { get; set; }
 
         public DateTime Aika { set; get; }
-
+        public Näytös(Elokuva elokuva, DateTime aika, Elokuvasali sali, Teatteri teatteri)
+        {
+            this.Elokuva = elokuva;
+            this.Aika = aika;
+            this.Sali = sali;
+            this.Teatteri = teatteri;
+        }
+        public Näytös()
+        {
+            
+        }
         // siiretään tietokantaluokkaan?
         //
         //public list<int> varatutpaikat { get; set; }
