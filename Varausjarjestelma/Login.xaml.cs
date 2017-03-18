@@ -169,35 +169,32 @@ namespace Varausjarjestelma
             if (!kayttajanimi.Equals("") && !etunimi.Equals("") && !sukunimi.Equals("") && !salasana.Equals("") && !salasanaVarmistus.Equals(""))
             {
                 //Tarkistetaan onko sama käyttäjänimi jo tietokannassa
-                //Kayttaja kayttaja = getKayttaja(kayttajanimi);
+                Kayttaja kayttaja = Tietokanta.getKayttaja(kayttajanimi);
 
                 //Jos käyttäjää ei löydy tietokannasta niin jatketaan rekisteröintiä
-                /*if (kayttaja == null)
+                if (kayttaja.Tunnus.Equals(kayttajanimi))
                 {
-
+                    tulostaIlmoitus("Tunnus on jo olemassa. Valitse toinen tunnus.", lbl_ilmoitusR, true);
                 }
                 else
                 {
+                    if (this.salasana.Equals(this.salasanaVarmistus))
+                    {
+                        //Rekisteröi käyttäjäjän tietokantaan
+                        Kayttaja uusiKayttaja = new Kayttaja(etunimi, sukunimi, kayttajanimi, salasana, "User");
 
-                }*/
+                        Tietokanta.SetKayttaja(uusiKayttaja);
 
-                if (this.salasana.Equals(this.salasanaVarmistus))
-                {
-                    //Rekisteröi käyttäjäjän tietokantaan
-                    Kayttaja uusiKayttaja = new Kayttaja(etunimi, sukunimi, kayttajanimi, salasana, "User");
-
-                    Tietokanta.SetKayttaja(uusiKayttaja);
-
-                    //Ilmoitetaan käyttäjälle että rekisteöinti onnistui,
-                    //tyhjennetään tekstilaatikot ja siirrytään login-formiin
-                    tulostaIlmoitus("Rekisteröinti onnistui. Ladataan...", lbl_ilmoitusR, false);
-                    await Task.Delay(200);
-                    btn_takaisinR_Click(sender, e);
-                }
-                else
-                {
-                    tulostaIlmoitus("Salasanat eivät täsmää!", lbl_ilmoitusR, true);
-
+                        //Ilmoitetaan käyttäjälle että rekisteöinti onnistui,
+                        //tyhjennetään tekstilaatikot ja siirrytään login-formiin
+                        tulostaIlmoitus("Rekisteröinti onnistui. Ladataan...", lbl_ilmoitusR, false);
+                        await Task.Delay(200);
+                        btn_takaisinR_Click(sender, e);
+                    }
+                    else
+                    {
+                        tulostaIlmoitus("Salasanat eivät täsmää!", lbl_ilmoitusR, true);
+                    }
                 }
 
             }
