@@ -76,7 +76,7 @@ namespace Varausjarjestelma
             // tietokanta: Hae näytökset listausta varten sellaisiin esityksiin jotka ovat tulevaisuudessa
 
             Elokuva valittu_elokuva = Ohjelmisto.SelectedItem as Elokuva;
-            List<Näytös> näytökset = _tietokanta.Näytökset(valittu_elokuva);
+            List<Näytös> näytökset = _tietokanta.GetElokuvanNaytokset(valittu_elokuva);
 
             TulevatNäytökset.ItemsSource = näytökset;
             Siirry("varaa_näytös");

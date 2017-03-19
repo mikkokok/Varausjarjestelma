@@ -91,6 +91,8 @@ namespace Varausjarjestelma
             // Luo muutama elokuva
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '2005', '120', 'Kissoja ja koiria', 'Kylla')");
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', '145', 'Kirahveja ja elefantteja', 'Ei')");
+            // Muutama näytös
+            Ajasql("INSERT INTO naytokset VALUES(null, 'Paras elokuva', '"+ System.DateTime.Now.ToShortTimeString() + "', 'Sali1', 'Teatteri1')");
             // Luo muutama elokuvasali ja teatteri
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '20', '10', 'Teatteri1', 'Kaupunki1')");
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '10', '5', 'Teatteri1', 'Kaupunki1')");
@@ -265,31 +267,11 @@ namespace Varausjarjestelma
             Ajasql($"DELETE FROM elokuvasalit WHERE nimi='{elokuvasali.Nimi}'");
         }
         #endregion
-        public List<Näytös> Näytökset(Elokuva elokuva)
-        {
-            var res = new List<Näytös>();
-
-            var näytös = new Näytös();
-            var aika = DateTime.Now.AddDays(2);
-
-            var sali = new Elokuvasali("Suurin ja kaunein -sali", 6, 8, new Teatteri("City 17", "KyberKino"));
-
-            näytös.Aika = aika;
-            näytös.Elokuva = elokuva;
-            näytös.Sali = sali;
-
-            //koko varmaan parmepi erillään
-            // esim.HaeVapaatPaikat(Näytös näytös) ?
-            // (jolloin myös täytyy muuttaa Näytös - luokkaa)
-
-            res.Add(näytös);
-            return res;
-        }
 
         public List<Paikka> VaratutPaikat(Näytös n)
         {
             var res = new List<Paikka>();
-            string sql = $"(SELECT * FROM varaukset WHERE naytosaika='{n.Aika}' AND elokuva='{n.Elokuva.Nimi}' AND elokuvasali='{n.Sali.Nimi}')";
+            string sql = $"SELECT * FROM varaukset WHERE naytosaika='{n.Aika.ToShortTimeString()}' AND elokuva='{n.Elokuva.Nimi}' AND elokuvasali='{n.Sali.Nimi}'";
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
             if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
@@ -300,11 +282,7 @@ namespace Varausjarjestelma
 
             return res;
         }
-
-        public List<Näytös> Näytökset(int elokuva)
-        {
-            return new List<Näytös>();
-        }
+        
         public void VaraaPaikka(Kayttaja kayttaja, Näytös naytos, Paikka paikka)
         {
             Ajasql($"INSERT INTO varaukset VALUES (null, '{naytos.Aika.ToShortTimeString()}', '{kayttaja.Tunnus}', {paikka.PaikkaNro}, '{naytos.Sali.Nimi}', '{naytos.Elokuva.Nimi}') ");
