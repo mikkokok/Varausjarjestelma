@@ -106,7 +106,6 @@ namespace Varausjarjestelma
             foreach (Paikka p in ValitsePaikat.ValitutPaikat)
             {
                 _tietokanta.VaraaPaikka(kayttaja, n, p);
-                System.Windows.MessageBox.Show("Lippu paikalle: " + p.PaikkaNro.ToString() + "\n(rivi: " + p.Rivi.ToString() + ", paikka: " + p.PaikkaRivissä.ToString() + ")");
             }
 
             Siirry("varaa_kiitos");
