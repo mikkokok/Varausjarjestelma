@@ -233,16 +233,11 @@ namespace Varausjarjestelma
         }
         public void SetElokuvanNaytos(Elokuva elokuva, Näytös naytos)
         {
-            Ajasql($"INSERT INTO naytokset VALUES (null, '{elokuva.Nimi}', '{naytos.Aika.ToShortTimeString()}', '{naytos.Sali.Nimi}', '{naytos.Teatteri.Nimi}')");
+            Ajasql($"INSERT INTO naytokset VALUES (null, '{elokuva.Nimi}', '{naytos.Aika}', '{naytos.Sali.Nimi}', '{naytos.Teatteri.Nimi}')");
         }
         #endregion
 
         public void DelElokuvanNaytos(Elokuva elokuva)
-        {
-            Ajasql($"DELETE FROM naytokset WHERE elokuvannimi='{elokuva.Nimi}'");
-        }
-
-        public void DelKaikkiNaytokset(Elokuva elokuva)
         {
             Ajasql($"DELETE FROM naytokset WHERE elokuvannimi='{elokuva.Nimi}'");
         }
