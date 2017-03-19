@@ -62,6 +62,7 @@ namespace Varausjarjestelma
             "riveja VARCHAR(255), " +
             "teatterinnimi VARCHAR(255), " +
             "teatterinkaupunki VARCHAR(255))";
+            Ajasql(_sql);
             _sql = "CREATE TABLE IF NOT EXISTS varaus" + // Taulu varaus
             "(id INTEGER PRIMARY KEY, " +
             "varaajannimi VARCHAR(255), " +
@@ -91,8 +92,8 @@ namespace Varausjarjestelma
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '2005', '120', 'Kissoja ja koiria', 'Kylla')");
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', '145', 'Kirahveja ja elefantteja', 'Ei')");
             // Luo muutama elokuvasali ja teatteri
-            Ajasql("INSET INTO elokuvasalit VALUES(null, 'Sali1', '20', '10', 'Teatteri1', 'Kaupunki1')");
-            Ajasql("INSET INTO elokuvasalit VALUES(null, 'Sali2', '10', '5', 'Teatteri1', 'Kaupunki1')");
+            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '20', '10', 'Teatteri1', 'Kaupunki1')");
+            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '10', '5', 'Teatteri1', 'Kaupunki1')");
         }
 
         public List<string> Ajasql(string sql)
@@ -132,8 +133,8 @@ namespace Varausjarjestelma
         //käyttäjänimen perusteella
         public Kayttaja getKayttaja(String kayttajatunnus)
         {
-            var res = new Kayttaja("", "", "", "", "");
-            string sql = $"SELECT * FROM kayttajat WHERE tunnus= {kayttajatunnus}";
+            var res = new Kayttaja("","","","","");
+            string sql = $"SELECT * FROM kayttajat WHERE tunnus= '{kayttajatunnus}'";
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
             if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
@@ -182,6 +183,11 @@ namespace Varausjarjestelma
         public void SetElokuva(Elokuva elokuva)
         {
             Ajasql($"INSERT INTO elokuvat VALUES (null, '{elokuva.Nimi}', '{elokuva.Vuosi}','{elokuva.Kesto}', '{elokuva.Teksti}', '{elokuva.Ohjelmistossa}')");
+        }
+
+        public void UpdateElokuva(Elokuva elokuva, string vanhaNimi)
+        {
+            Ajasql($"UPDATE elokuvat SET elokuvannimi='{elokuva.Nimi}',vuosi='{elokuva.Vuosi}', kesto='{elokuva.Kesto}', kuvaus='{elokuva.Teksti}', ohjelmistossa='{elokuva.Ohjelmistossa}' WHERE elokuvannimi='{vanhaNimi}'");
         }
 
         public void DelElokuva(Elokuva elokuva)

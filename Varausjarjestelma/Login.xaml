@@ -26,17 +26,18 @@
         <Grid Name="Register_Grid" Visibility="Collapsed">
             <Label x:Name="lbl_tunnusR" Style="{StaticResource LabelStyle}" Content="Käyttäjätunnus" Foreground="White" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
             <Label x:Name="lbl_salasanaR" Style="{StaticResource LabelStyle}" Content="Salasana" Foreground="White" HorizontalAlignment="Left" Margin="10,140,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="lbl_ilmoitusR" Style="{StaticResource FadeAnimation}" Content="" Foreground="White" Visibility="Collapsed" HorizontalAlignment="Left" Margin="70,241,0,0" VerticalAlignment="Top" />
+            <Label x:Name="lbl_ilmoitusR" Style="{StaticResource FadeAnimation}" Content="" Foreground="White" Visibility="Visible" HorizontalAlignment="Left" Margin="10,247,0,0" VerticalAlignment="Top" Width="274" />
             <Label x:Name="lbl_salasanan_vahvistus" Style="{StaticResource LabelStyle}" Foreground="White" Content="Toista salasana" HorizontalAlignment="Left" Margin="10,188,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="lbl_etunimi" Content="Etunimi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.77,0.179"/>
+            <Label x:Name="lbl_sukunimi" Content="Sukunimi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
             <TextBox x:Name="txt_kayttajaNimiR" HorizontalAlignment="Left" Height="24" Margin="122,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="txt_etunimi" HorizontalAlignment="Left" Height="23" Margin="122,56,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="txt_sukunimi" HorizontalAlignment="Left" Height="23" Margin="122,101,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
             <PasswordBox x:Name="txt_salasanaR" HorizontalAlignment="Left" Height="23" Margin="122,145,0,0" VerticalAlignment="Top" Width="120"/>
             <PasswordBox x:Name="txt_salasanan_vahvistus" HorizontalAlignment="Left" Height="23" Margin="122,193,0,0" VerticalAlignment="Top" Width="120"/>
             <Button x:Name="btn_rekisteroi"  Height="25" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="167,285,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press" Content="Rekisteroidy" Click="btn_rekisteroi_Click" />
             <Button x:Name="btn_takaisinR" Height="25" Width="85" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="28,285,0,0" VerticalAlignment="Top" Content="Takaisin" Click="btn_takaisinR_Click" />
-            <Label x:Name="lbl_etunimi" Content="Etunimi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.77,0.179"/>
-            <Label x:Name="lbl_sukunimi" Content="Sukunimi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txt_etunimi" HorizontalAlignment="Left" Height="23" Margin="122,56,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-            <TextBox x:Name="txt_sukunimi" HorizontalAlignment="Left" Height="23" Margin="122,101,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+     
         </Grid>
     </Grid>
 </Window>

@@ -70,23 +70,6 @@ namespace Varausjarjestelma
             return true;
         }
 
-        //Päivittää annetun elokuvan tiedot tietokannassa
-        //Palauttaa true jos onnistuu
-        private bool PaivitaElokuva(Elokuva elokuva, string vanhaNimi)
-        {
-            tietokanta.DelElokuva(elokuva);
-            tietokanta.SetElokuva(elokuva);
-            kaikkiElokuvat = tietokanta.GetElokuvat();
-            return true;
-        }
-
-        //Päivittää annetun elokuvan näytökset
-        //Palauttaa true jos onnistuu
-        private bool paivitaElokuvanNaytokset(Elokuva elokuva, List<Näytös> elokuvanNäytökset)
-        {
-            return true;
-        }
-
         #endregion tietokantametodit
         #region yleisetUImetodit
 
@@ -153,12 +136,31 @@ namespace Varausjarjestelma
 
         private void dg_Elokuvat_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            elokuvaIndeksi = dg_Elokuvat.SelectedIndex;
-            lbl_Naytokset.Visibility = Visibility.Visible;
-            dg_Naytokset.Visibility = Visibility.Visible;
-            btn_Avaa_Elokuvan_Muokkaus.Visibility = Visibility.Visible;
-            btn_Poista_Elokuva.Visibility = Visibility.Visible;
-            
+            dg_Naytokset.Items.Clear();
+
+            if (dg_Elokuvat.SelectedIndex != -1)
+            {
+                elokuvaIndeksi = dg_Elokuvat.SelectedIndex;
+
+                Elokuva elokuva = kaikkiElokuvat[elokuvaIndeksi];
+                elokuvanNaytokset = tietokanta.getElokuvanNaytokset(elokuva);
+
+                foreach (Näytös naytos in elokuvanNaytokset)
+                {
+                    dg_Naytokset.Items.Add(new
+                    {
+                        Teatteri = naytos.Teatteri.Nimi,
+                        Sali = naytos.Sali.Nimi,
+                        Pvm = naytos.Aika.ToShortDateString(),
+                        Klo = naytos.Aika.ToShortTimeString()
+                    });
+                }
+
+                lbl_Naytokset.Visibility = Visibility.Visible;
+                dg_Naytokset.Visibility = Visibility.Visible;
+                btn_Avaa_Elokuvan_Muokkaus.Visibility = Visibility.Visible;
+                btn_Poista_Elokuva.Visibility = Visibility.Visible;
+            }         
         }
 
         private void btn_Avaa_Elokuvan_Lisays_Click(object sender, RoutedEventArgs e)
@@ -191,8 +193,6 @@ namespace Varausjarjestelma
                 if (varmistus == MessageBoxResult.OK)
                 {
                     dg_Elokuvat.Items.RemoveAt(elokuvaIndeksi);
-
-                    tietokanta.Ajasql("DELETE FROM naytokset WHERE elokuvannimi= '" + elokuva.Nimi + "'");
                     tietokanta.DelElokuva(elokuva);
                     paivitaElokuvatDG();
                 }
@@ -232,39 +232,54 @@ namespace Varausjarjestelma
 
         private void cmb_Elokuvateatteri_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ElokuvaT1.Content.Equals("Elokuvateatteri1"))
+            if (cmb_Elokuvateatteri.SelectedIndex != -1)
             {
-                Elokuva1_Sali1.Visibility = Visibility.Visible;
-                Elokuva1_Sali2.Visibility = Visibility.Visible;
-                Elokuva2_Sali1.Visibility = Visibility.Collapsed;
-                Elokuva2_Sali2.Visibility = Visibility.Collapsed;
+                Sali1.Visibility = Visibility.Visible;
+                Sali2.Visibility = Visibility.Visible;
             }
-            else if (ElokuvaT1.Content.Equals("Elokuvateatteri2"))
+            else
             {
-                Elokuva2_Sali1.Visibility = Visibility.Visible;
-                Elokuva2_Sali2.Visibility = Visibility.Visible;
-                Elokuva1_Sali1.Visibility = Visibility.Collapsed;
-                Elokuva1_Sali2.Visibility = Visibility.Collapsed;
+                Sali1.Visibility = Visibility.Collapsed;
+                Sali2.Visibility = Visibility.Collapsed;
             }
+
         }
 
         private void btn_Lisaa_Naytos_Click(object sender, RoutedEventArgs e)
         {
-            Näytös naytos = new Näytös();
             Teatteri teatteri = new Teatteri(cmb_Elokuvateatteri.Text, "Turku");
-            Elokuvasali sali = new Elokuvasali(cmb_Salit.Text, 20, 10, teatteri);
+            Elokuvasali sali;
 
-            naytos.Elokuva = this.lisattavaElokuva;
-            naytos.Sali = sali;
+            //Luodaan erikokoiset salit teatterin ja salin nimen perusteella
+            if (teatteri.Nimi.Equals("Teatteri1") && cmb_Salit.Text.Equals("Sali1"))
+            {
+                sali = new Elokuvasali(cmb_Salit.Text, 20, 10, teatteri);
+            }
+            else if (teatteri.Nimi.Equals("Teatteri1") && cmb_Salit.Text.Equals("Sali2"))
+            {
+                sali = new Elokuvasali(cmb_Salit.Text, 15, 25, teatteri);
+            }
+            else if (teatteri.Nimi.Equals("Teatteri2") && cmb_Salit.Text.Equals("Sali1"))
+            {
+                sali = new Elokuvasali(cmb_Salit.Text, 25, 15, teatteri);
+            }
+            else if (teatteri.Nimi.Equals("Teatteri2") && cmb_Salit.Text.Equals("Sali2"))
+            {
+                sali = new Elokuvasali(cmb_Salit.Text, 10, 10, teatteri);
+            }
+            else
+            {
+                sali = null;
+            }
 
             aika = Convert.ToDateTime(datep_Naytoksen_aika.Text);
-            naytos.Aika = aika;
 
+            Näytös naytos = new Näytös(this.lisattavaElokuva, aika, sali, teatteri);
             lisattavatNaytokset.Add(naytos);
 
             dg_Lisattavat_Naytokset.Items.Add(new
             {
-                Elokuvateatteri = teatteri.Nimi,
+                Elokuvateatteri = naytos.Teatteri.Nimi,
                 Sali = naytos.Sali.Nimi,
                 Pvm = naytos.Aika.ToShortDateString(),
                 Klo = naytos.Aika.ToShortTimeString()
@@ -447,7 +462,10 @@ namespace Varausjarjestelma
             paivitettavaElokuva.Vuosi = int.Parse(txt_VuosiP.Text);
             paivitettavaElokuva.Kesto = int.Parse(txt_KestoP.Text);
             paivitettavaElokuva.Teksti = txt_KuvausP.Text;
-            PaivitaElokuva(paivitettavaElokuva, elokuvanVanhaNimi);
+
+            tietokanta.UpdateElokuva(paivitettavaElokuva, elokuvanVanhaNimi);
+            tietokanta.Ajasql($"UPDATE naytokset SET elokuvannimi='{paivitettavaElokuva.Nimi}' WHERE elokuvannimi='{elokuvanVanhaNimi}'");
+            
             tulostaIlmoitus("Elokuvan päivitys onnistui. Ladataan...", lbl_Paivitys_ilmoitus, false);
             await Task.Delay(1000);
             paivitettavaElokuva = null;
