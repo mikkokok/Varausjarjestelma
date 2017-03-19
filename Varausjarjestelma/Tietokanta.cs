@@ -228,6 +228,11 @@ namespace Varausjarjestelma
             Ajasql($"DELETE FROM naytokset WHERE elokuvannimi='{naytos.Elokuva.Nimi}'");
         }
 
+        public void DelKaikkiNaytokset(Elokuva elokuva)
+        {
+            Ajasql($"DELETE FROM naytokset WHERE elokuvannimi='{elokuva.Nimi}'");
+        }
+
         #region Elokuvasalit
         public List<Elokuvasali> GetElokuvasalit()
         {

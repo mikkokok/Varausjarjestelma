@@ -29,6 +29,7 @@ namespace Varausjarjestelma
         private Elokuva paivitettavaElokuva;
         private List<Näytös> elokuvanNaytokset;
         private List<Näytös> lisattavatNaytokset;
+        private List<Näytös> paivitettavatNaytokset;
         private List<Kayttaja> kayttajat;
 
         private String elokuvanNimi;
@@ -193,11 +194,35 @@ namespace Varausjarjestelma
                 if (varmistus == MessageBoxResult.OK)
                 {
                     dg_Elokuvat.Items.RemoveAt(elokuvaIndeksi);
+                    tietokanta.DelKaikkiNaytokset(elokuva);
                     tietokanta.DelElokuva(elokuva);
                     paivitaElokuvatDG();
                 }
             }
-            
+           
+        }
+
+        private void btn_Muokkaa_Naytokset_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (elokuvaIndeksi != -1)
+            {
+                paivitettavaElokuva = kaikkiElokuvat[elokuvaIndeksi];
+                Naytosten_Paivitys_Grid.Visibility = Visibility.Visible;
+                paivitettavatNaytokset = tietokanta.getElokuvanNaytokset(paivitettavaElokuva);
+
+                foreach (Näytös naytos in paivitettavatNaytokset)
+                {
+                    dg_Paivitettavat_Naytokset.Items.Add(new
+                    {
+                        Elokuvateatteri = naytos.Teatteri.Nimi,
+                        Sali = naytos.Sali.Nimi,
+                        Pvm = naytos.Aika.ToShortDateString(),
+                        Klo = naytos.Aika.ToShortTimeString()
+                    });
+                }
+
+                Lisaa_Elokuva_Tab.IsSelected = true;
+            }
 
         }
 
@@ -333,10 +358,74 @@ namespace Varausjarjestelma
 
         private void btn_Lisaa_NaytosP_Click(object sender, RoutedEventArgs e)
         {
+
+            Teatteri teatteri = new Teatteri(cmb_ElokuvateatteriP2.Text, "Turku");
+            Elokuvasali sali;
+
+            //Luodaan erikokoiset salit teatterin ja salin nimen perusteella
+            if (teatteri.Nimi.Equals("Teatteri1") && cmb_SalitP2.Text.Equals("Sali1"))
+            {
+                sali = new Elokuvasali(cmb_SalitP2.Text, 20, 10, teatteri);
+            }
+            else if (teatteri.Nimi.Equals("Teatteri1") && cmb_SalitP2.Text.Equals("Sali2"))
+            {
+                sali = new Elokuvasali(cmb_SalitP2.Text, 15, 25, teatteri);
+            }
+            else if (teatteri.Nimi.Equals("Teatteri2") && cmb_SalitP2.Text.Equals("Sali1"))
+            {
+                sali = new Elokuvasali(cmb_SalitP2.Text, 25, 15, teatteri);
+            }
+            else if (teatteri.Nimi.Equals("Teatteri2") && cmb_SalitP2.Text.Equals("Sali2"))
+            {
+                sali = new Elokuvasali(cmb_SalitP2.Text, 10, 10, teatteri);
+            }
+            else
+            {
+                sali = null;
+            }
+
+            aika = Convert.ToDateTime(dp_Paivitetty_Aika2.Text);
+
+            Näytös naytos = new Näytös(this.paivitettavaElokuva, aika, sali, teatteri);
+            paivitettavatNaytokset.Add(naytos);
+
             dg_Paivitettavat_Naytokset.Items.Add(new
             {
-                Elokuvateatteri = txt_ElokuvateatteriP.Text,
+                Elokuvateatteri = naytos.Teatteri.Nimi,
+                Sali = naytos.Sali.Nimi,
+                Pvm = naytos.Aika.ToShortDateString(),
+                Klo = naytos.Aika.ToShortTimeString()
             });
+        }
+
+        private void dg_Paivitettavat_Naytokset_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dg_Paivitettavat_Naytokset.SelectedIndex != -1)
+            {
+                int naytosIndeksi = dg_Paivitettavat_Naytokset.SelectedIndex;
+                Näytös paivitettavaNaytos = paivitettavatNaytokset[naytosIndeksi];
+
+                if (paivitettavaNaytos.Teatteri.Nimi.Equals("Teatteri1"))
+                {
+                    cmb_ElokuvateatteriP1.SelectedIndex = 0;
+                }
+                else
+                {
+                    cmb_ElokuvateatteriP1.SelectedIndex = 1;
+                }
+
+
+                if (paivitettavaNaytos.Sali.Nimi.Equals("Sali1"))
+                {
+                    cmb_SalitP1.SelectedIndex = 0;
+                }
+                else
+                {
+                    cmb_SalitP1.SelectedIndex = 1;
+                }
+                dp_Paivitetty_Aika.Text = paivitettavaNaytos.Aika.ToShortDateString() + paivitettavaNaytos.Aika.ToShortTimeString();
+            }
+
         }
 
         private void btn_Paivita_Naytos_Click(object sender, RoutedEventArgs e)
