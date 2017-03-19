@@ -76,7 +76,7 @@ namespace Varausjarjestelma
             // tietokanta: Hae näytökset listausta varten sellaisiin esityksiin jotka ovat tulevaisuudessa
 
             Elokuva valittu_elokuva = Ohjelmisto.SelectedItem as Elokuva;
-            List<Näytös> näytökset = _tietokanta.Näytökset(valittu_elokuva);
+            List<Näytös> näytökset = _tietokanta.GetElokuvanNaytokset(valittu_elokuva);
 
             TulevatNäytökset.ItemsSource = näytökset;
             Siirry("varaa_näytös");
@@ -106,7 +106,6 @@ namespace Varausjarjestelma
             foreach (Paikka p in ValitsePaikat.ValitutPaikat)
             {
                 _tietokanta.VaraaPaikka(kayttaja, n, p);
-                System.Windows.MessageBox.Show("Lippu paikalle: " + p.PaikkaNro.ToString() + "\n(rivi: " + p.Rivi.ToString() + ", paikka: " + p.PaikkaRivissä.ToString() + ")");
             }
 
             Siirry("varaa_kiitos");
