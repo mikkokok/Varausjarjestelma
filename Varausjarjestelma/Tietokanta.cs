@@ -276,10 +276,17 @@ namespace Varausjarjestelma
         }
         #endregion
 
-        public List<Paikka> VaratutPaikat(Näytös n)
+
+        public List<Paikka> VaratutPaikat(Näytös n, Kayttaja k)
         {
             var res = new List<Paikka>();
             string sql = $"SELECT * FROM varaukset WHERE naytosaika='{n.Aika.ToShortTimeString()}' AND elokuva='{n.Elokuva.Nimi}' AND elokuvasali='{n.Sali.Nimi}'";
+
+            if (k != null)
+            {
+                sql += $" AND kayttajantunnus='{k.Tunnus}'";
+            }
+
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
             if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
@@ -290,12 +297,22 @@ namespace Varausjarjestelma
 
             return res;
         }
+
+        public List<Paikka> VaratutPaikat(Näytös n)
+        {
+            return VaratutPaikat(n, null);
+        }
         
         public void VaraaPaikka(Kayttaja kayttaja, Näytös naytos, Paikka paikka)
         {
             Ajasql($"INSERT INTO varaukset VALUES (null, '{naytos.Aika.ToShortTimeString()}', '{kayttaja.Tunnus}', {paikka.PaikkaNro}, '{naytos.Sali.Nimi}', '{naytos.Elokuva.Nimi}') ");
         }
-
+        
+        public void PoistaPaikkaVaraus(Paikka p)
+        {
+            // todo
+            null
+        }
 
         public void Dispose()
         {
