@@ -92,10 +92,12 @@ namespace Varausjarjestelma
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '2005', '120', 'Kissoja ja koiria', 'Kylla')");
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', '145', 'Kirahveja ja elefantteja', 'Ei')");
             // Muutama näytös
-            Ajasql("INSERT INTO naytokset VALUES(null, 'Paras elokuva', '"+ System.DateTime.Now.ToShortTimeString() + "', 'Sali1', 'Teatteri1')");
+            Ajasql("INSERT INTO naytokset VALUES(null, 'Paras elokuva', '"+ System.DateTime.Now + "', 'Sali1', 'Teatteri1')");
             // Luo muutama elokuvasali ja teatteri
-            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '20', '10', 'Teatteri1', 'Kaupunki1')");
-            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '10', '5', 'Teatteri1', 'Kaupunki1')");
+            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '20', '10', 'Teatteri1', 'Turku')");
+            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '15', '25', 'Teatteri1', 'Turku')");
+            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '25', '15', 'Teatteri2', 'Turku')");
+            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '10', '10', 'Teatteri2', 'Turku')");
         }
 
         public List<string> Ajasql(string sql)
@@ -212,13 +214,19 @@ namespace Varausjarjestelma
             if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
             while (_sqllukija.Read())
             {
-                res.Add(new Näytös(elokuva, DateTime.Parse(_sqllukija.GetString(2)), HaeElokuvasali(salit, _sqllukija.GetString(3)), HaeElokuvasali(salit, _sqllukija.GetString(3)).Teatteri));
+                res.Add(new Näytös(elokuva, DateTime.Parse(_sqllukija.GetString(2)), HaeElokuvasali(salit, _sqllukija.GetString(3)), HaeTeatteri(salit, _sqllukija.GetString(4))));
             }
             return res;
         }
         private static Elokuvasali HaeElokuvasali(List<Elokuvasali> salit, string salinnimi)
         {
             return salit.First(s => s.Nimi == salinnimi);
+        }
+
+        private static Teatteri HaeTeatteri(List<Elokuvasali> salit, string teatterinnimi)
+        {
+            Elokuvasali sali = salit.First(s => s.Teatteri.Nimi == teatterinnimi);
+            return sali.Teatteri;
         }
 
         //Päivittää elokuvaan liittyvät näytökset
