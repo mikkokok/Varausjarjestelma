@@ -167,7 +167,9 @@ namespace Varausjarjestelma
 
         private void btn_Avaa_Elokuvan_Lisays_Click(object sender, RoutedEventArgs e)
         {
+            paivitettavaElokuva = null;
             Perustiedot_Grid.Visibility = Visibility.Visible;
+            Naytokset_Lisays_Grid.Visibility = Visibility.Collapsed;
             Perustietojen_Paivitys_Grid.Visibility = Visibility.Collapsed;
             Naytosten_Paivitys_Grid.Visibility = Visibility.Collapsed;
             Lisaa_Elokuva_Tab.IsSelected = true;
@@ -209,6 +211,9 @@ namespace Varausjarjestelma
             {
                 paivitettavaElokuva = kaikkiElokuvat[elokuvaIndeksi];
                 Naytosten_Paivitys_Grid.Visibility = Visibility.Visible;
+                Perustietojen_Paivitys_Grid.Visibility = Visibility.Collapsed;
+                Perustiedot_Grid.Visibility = Visibility.Collapsed;
+                Naytokset_Lisays_Grid.Visibility = Visibility.Collapsed;
                 paivitettavatNaytokset = tietokanta.GetElokuvanNaytokset(paivitettavaElokuva);
                 paivitaNaytoksetP();
                 Lisaa_Elokuva_Tab.IsSelected = true;
@@ -538,10 +543,17 @@ namespace Varausjarjestelma
             if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 0)
             {
                 paivitaElokuvatDG();
-                clearElokuvanLisays();
-                clearElokuvanPaivitys();
+                //clearElokuvanLisays();
+                //clearElokuvanPaivitys();
             }
 
+
+            if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 1 && paivitettavaElokuva == null)
+            {
+                clearElokuvanLisays();
+                clearElokuvanPaivitys();
+
+            }
 
             if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 1 && paivitettavaElokuva != null)
             {
@@ -550,6 +562,7 @@ namespace Varausjarjestelma
                 txt_VuosiP.Text = paivitettavaElokuva.Vuosi.ToString();
                 txt_KestoP.Text = paivitettavaElokuva.Kesto.ToString();
                 txt_KuvausP.Text = paivitettavaElokuva.Teksti;
+
             }
 
             if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 2)
