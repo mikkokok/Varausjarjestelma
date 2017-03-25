@@ -121,7 +121,7 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="Lisaa_Elokuva_Tab" Header="Lisää elokuva" Visibility="Collapsed">
+            <TabItem x:Name="Lisaa_Elokuva_Tab" Header="Lisää elokuva" Visibility="Visible">
                 <Grid x:Name="Elokuvan_Lisays_Grid">
                     <Grid x:Name="Perustiedot_Grid" Visibility="Visible">
                         <Label x:Name="lbl_Lisää_Elokuva" Content="LISÄÄ ELOKUVA" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
@@ -130,11 +130,13 @@
                         <Label x:Name="lb_lKuvaus" Content="Kuvaus" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="200,222,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="lbl_vuosi" Content="Vuosi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,118,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.743,0.705"/>
                         <TextBox x:Name="txt_Elokuvan_Nimi" HorizontalAlignment="Left" Height="23" Margin="137,68,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="339"/>
-                        <TextBox x:Name="txt_Vuosi" HorizontalAlignment="Left" Height="23" Margin="137,118,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                        <TextBox x:Name="txt_Vuosi" PreviewTextInput="vainNumeroita" HorizontalAlignment="Left" Height="23" Margin="137,118,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                         <TextBox x:Name="txt_Kesto" PreviewTextInput="vainNumeroita" HorizontalAlignment="Left" Height="24" Margin="137,174,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                         <TextBox x:Name="txt_Kuvaus" HorizontalAlignment="Left" Height="251" Margin="20,269,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456"/>
                         <Button x:Name="btn_Lisays_Seuraava" Content="Seuraava" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="568,59,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Elokuvan_Perustiedot_Click"/>
-                        <Label x:Name="lbl_lisays_ilmoitus" Content="Lisays ilmoitus" FontSize="18" Style="{StaticResource FadeAnimation}" Visibility="Collapsed" HorizontalAlignment="Left" Margin="568,174,0,0" VerticalAlignment="Top" Height="159" Width="187"/>
+                        <Label x:Name="lbl_lisays_ilmoitus" FontSize="18" Style="{StaticResource FadeAnimation}" Visibility="Collapsed" HorizontalAlignment="Left" Margin="568,174,0,0" VerticalAlignment="Top" Height="159" MaxWidth="180">
+
+                        </Label>
                     </Grid>
 
                     <Grid x:Name="Naytokset_Lisays_Grid" Visibility="Collapsed" Margin="-10,-23,10,23">
@@ -173,7 +175,7 @@
                         <Label x:Name="lb_lKuvausP" Content="Kuvaus" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="200,222,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="lbl_vuosiP" Content="Vuosi" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="20,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.743,0.705"/>
                         <TextBox x:Name="txt_Elokuvan_NimiP" HorizontalAlignment="Left" Height="23" Margin="137,68,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="339"/>
-                        <TextBox x:Name="txt_VuosiP" HorizontalAlignment="Left" Height="23" Margin="137,113,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                        <TextBox x:Name="txt_VuosiP" PreviewTextInput="vainNumeroita" HorizontalAlignment="Left" Height="23" Margin="137,113,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                         <TextBox x:Name="txt_KestoP" PreviewTextInput="vainNumeroita" HorizontalAlignment="Left" Height="24" Margin="137,174,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
                         <TextBox x:Name="txt_KuvausP" HorizontalAlignment="Left" Height="251" Margin="20,269,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456"/>
                         <Label x:Name="lbl_Paivitys_ilmoitus" Content="Paivitys Ilmoitus" Visibility="Collapsed" FontSize="18" Style="{StaticResource FadeAnimation}" HorizontalAlignment="Left" Margin="504,269,0,0" VerticalAlignment="Top" Height="124" Width="249"/>

@@ -311,7 +311,7 @@ namespace Varausjarjestelma
         public void PoistaPaikkaVaraus(Paikka p)
         {
             // todo
-            null
+            //null;
         }
 
         public void Dispose()
