@@ -85,7 +85,8 @@ namespace Varausjarjestelma
 
             if (viimeksiValittu == Lisaa_Elokuva_Tab && toimintoKesken)
             {
-                MessageBoxResult vastaus = Xceed.Wpf.Toolkit.MessageBox.Show("Haluatko varmasti poistua? Tallentamattomat tiedot katoavat jos poistut nyt", "Viesti", MessageBoxButton.OKCancel);
+
+                MessageBoxResult vastaus = Xceed.Wpf.Toolkit.MessageBox.Show("Haluatko varmasti poistua? Tallentamattomat tiedot katoavat jos poistut nyt", "Viesti", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
 
                 if (vastaus == MessageBoxResult.OK)
                 {
@@ -244,11 +245,18 @@ namespace Varausjarjestelma
                     });
                 }
 
-                lbl_Naytokset.Visibility = Visibility.Visible;
-                dg_Naytokset.Visibility = Visibility.Visible;
                 btn_Avaa_Elokuvan_Muokkaus.Visibility = Visibility.Visible;
+                btn_Muokkaa_Naytokset.Visibility = Visibility.Visible;
                 btn_Poista_Elokuva.Visibility = Visibility.Visible;
-            }         
+            }
+            else
+            {
+                dg_Elokuvat.Items.Clear();
+
+                btn_Avaa_Elokuvan_Muokkaus.Visibility = Visibility.Collapsed;
+                btn_Muokkaa_Naytokset.Visibility = Visibility.Collapsed;
+                btn_Poista_Elokuva.Visibility = Visibility.Collapsed;
+            }       
         }
 
         private void btn_Avaa_Elokuvan_Lisays_Click(object sender, RoutedEventArgs e)
@@ -281,7 +289,7 @@ namespace Varausjarjestelma
             if (elokuvaIndeksi != -1)
             {
                 Elokuva elokuva = kaikkiElokuvat[elokuvaIndeksi];
-                MessageBoxResult varmistus = System.Windows.MessageBox.Show("Haluatko varmasti poistaa elokuvan: " + elokuva.Nimi, "Elokuvan poistaminen", System.Windows.MessageBoxButton.OKCancel);
+                MessageBoxResult varmistus = Xceed.Wpf.Toolkit.MessageBox.Show("Haluatko varmasti poistaa elokuvan: " + elokuva.Nimi, "Elokuvan poistaminen", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
                 if (varmistus == MessageBoxResult.OK)
                 {
                     dg_Elokuvat.Items.RemoveAt(elokuvaIndeksi);
@@ -335,9 +343,9 @@ namespace Varausjarjestelma
             }
             else
             {
-                Kayttaja kayttaja = tietokanta.getKayttaja(txt_Elokuvan_Nimi.Text);
+                Elokuva elokuva = tietokanta.GetElokuva(txt_Elokuvan_Nimi.Text);
 
-                if (kayttaja != null)
+                if(!elokuva.Nimi.Equals(""))
                 {
                     tulostaIlmoitus("Elokuva on jo olemassa. Valitse toinen nimi elokuvalle", lbl_lisays_ilmoitus, true);
                 }
@@ -596,20 +604,29 @@ namespace Varausjarjestelma
 
         private async void btn_Paivita_Elokuvan_Perustiedot_Click(object sender, RoutedEventArgs e)
         {
-            paivitettavaElokuva.Nimi = txt_Elokuvan_NimiP.Text;
-            paivitettavaElokuva.Vuosi = int.Parse(txt_VuosiP.Text);
-            paivitettavaElokuva.Kesto = int.Parse(txt_KestoP.Text);
-            paivitettavaElokuva.Teksti = txt_KuvausP.Text;
+            Elokuva elokuva = tietokanta.GetElokuva(txt_Elokuvan_NimiP.Text);
 
-            tietokanta.UpdateElokuva(paivitettavaElokuva, elokuvanVanhaNimi);
-            tietokanta.Ajasql($"UPDATE naytokset SET elokuvannimi='{paivitettavaElokuva.Nimi}' WHERE elokuvannimi='{elokuvanVanhaNimi}'");
+            if (!elokuva.Nimi.Equals(""))
+            {
+                tulostaIlmoitus("Elokuva on jo olemassa. Valitse toinen nimi elokuvalle", lbl_Paivitys_ilmoitus, true);
+            }
+            else
+            {
+                paivitettavaElokuva.Nimi = txt_Elokuvan_NimiP.Text;
+                paivitettavaElokuva.Vuosi = int.Parse(txt_VuosiP.Text);
+                paivitettavaElokuva.Kesto = int.Parse(txt_KestoP.Text);
+                paivitettavaElokuva.Teksti = txt_KuvausP.Text;
 
-            tulostaIlmoitus("Elokuvan päivitys onnistui. Ladataan...", lbl_Paivitys_ilmoitus, false);
-            await Task.Delay(1000);
-            paivitettavaElokuva = null;
-            this.toimintoKesken = false;
-            Perustiedot_Grid.Visibility = Visibility.Visible;
-            YllapidonEtusivuTab.IsSelected = true;
+                tietokanta.UpdateElokuva(paivitettavaElokuva, elokuvanVanhaNimi);
+                tietokanta.Ajasql($"UPDATE naytokset SET elokuvannimi='{paivitettavaElokuva.Nimi}' WHERE elokuvannimi='{elokuvanVanhaNimi}'");
+
+                tulostaIlmoitus("Elokuvan päivitys onnistui. Ladataan...", lbl_Paivitys_ilmoitus, false);
+                await Task.Delay(1000);
+                paivitettavaElokuva = null;
+                this.toimintoKesken = false;
+                Perustiedot_Grid.Visibility = Visibility.Visible;
+                YllapidonEtusivuTab.IsSelected = true;
+            }
         }
 
         private async void btn_Paivita_Naytokset_Click(object sender, RoutedEventArgs e)
@@ -668,6 +685,7 @@ namespace Varausjarjestelma
         }
 
         #endregion
+        #region kirjauduUlos
 
         //Hoitaa käyttäjän kirjautumisen ulos järjestelmästä ja 
         //avaa login-formin ja tyhjentää muuttujat
@@ -678,6 +696,8 @@ namespace Varausjarjestelma
             new Login().Show();
             this.Close();
         }
+
+        #endregion
     }
 }
 

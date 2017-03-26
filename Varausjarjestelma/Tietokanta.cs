@@ -173,7 +173,7 @@ namespace Varausjarjestelma
         public Elokuva GetElokuva(string elokuvaNimi)
         {
             var res = new Elokuva("", 1, 1, "", "");
-            string sql = $"SELECT * FROM elokuvat WHERE nimi='{elokuvaNimi}'";
+            string sql = $"SELECT * FROM elokuvat WHERE elokuvannimi='{elokuvaNimi}'";
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
             if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
