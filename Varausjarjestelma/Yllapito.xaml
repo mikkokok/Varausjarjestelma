@@ -249,6 +249,18 @@
             <TabItem x:Name="Ohjeet_Tab" Header="Ohjeet">
                 <Grid x:Name="Ohjeet_Grid">
                     <Label x:Name="lbl_Ohjeet" Style="{StaticResource LabelHeaderStyle}" Content="Ohjeet" Margin="10,10,764,492"/>
+                    <Label x:Name="lbl_Eka_Ohje" Style="{StaticResource LabelStyle}" Margin="31,74,34,433">
+                        <TextBlock TextWrapping="Wrap" Text="Yllapidossa voi lisätä, muokata ja poistaa elokuvia ja elokuvien näytöksiä. Voit myös ylentää käyttäjän ylläpitäjäki"></TextBlock>
+                    </Label>
+                    <Label x:Name="lbl_Toka_Ohje" Style="{StaticResource LabelStyle}" Margin="31,116,34,378">
+                        <TextBlock TextWrapping="Wrap" Text="Elokuvan lisäys tapahtuu antamalla tiedot elokuvasta ja elokuvan näytöksistä. Elokuvan näytöksiä ei tarvitse välttämättä antaa heti vaan muokata niitä myöhemmin. Et voi lisätä kahta samanimistä elokuvaa järjestelmään"></TextBlock>
+                    </Label>
+                    <Label x:Name="lbl_Kolmas_Ohje" Style="{StaticResource LabelStyle}" Margin="31,171,34,323">
+                        <TextBlock TextWrapping="Wrap" Text="Elokuvat-sivulla saat elokuvan näytökset näkyviin valitsemalla elokuvan listasta. Näin voit myös muokata kyseistä elokuvaa tai sen näytöksiä tai poistaa elokuvan kokonaan. Kun poistat elokuvan niin kyseisen elokuvan näytökset poistuvat automaattisesti"></TextBlock>
+                    </Label>
+                    <Label x:Name="lbl_Neljäs_Ohje" Style="{StaticResource LabelStyle}" Margin="31,226,34,242">
+                        <TextBlock TextWrapping="Wrap" Text="Kun lisäät näytöksiä elokuvaan niin voit myös halutessasi poistaa ne valitsemalla ne listassa ja painamalla Poista-painiketta. Kun muokkaat elokuvan näytöksiä niin valitse näytös listasta jolloin näytöksen tiedot ilmestyvät oikeille paikoilleen. Tämän jälkeen voit muokata näytöksen tietoja. Muista tallentaa muutokset."></TextBlock>
+                    </Label>
                 </Grid>
             </TabItem>
             <TabItem x:Name="Kirjaudu_Ulos_Tab" Header="Kirjaudu ulos">
