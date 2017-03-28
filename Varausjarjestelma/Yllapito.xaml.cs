@@ -387,51 +387,66 @@ namespace Varausjarjestelma
 
         private void btn_Lisaa_Naytos_Click(object sender, RoutedEventArgs e)
         {
-            Teatteri teatteri = new Teatteri(cmb_Elokuvateatteri.Text, "Turku");
-            Elokuvasali sali;
-
-            //Luodaan erikokoiset salit teatterin ja salin nimen perusteella
-            if (teatteri.Nimi.Equals("Teatteri1") && cmb_Salit.Text.Equals("Sali1"))
+            if (cmb_Elokuvateatteri.Text.Equals("") || cmb_Salit.Equals("") || datep_Naytoksen_aika.Text.Equals(""))
             {
-                sali = new Elokuvasali(cmb_Salit.Text, 20, 10, teatteri);
-            }
-            else if (teatteri.Nimi.Equals("Teatteri1") && cmb_Salit.Text.Equals("Sali2"))
-            {
-                sali = new Elokuvasali(cmb_Salit.Text, 15, 25, teatteri);
-            }
-            else if (teatteri.Nimi.Equals("Teatteri2") && cmb_Salit.Text.Equals("Sali1"))
-            {
-                sali = new Elokuvasali(cmb_Salit.Text, 25, 15, teatteri);
-            }
-            else if (teatteri.Nimi.Equals("Teatteri2") && cmb_Salit.Text.Equals("Sali2"))
-            {
-                sali = new Elokuvasali(cmb_Salit.Text, 10, 10, teatteri);
+                tulostaIlmoitus("Tarvittavat näytöksen tiedot puuttuvat!", lbl_Elokuvan_Lisays_Ilmoitus, true);
             }
             else
             {
-                sali = null;
+                Teatteri teatteri = new Teatteri(cmb_Elokuvateatteri.Text, "Turku");
+                Elokuvasali sali;
+
+                //Luodaan erikokoiset salit teatterin ja salin nimen perusteella
+                if (teatteri.Nimi.Equals("Teatteri1") && cmb_Salit.Text.Equals("Sali1"))
+                {
+                    sali = new Elokuvasali(cmb_Salit.Text, 20, 10, teatteri);
+                }
+                else if (teatteri.Nimi.Equals("Teatteri1") && cmb_Salit.Text.Equals("Sali2"))
+                {
+                    sali = new Elokuvasali(cmb_Salit.Text, 15, 25, teatteri);
+                }
+                else if (teatteri.Nimi.Equals("Teatteri2") && cmb_Salit.Text.Equals("Sali1"))
+                {
+                    sali = new Elokuvasali(cmb_Salit.Text, 25, 15, teatteri);
+                }
+                else if (teatteri.Nimi.Equals("Teatteri2") && cmb_Salit.Text.Equals("Sali2"))
+                {
+                    sali = new Elokuvasali(cmb_Salit.Text, 10, 10, teatteri);
+                }
+                else
+                {
+                    sali = null;
+                }
+
+                aika = Convert.ToDateTime(datep_Naytoksen_aika.Text);
+
+                Näytös naytos = new Näytös(this.lisattavaElokuva, aika, sali, teatteri);
+                lisattavatNaytokset.Add(naytos);
+
+                dg_Lisattavat_Naytokset.Items.Add(new
+                {
+                    Elokuvateatteri = naytos.Teatteri.Nimi,
+                    Sali = naytos.Sali.Nimi,
+                    Pvm = naytos.Aika.ToShortDateString(),
+                    Klo = naytos.Aika.ToShortTimeString()
+                });
             }
-
-            aika = Convert.ToDateTime(datep_Naytoksen_aika.Text);
-
-            Näytös naytos = new Näytös(this.lisattavaElokuva, aika, sali, teatteri);
-            lisattavatNaytokset.Add(naytos);
-
-            dg_Lisattavat_Naytokset.Items.Add(new
-            {
-                Elokuvateatteri = naytos.Teatteri.Nimi,
-                Sali = naytos.Sali.Nimi,
-                Pvm = naytos.Aika.ToShortDateString(),
-                Klo = naytos.Aika.ToShortTimeString()
-            });
 
         }
 
         private void btn_Poista_Lisattava_Naytos_Click(object sender, RoutedEventArgs e)
         {
-            naytoksenIndeksi = dg_Lisattavat_Naytokset.SelectedIndex;
-            lisattavatNaytokset.RemoveAt(naytoksenIndeksi);
-            dg_Lisattavat_Naytokset.Items.RemoveAt(naytoksenIndeksi);
+            if (dg_Lisattavat_Naytokset.SelectedIndex != -1)
+            {
+                naytoksenIndeksi = dg_Lisattavat_Naytokset.SelectedIndex;
+                lisattavatNaytokset.RemoveAt(naytoksenIndeksi);
+                dg_Lisattavat_Naytokset.Items.RemoveAt(naytoksenIndeksi);
+            }
+            else
+            {
+                tulostaIlmoitus("Et valinnut poistettavaa näytöstä. Valitse poistettava näytös listasta", lbl_Elokuvan_Lisays_Ilmoitus, true);
+            }
+
         }
 
         private async void btn_Lisaa_Elokuva_Click_(object sender, RoutedEventArgs e)
@@ -490,45 +505,56 @@ namespace Varausjarjestelma
 
         private void btn_Lisaa_NaytosP_Click(object sender, RoutedEventArgs e)
         {
-
-            Teatteri teatteri = new Teatteri(cmb_ElokuvateatteriP2.Text, "Turku");
-            Elokuvasali sali;
-
-            //Luodaan erikokoiset salit teatterin ja salin nimen perusteella
-            if (teatteri.Nimi.Equals("Teatteri1") && cmb_SalitP2.Text.Equals("Sali1"))
+            if (cmb_ElokuvateatteriP2.Text.Equals("") || cmb_SalitP2.Text.Equals("") || dp_Paivitetty_Aika2.Text.Equals(""))
             {
-                sali = new Elokuvasali(cmb_SalitP2.Text, 20, 10, teatteri);
-            }
-            else if (teatteri.Nimi.Equals("Teatteri1") && cmb_SalitP2.Text.Equals("Sali2"))
-            {
-                sali = new Elokuvasali(cmb_SalitP2.Text, 15, 25, teatteri);
-            }
-            else if (teatteri.Nimi.Equals("Teatteri2") && cmb_SalitP2.Text.Equals("Sali1"))
-            {
-                sali = new Elokuvasali(cmb_SalitP2.Text, 25, 15, teatteri);
-            }
-            else if (teatteri.Nimi.Equals("Teatteri2") && cmb_SalitP2.Text.Equals("Sali2"))
-            {
-                sali = new Elokuvasali(cmb_SalitP2.Text, 10, 10, teatteri);
+                tulostaIlmoitus("Tarvittavia tietoja puuttuu näytöksestä. Tarkista tiedot.", lbl_Naytokset_Paivitys_Ilmoitus, true);
             }
             else
             {
-                sali = null;
+                Teatteri teatteri = new Teatteri(cmb_ElokuvateatteriP2.Text, "Turku");
+                Elokuvasali sali;
+
+                //Luodaan erikokoiset salit teatterin ja salin nimen perusteella
+                if (teatteri.Nimi.Equals("Teatteri1") && cmb_SalitP2.Text.Equals("Sali1"))
+                {
+                    sali = new Elokuvasali(cmb_SalitP2.Text, 20, 10, teatteri);
+                }
+                else if (teatteri.Nimi.Equals("Teatteri1") && cmb_SalitP2.Text.Equals("Sali2"))
+                {
+                    sali = new Elokuvasali(cmb_SalitP2.Text, 15, 25, teatteri);
+                }
+                else if (teatteri.Nimi.Equals("Teatteri2") && cmb_SalitP2.Text.Equals("Sali1"))
+                {
+                    sali = new Elokuvasali(cmb_SalitP2.Text, 25, 15, teatteri);
+                }
+                else if (teatteri.Nimi.Equals("Teatteri2") && cmb_SalitP2.Text.Equals("Sali2"))
+                {
+                    sali = new Elokuvasali(cmb_SalitP2.Text, 10, 10, teatteri);
+                }
+                else
+                {
+                    sali = null;
+                }
+
+                aika = Convert.ToDateTime(dp_Paivitetty_Aika2.Text);
+
+                Näytös naytos = new Näytös(this.paivitettavaElokuva, aika, sali, teatteri);
+                paivitettavatNaytokset.Add(naytos);
+                paivitaNaytoksetP();
+                clearNaytosPLisays();
             }
 
-            aika = Convert.ToDateTime(dp_Paivitetty_Aika2.Text);
-
-            Näytös naytos = new Näytös(this.paivitettavaElokuva, aika, sali, teatteri);
-            paivitettavatNaytokset.Add(naytos);
-            paivitaNaytoksetP();
-            clearNaytosPLisays();
         }
 
         private void dg_Paivitettavat_Naytokset_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             clearNaytosPLisays();
+
             if (dg_Paivitettavat_Naytokset.SelectedIndex != -1)
             {
+                btn_Paivita_Naytos.Visibility = Visibility.Visible;
+                btn_Poista_Valittu_NaytosP.Visibility = Visibility.Visible;
+
                 naytoksenIndeksi = dg_Paivitettavat_Naytokset.SelectedIndex;
                 paivitettavaNaytos = paivitettavatNaytokset[naytoksenIndeksi];
 
@@ -593,39 +619,48 @@ namespace Varausjarjestelma
 
         private void btn_Poista_Valittu_NaytosP_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult varmistus = Xceed.Wpf.Toolkit.MessageBox.Show("Haluatko varmasti poistaa valitun näytöksen?", "Näytöksen poistaminen", MessageBoxButton.OKCancel);
+            MessageBoxResult varmistus = Xceed.Wpf.Toolkit.MessageBox.Show("Haluatko varmasti poistaa valitun näytöksen?", "Näytöksen poistaminen", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (varmistus == MessageBoxResult.OK)
             {
                 paivitettavatNaytokset.RemoveAt(naytoksenIndeksi);
                 dg_Paivitettavat_Naytokset.Items.RemoveAt(naytoksenIndeksi);
                 paivitaNaytoksetP();
+                btn_Paivita_Naytos.Visibility = Visibility.Collapsed;
+                btn_Poista_Valittu_NaytosP.Visibility = Visibility.Collapsed;
             }
         }
 
         private async void btn_Paivita_Elokuvan_Perustiedot_Click(object sender, RoutedEventArgs e)
         {
-            Elokuva elokuva = tietokanta.GetElokuva(txt_Elokuvan_NimiP.Text);
-
-            if (!elokuva.Nimi.Equals(""))
+            if (txt_Elokuvan_NimiP.Text.Equals("") || txt_KestoP.Text.Equals("") || txt_VuosiP.Text.Equals("") || txt_KuvausP.Text.Equals(""))
             {
-                tulostaIlmoitus("Elokuva on jo olemassa. Valitse toinen nimi elokuvalle", lbl_Paivitys_ilmoitus, true);
+                tulostaIlmoitus("Tarvittavia tietoja puuttuu! Tarkista elokuvan tiedot", lbl_Paivitys_ilmoitus, true);
             }
             else
             {
-                paivitettavaElokuva.Nimi = txt_Elokuvan_NimiP.Text;
-                paivitettavaElokuva.Vuosi = int.Parse(txt_VuosiP.Text);
-                paivitettavaElokuva.Kesto = int.Parse(txt_KestoP.Text);
-                paivitettavaElokuva.Teksti = txt_KuvausP.Text;
+                Elokuva elokuva = tietokanta.GetElokuva(txt_Elokuvan_NimiP.Text);
 
-                tietokanta.UpdateElokuva(paivitettavaElokuva, elokuvanVanhaNimi);
-                tietokanta.Ajasql($"UPDATE naytokset SET elokuvannimi='{paivitettavaElokuva.Nimi}' WHERE elokuvannimi='{elokuvanVanhaNimi}'");
+                if (!elokuva.Nimi.Equals(""))
+                {
+                    tulostaIlmoitus("Elokuva on jo olemassa. Valitse toinen nimi elokuvalle", lbl_Paivitys_ilmoitus, true);
+                }
+                else
+                {
+                    paivitettavaElokuva.Nimi = txt_Elokuvan_NimiP.Text;
+                    paivitettavaElokuva.Vuosi = int.Parse(txt_VuosiP.Text);
+                    paivitettavaElokuva.Kesto = int.Parse(txt_KestoP.Text);
+                    paivitettavaElokuva.Teksti = txt_KuvausP.Text;
 
-                tulostaIlmoitus("Elokuvan päivitys onnistui. Ladataan...", lbl_Paivitys_ilmoitus, false);
-                await Task.Delay(1000);
-                paivitettavaElokuva = null;
-                this.toimintoKesken = false;
-                Perustiedot_Grid.Visibility = Visibility.Visible;
-                YllapidonEtusivuTab.IsSelected = true;
+                    tietokanta.UpdateElokuva(paivitettavaElokuva, elokuvanVanhaNimi);
+                    tietokanta.Ajasql($"UPDATE naytokset SET elokuvannimi='{paivitettavaElokuva.Nimi}' WHERE elokuvannimi='{elokuvanVanhaNimi}'");
+
+                    tulostaIlmoitus("Elokuvan päivitys onnistui. Ladataan...", lbl_Paivitys_ilmoitus, false);
+                    await Task.Delay(1000);
+                    paivitettavaElokuva = null;
+                    this.toimintoKesken = false;
+                    Perustiedot_Grid.Visibility = Visibility.Visible;
+                    YllapidonEtusivuTab.IsSelected = true;
+                }
             }
         }
 
