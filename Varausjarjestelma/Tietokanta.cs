@@ -230,7 +230,7 @@ namespace Varausjarjestelma
         }
 
         //Päivittää elokuvaan liittyvät näytökset
-        public void muokkaaNaytokset(Elokuva elokuva, List<Näytös> naytokset)
+        public void MuokkaaNaytokset(Elokuva elokuva, List<Näytös> naytokset)
         {
             // Tyhjennä aikaisemmat näytökset
             DelElokuvanNaytos(elokuva);
@@ -298,9 +298,18 @@ namespace Varausjarjestelma
             return res;
         }
 
-        public List<Paikka> VaratutPaikat(Näytös n)
+        public List<Paikka> VaratutPaikat(Näytös naytos)
         {
-            return VaratutPaikat(n, null);
+            var res = new List<Paikka>();
+            string sql = $"SELECT * FROM varaukset WHERE elokuvannimi='{naytos.Elokuva.Nimi}' AND naytosaika='{naytos.Aika.ToShortTimeString()}'";
+            _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
+            _sqllukija = _sqlkomento.ExecuteReader();
+            if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
+            while (_sqllukija.Read())
+            {
+                res.Add(new Paikka(naytos.Sali, int.Parse(_sqllukija.GetString(2))));
+            }
+            return res;
         }
         
         public void VaraaPaikka(Kayttaja kayttaja, Näytös naytos, Paikka paikka)
@@ -308,10 +317,9 @@ namespace Varausjarjestelma
             Ajasql($"INSERT INTO varaukset VALUES (null, '{naytos.Aika.ToShortTimeString()}', '{kayttaja.Tunnus}', {paikka.PaikkaNro}, '{naytos.Sali.Nimi}', '{naytos.Elokuva.Nimi}') ");
         }
         
-        public void PoistaPaikkaVaraus(Paikka p)
+        public void PoistaPaikkaVaraus(Paikka paikka, Näytös naytos)
         {
-            // todo
-            //null;
+            Ajasql($"DELETE FROM varaukset WHERE elokuvasali='{paikka.Sali.Nimi}' AND naytosaika='{naytos.Aika.ToShortTimeString()}' AND istumapaikka='{paikka.PaikkaNro}'");
         }
 
         public void Dispose()

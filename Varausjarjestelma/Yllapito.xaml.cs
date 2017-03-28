@@ -666,7 +666,7 @@ namespace Varausjarjestelma
 
         private async void btn_Paivita_Naytokset_Click(object sender, RoutedEventArgs e)
         {
-            tietokanta.muokkaaNaytokset(paivitettavaElokuva, paivitettavatNaytokset);
+            tietokanta.MuokkaaNaytokset(paivitettavaElokuva, paivitettavatNaytokset);
             tulostaIlmoitus("Näytökset päivitetty. Ladataan...", lbl_Naytokset_Paivitys_Ilmoitus, false);
             await Task.Delay(1000);
             paivitettavaElokuva = null;
