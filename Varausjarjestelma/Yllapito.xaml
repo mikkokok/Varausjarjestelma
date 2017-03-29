@@ -232,7 +232,7 @@
             <TabItem x:Name="Kayttajat_tab" Header="Käyttäjät">
 
                 <Grid x:Name="Kayttajat_Grid">
-                    <DataGrid x:Name="dg_kayttajat" Background="#80c1ff" HorizontalAlignment="Left" Margin="24,76,0,0" VerticalAlignment="Top" Height="329" Width="253" SelectionChanged="dg_kayttajat_SelectionChanged">
+                    <DataGrid x:Name="dg_kayttajat" IsReadOnly="True" Background="#80c1ff" HorizontalAlignment="Left" Margin="24,76,0,0" VerticalAlignment="Top" Height="329" Width="253" SelectionChanged="dg_kayttajat_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Kayttajatunnus}" ClipboardContentBinding="{x:Null}" Header="Tunnus"/>
                             <DataGridTextColumn Binding="{Binding Etunimi}" ClipboardContentBinding="{x:Null}" Header="Etunimi"/>
