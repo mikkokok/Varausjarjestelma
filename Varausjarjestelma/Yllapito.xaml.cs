@@ -399,15 +399,15 @@ namespace Varausjarjestelma
                 //Luodaan erikokoiset salit teatterin ja salin nimen perusteella
                 if (teatteri.Nimi.Equals("Teatteri1") && cmb_Salit.Text.Equals("Sali1"))
                 {
-                    sali = new Elokuvasali(cmb_Salit.Text, 20, 10, teatteri);
+                    sali = new Elokuvasali(cmb_Salit.Text, 18, 10, teatteri);
                 }
                 else if (teatteri.Nimi.Equals("Teatteri1") && cmb_Salit.Text.Equals("Sali2"))
                 {
-                    sali = new Elokuvasali(cmb_Salit.Text, 15, 25, teatteri);
+                    sali = new Elokuvasali(cmb_Salit.Text, 15, 15, teatteri);
                 }
                 else if (teatteri.Nimi.Equals("Teatteri2") && cmb_Salit.Text.Equals("Sali1"))
                 {
-                    sali = new Elokuvasali(cmb_Salit.Text, 25, 15, teatteri);
+                    sali = new Elokuvasali(cmb_Salit.Text, 20, 10, teatteri);
                 }
                 else if (teatteri.Nimi.Equals("Teatteri2") && cmb_Salit.Text.Equals("Sali2"))
                 {
@@ -517,15 +517,15 @@ namespace Varausjarjestelma
                 //Luodaan erikokoiset salit teatterin ja salin nimen perusteella
                 if (teatteri.Nimi.Equals("Teatteri1") && cmb_SalitP2.Text.Equals("Sali1"))
                 {
-                    sali = new Elokuvasali(cmb_SalitP2.Text, 20, 10, teatteri);
+                    sali = new Elokuvasali(cmb_SalitP2.Text, 18, 10, teatteri);
                 }
                 else if (teatteri.Nimi.Equals("Teatteri1") && cmb_SalitP2.Text.Equals("Sali2"))
                 {
-                    sali = new Elokuvasali(cmb_SalitP2.Text, 15, 25, teatteri);
+                    sali = new Elokuvasali(cmb_SalitP2.Text, 15, 15, teatteri);
                 }
                 else if (teatteri.Nimi.Equals("Teatteri2") && cmb_SalitP2.Text.Equals("Sali1"))
                 {
-                    sali = new Elokuvasali(cmb_SalitP2.Text, 25, 15, teatteri);
+                    sali = new Elokuvasali(cmb_SalitP2.Text, 20, 10, teatteri);
                 }
                 else if (teatteri.Nimi.Equals("Teatteri2") && cmb_SalitP2.Text.Equals("Sali2"))
                 {
@@ -589,15 +589,15 @@ namespace Varausjarjestelma
             //Luodaan erikokoiset salit teatterin ja salin nimen perusteella
             if (teatteri.Nimi.Equals("Teatteri1") && cmb_SalitP1.Text.Equals("Sali1"))
             {
-                sali = new Elokuvasali(cmb_SalitP1.Text, 20, 10, teatteri);
+                sali = new Elokuvasali(cmb_SalitP1.Text, 18, 10, teatteri);
             }
             else if (teatteri.Nimi.Equals("Teatteri1") && cmb_SalitP1.Text.Equals("Sali2"))
             {
-                sali = new Elokuvasali(cmb_SalitP1.Text, 15, 25, teatteri);
+                sali = new Elokuvasali(cmb_SalitP1.Text, 15, 15, teatteri);
             }
             else if (teatteri.Nimi.Equals("Teatteri2") && cmb_SalitP1.Text.Equals("Sali1"))
             {
-                sali = new Elokuvasali(cmb_SalitP1.Text, 25, 15, teatteri);
+                sali = new Elokuvasali(cmb_SalitP1.Text, 20, 10, teatteri);
             }
             else if (teatteri.Nimi.Equals("Teatteri2") && cmb_SalitP1.Text.Equals("Sali2"))
             {

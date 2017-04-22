@@ -94,9 +94,9 @@ namespace Varausjarjestelma
             // Muutama näytös
             Ajasql("INSERT INTO naytokset VALUES(null, 'Paras elokuva', '"+ System.DateTime.Now + "', 'Sali1', 'Teatteri1')");
             // Luo muutama elokuvasali ja teatteri
-            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '20', '10', 'Teatteri1', 'Turku')");
-            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '15', '25', 'Teatteri1', 'Turku')");
-            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '25', '15', 'Teatteri2', 'Turku')");
+            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '18', '10', 'Teatteri1', 'Turku')");
+            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '15', '15', 'Teatteri1', 'Turku')");
+            Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '20', '10', 'Teatteri2', 'Turku')");
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '10', '10', 'Teatteri2', 'Turku')");
         }
 

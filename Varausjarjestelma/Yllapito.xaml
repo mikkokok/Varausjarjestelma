@@ -42,7 +42,7 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem x:Name="YllapidonEtusivuTab" Header="Elokuvat">
+            <TabItem x:Name="YllapidonEtusivuTab" Header="Elokuvat" Height="19" VerticalAlignment="Top">
                 <Grid x:Name="Yllapidon_Etusivun_Grid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="27*"/>
@@ -108,7 +108,15 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                         </DataGrid.Columns>
-
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="LightBlue"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
                     </DataGrid>
                     <DataGrid x:Name="dg_Naytokset" IsReadOnly="True" Background=" #80c1ff" Visibility="Visible" Grid.Column="2" HorizontalAlignment="Left" Margin="123,46,0,0" VerticalAlignment="Top" Width="343" Height="368">
                         <DataGrid.Columns>
@@ -117,6 +125,15 @@
                             <DataGridTextColumn Binding="{Binding Pvm}" ClipboardContentBinding="{x:Null}" Header="Pvm"/>
                             <DataGridTextColumn Binding="{Binding Klo}" ClipboardContentBinding="{x:Null}" Header="Klo"/>
                         </DataGrid.Columns>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="LightBlue"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
                     </DataGrid>
                 </Grid>
             </TabItem>
@@ -162,6 +179,15 @@
                                 <DataGridTextColumn Binding="{Binding Pvm}" ClipboardContentBinding="{x:Null}" Header="Pvm"/>
                                 <DataGridTextColumn Binding="{Binding Klo}" ClipboardContentBinding="{x:Null}" Header="Klo"/>
                             </DataGrid.Columns>
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="LightBlue"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
                         </DataGrid>
                         <Label x:Name="lbl_Elokuvan_Lisays_Ilmoitus" Visibility="Collapsed" Style="{StaticResource FadeAnimation}" FontSize="18" HorizontalAlignment="Left" Margin="462,413,0,0" VerticalAlignment="Top" Height="121" Width="386"/>
                         <Label x:Name="lbl_Sali" Content="Sali" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="462,197,0,0" VerticalAlignment="Top"/>
@@ -189,6 +215,15 @@
                                 <DataGridTextColumn Binding="{Binding Pvm}" ClipboardContentBinding="{x:Null}" Header="Pvm."/>
                                 <DataGridTextColumn Binding="{Binding Klo}" ClipboardContentBinding="{x:Null}" Header="Klo."/>
                             </DataGrid.Columns>
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="LightBlue"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
                         </DataGrid>
                         <Label x:Name="lbl_Paivita_Naytokset" Content="PÄIVITÄ ELOKUVAN NÄYTÖKSET" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="26,30,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="lbl_Lisaa_NaytosP" Content="LISÄÄ UUSI NÄYTÖS" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="280,298,0,0"/>
@@ -209,7 +244,7 @@
                             <ComboBoxItem Content="Sali2"/>
                         </ComboBox>
                         <wpfTool:DateTimePicker x:Name="dp_Paivitetty_Aika" HorizontalAlignment="Left" VerticalAlignment="Top" Width="220" Height="28" Margin="401,177,0,0" CultureInfo="fi-FI" Format="Custom" CurrentDateTimePart="Hour24" FormatString="dd.MM.yyyy HH:mm"/>
-                        <Button x:Name="btn_Lisaa_NaytosP" Content="Lisää näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="121" Height="41" Margin="467,516,0,0" Click="btn_Lisaa_NaytosP_Click"/>
+                        <Button x:Name="btn_Lisaa_NaytosP" Content="Lisää näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="121" Height="41" Margin="500,505,0,0" Click="btn_Lisaa_NaytosP_Click"/>
 
                         <Label x:Name="lbl_Naytokset_Paivitys_Ilmoitus" Visibility="Collapsed" Style="{StaticResource FadeAnimation}" FontSize="16" HorizontalAlignment="Left" Margin="654,161,0,0" VerticalAlignment="Top" Height="207" Width="204"/>
                         <Label x:Name="lbl_SaliP1" Content="Sali" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="260,135,0,0" VerticalAlignment="Top"/>
@@ -239,6 +274,15 @@
                             <DataGridTextColumn Binding="{Binding Sukunimi}" ClipboardContentBinding="{x:Null}" Header="Sukunimi"/>
                             <DataGridTextColumn Binding="{Binding Rooli}" ClipboardContentBinding="{x:Null}" Header="Rooli"/>
                         </DataGrid.Columns>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="LightBlue"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
                     </DataGrid>
                     <Label x:Name="lbl_Kayttajat" Style="{StaticResource LabelHeaderStyle}" Content="Käyttäjät" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="btn_Ylenna_Kayttaja" Style="{StaticResource ButtonStyle}" Content="Ylennä ylläpitäjäksi" Visibility="Collapsed" HorizontalAlignment="Left" Margin="335,76,0,0" VerticalAlignment="Top" Width="145" Height="51" Click="btn_Ylenna_Kayttaja_Click"/>
@@ -248,18 +292,17 @@
             <TabItem x:Name="Ohjeet_Tab" Header="Ohjeet">
                 <Grid x:Name="Ohjeet_Grid">
                     <Label x:Name="lbl_Ohjeet" Style="{StaticResource LabelHeaderStyle}" Content="Ohjeet" Margin="10,10,764,492"/>
-                    
-                    <TextBlock TextWrapping="Wrap" Text="Yllapidossa voi lisätä, muokata ja poistaa elokuvia ja elokuvien näytöksiä. Voit myös ylentää käyttäjän ylläpitäjäki" Margin="36,81,129,438" Foreground="White"/>
-                    <TextBlock TextWrapping="Wrap" Text="Elokuvan lisäys tapahtuu antamalla tiedot elokuvasta ja elokuvan näytöksistä. Elokuvan näytöksiä ei tarvitse välttämättä antaa heti vaan muokata niitä myöhemmin. Et voi lisätä kahta samanimistä elokuvaa järjestelmään" Margin="36,121,50,387" Foreground="White"/>
-                    <TextBlock TextWrapping="Wrap" Text="Elokuvat-sivulla saat elokuvan näytökset näkyviin valitsemalla elokuvan listasta. Näin voit myös muokata kyseistä elokuvaa tai sen näytöksiä tai poistaa elokuvan kokonaan. Kun poistat elokuvan niin kyseisen elokuvan näytökset poistuvat automaattisesti" Margin="36,162,45,346" Foreground="White"/>
-                    <TextBlock TextWrapping="Wrap" Text="Kun lisäät näytöksiä elokuvaan niin voit myös halutessasi poistaa ne valitsemalla ne listassa ja painamalla Poista-painiketta. Kun muokkaat elokuvan näytöksiä niin valitse näytös listasta jolloin näytöksen tiedot ilmestyvät oikeille paikoilleen. Tämän jälkeen voit muokata näytöksen tietoja. Muista tallentaa muutokset." Margin="36,203,64,287" Foreground="White"/>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" FontSize="20" Text="Yllapidossa voi lisätä, muokata ja poistaa elokuvia ja elokuvien näytöksiä. Voit myös ylentää käyttäjän ylläpitäjäki" Margin="36,76,83,395" Foreground="White"/>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" FontSize="20" Text="Elokuvan lisäys tapahtuu antamalla tiedot elokuvasta ja elokuvan näytöksistä. Elokuvan näytöksiä ei tarvitse välttämättä antaa heti vaan muokata niitä myöhemmin. Et voi lisätä kahta samanimistä elokuvaa järjestelmään" Margin="36,154,45,293" Foreground="White"/>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" FontSize="20" Text="Elokuvat-sivulla saat elokuvan näytökset näkyviin valitsemalla elokuvan listasta. Näin voit myös muokata kyseistä elokuvaa tai sen näytöksiä tai poistaa elokuvan kokonaan. Kun poistat elokuvan niin kyseisen elokuvan näytökset poistuvat automaattisesti" Margin="36,256,45,197" Foreground="White"/>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" FontSize="20" Text="Kun lisäät näytöksiä elokuvaan niin voit myös halutessasi poistaa ne valitsemalla ne listassa ja painamalla Poista-painiketta. Kun muokkaat elokuvan näytöksiä niin valitse näytös listasta jolloin näytöksen tiedot ilmestyvät oikeille paikoilleen. Tämän jälkeen voit muokata näytöksen tietoja. Muista tallentaa muutokset." Margin="36,352,64,72" Foreground="White"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="Kirjaudu_Ulos_Tab" Header="Kirjaudu ulos">
                 <Grid x:Name="Yllapidon_Logout">
                     <Label x:Name="lbl_kirjaudu_ulos" Content="OLET KIRJAUTUMASSA ULOS." Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="24,51,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="label1" Content="TALLENTAMATTOMAT TIEDOT MENETETÄÄN" Style="{StaticResource LabelHeaderStyle}" HorizontalAlignment="Left" Margin="24,103,0,0" VerticalAlignment="Top"/>
-                    <Button x:Name="btn_kirjaudu_ulos" Content="Kirjaudu Ulos" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="35,169,0,0" VerticalAlignment="Top" Width="153" Height="68" Click="btn_kirjaudu_ulos_Click"/>
+                    <Button x:Name="btn_kirjaudu_ulos" Content="Kirjaudu Ulos" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="35,169,0,0" VerticalAlignment="Top" Width="174" Height="68" FontSize="20" Click="btn_kirjaudu_ulos_Click"/>
                     <Label x:Name="lbl_logout_ilmoitus" Content="Kirjaudutaan ulos..." Style="{StaticResource LabelStyle}" Visibility="Collapsed" HorizontalAlignment="Left" Margin="282,188,0,0" VerticalAlignment="Top"/>
 
                 </Grid>

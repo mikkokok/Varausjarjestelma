@@ -19,7 +19,7 @@
             <Label x:Name="lbl_ilmoitus" Style="{StaticResource FadeAnimation}"  Content="ilmoitus" Foreground="White" Visibility="Collapsed" HorizontalAlignment="Left" Margin="34,115,0,0" VerticalAlignment="Top" />
             <TextBox x:Name="txt_kayttajaNimi" HorizontalAlignment="Left" Height="24" Margin="122,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             <PasswordBox x:Name="txt_salasana" HorizontalAlignment="Left" Height="23" Margin="122,76,0,0" VerticalAlignment="Top" Width="120"/>
-            <Button x:Name="btn_kirjaudu"  Height="25" Style="{StaticResource ButtonStyle}" Click="btnkirjaudu_Click" HorizontalAlignment="Left" Margin="167,143,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press" Content="Kirjaudu" />
+            <Button x:Name="btn_kirjaudu" Height="25" Style="{StaticResource ButtonStyle}" Click="btnkirjaudu_Click" HorizontalAlignment="Left" Margin="167,143,0,0" VerticalAlignment="Top" Width="75" ClickMode="Press" Content="Kirjaudu" />
             <Button x:Name="btn_rekisteroidy" Height="25" Width="85" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="34,143,0,0" VerticalAlignment="Top" Click="btn_rekisteroidy_Click" Content="Rekisteröidy" />
         </Grid>
 
