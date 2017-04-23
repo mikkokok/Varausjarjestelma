@@ -245,17 +245,17 @@ namespace Varausjarjestelma
                     });
                 }
 
-                btn_Avaa_Elokuvan_Muokkaus.Visibility = Visibility.Visible;
-                btn_Muokkaa_Naytokset.Visibility = Visibility.Visible;
-                btn_Poista_Elokuva.Visibility = Visibility.Visible;
+                btn_Avaa_Elokuvan_Muokkaus.IsEnabled = true;
+                btn_Muokkaa_Naytokset.IsEnabled = true;
+                btn_Poista_Elokuva.IsEnabled = true;
             }
             else
             {
                 dg_Elokuvat.Items.Clear();
 
-                btn_Avaa_Elokuvan_Muokkaus.Visibility = Visibility.Collapsed;
-                btn_Muokkaa_Naytokset.Visibility = Visibility.Collapsed;
-                btn_Poista_Elokuva.Visibility = Visibility.Collapsed;
+                btn_Avaa_Elokuvan_Muokkaus.IsEnabled = false;
+                btn_Muokkaa_Naytokset.IsEnabled = false;
+                btn_Poista_Elokuva.IsEnabled = false;
             }       
         }
 
@@ -494,6 +494,9 @@ namespace Varausjarjestelma
                     Klo = naytos.Aika.ToShortTimeString()
                 });
             }
+            btn_Paivita_Naytos.IsEnabled = false;
+            btn_Poista_Valittu_NaytosP.IsEnabled = false;
+
         }
 
         private void clearNaytosPLisays()
@@ -552,8 +555,8 @@ namespace Varausjarjestelma
 
             if (dg_Paivitettavat_Naytokset.SelectedIndex != -1)
             {
-                btn_Paivita_Naytos.Visibility = Visibility.Visible;
-                btn_Poista_Valittu_NaytosP.Visibility = Visibility.Visible;
+                btn_Paivita_Naytos.IsEnabled = true;
+                btn_Poista_Valittu_NaytosP.IsEnabled = true;
 
                 naytoksenIndeksi = dg_Paivitettavat_Naytokset.SelectedIndex;
                 paivitettavaNaytos = paivitettavatNaytokset[naytoksenIndeksi];
@@ -625,8 +628,8 @@ namespace Varausjarjestelma
                 paivitettavatNaytokset.RemoveAt(naytoksenIndeksi);
                 dg_Paivitettavat_Naytokset.Items.RemoveAt(naytoksenIndeksi);
                 paivitaNaytoksetP();
-                btn_Paivita_Naytos.Visibility = Visibility.Collapsed;
-                btn_Poista_Valittu_NaytosP.Visibility = Visibility.Collapsed;
+                btn_Paivita_Naytos.IsEnabled = false;
+                btn_Poista_Valittu_NaytosP.IsEnabled = false;
             }
         }
 
@@ -640,27 +643,20 @@ namespace Varausjarjestelma
             {
                 Elokuva elokuva = tietokanta.GetElokuva(txt_Elokuvan_NimiP.Text);
 
-                if (!elokuva.Nimi.Equals(""))
-                {
-                    tulostaIlmoitus("Elokuva on jo olemassa. Valitse toinen nimi elokuvalle", lbl_Paivitys_ilmoitus, true);
-                }
-                else
-                {
-                    paivitettavaElokuva.Nimi = txt_Elokuvan_NimiP.Text;
-                    paivitettavaElokuva.Vuosi = int.Parse(txt_VuosiP.Text);
-                    paivitettavaElokuva.Kesto = int.Parse(txt_KestoP.Text);
-                    paivitettavaElokuva.Teksti = txt_KuvausP.Text;
+                paivitettavaElokuva.Nimi = txt_Elokuvan_NimiP.Text;
+                paivitettavaElokuva.Vuosi = int.Parse(txt_VuosiP.Text);
+                paivitettavaElokuva.Kesto = int.Parse(txt_KestoP.Text);
+                paivitettavaElokuva.Teksti = txt_KuvausP.Text;
 
-                    tietokanta.UpdateElokuva(paivitettavaElokuva, elokuvanVanhaNimi);
-                    tietokanta.Ajasql($"UPDATE naytokset SET elokuvannimi='{paivitettavaElokuva.Nimi}' WHERE elokuvannimi='{elokuvanVanhaNimi}'");
+                tietokanta.UpdateElokuva(paivitettavaElokuva, elokuvanVanhaNimi);
+                tietokanta.Ajasql($"UPDATE naytokset SET elokuvannimi='{paivitettavaElokuva.Nimi}' WHERE elokuvannimi='{elokuvanVanhaNimi}'");
 
-                    tulostaIlmoitus("Elokuvan päivitys onnistui. Ladataan...", lbl_Paivitys_ilmoitus, false);
-                    await Task.Delay(1000);
-                    paivitettavaElokuva = null;
-                    this.toimintoKesken = false;
-                    Perustiedot_Grid.Visibility = Visibility.Visible;
-                    YllapidonEtusivuTab.IsSelected = true;
-                }
+                tulostaIlmoitus("Elokuvan päivitys onnistui. Ladataan...", lbl_Paivitys_ilmoitus, false);
+                await Task.Delay(1000);
+                paivitettavaElokuva = null;
+                this.toimintoKesken = false;
+                Perustiedot_Grid.Visibility = Visibility.Visible;
+                YllapidonEtusivuTab.IsSelected = true;
             }
         }
 
@@ -699,7 +695,7 @@ namespace Varausjarjestelma
             Kayttaja kayttaja = kayttajat[kayttajaIndeksi];
             tietokanta.Ajasql("UPDATE kayttajat SET rooli = 'Admin' WHERE tunnus='" + kayttaja.Tunnus + "'");
             paivitaKayttajat();
-            btn_Ylenna_Kayttaja.Visibility = Visibility.Collapsed;
+            btn_Ylenna_Kayttaja.IsEnabled = false;
         }
 
         private void dg_kayttajat_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -710,11 +706,11 @@ namespace Varausjarjestelma
                 Kayttaja kayttaja = kayttajat[kayttajaIndeksi];
                 if (kayttaja.Rooli.Equals("User"))
                 {
-                    btn_Ylenna_Kayttaja.Visibility = Visibility.Visible;
+                    btn_Ylenna_Kayttaja.IsEnabled = true;
                 }
                 else
                 {
-                    btn_Ylenna_Kayttaja.Visibility = Visibility.Collapsed;
+                    btn_Ylenna_Kayttaja.IsEnabled = false;
                 }
             }
         }

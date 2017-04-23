@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Varausjarjestelma"
         mc:Ignorable="d"
-        Title="Kirjaudu Sisään" FontFamily="Arial" Height="218" Width="300" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" SizeChanged="Window_SizeChanged" Background="#FFF6FBFD" Foreground="#FFEEF8FD" Visibility="Visible" ResizeMode="NoResize" Margin="0" BorderThickness="0">
+        Title="Kirjaudu Sisään" FontFamily="Arial" Height="218" Width="300" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" SizeChanged="Window_SizeChanged" Background="#FFF6FBFD" Foreground="#FFEEF8FD" Visibility="Visible" ResizeMode="CanMinimize" Margin="0" BorderThickness="0">
     <Grid VerticalAlignment="Stretch">
         <Grid.Background>
             <LinearGradientBrush>
