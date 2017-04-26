@@ -92,7 +92,7 @@ namespace Varausjarjestelma
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '2005', '120', 'Kissoja ja koiria', 'Kylla')");
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', '145', 'Kirahveja ja elefantteja', 'Ei')");
             // Muutama näytös
-            Ajasql("INSERT INTO naytokset VALUES(null, 'Paras elokuva', '"+ System.DateTime.Now + "', 'Sali1', 'Teatteri1')");
+            Ajasql("INSERT INTO naytokset VALUES(null, 'Paras elokuva', '" + System.DateTime.Now + "', 'Sali1', 'Teatteri1')");
             // Luo muutama elokuvasali ja teatteri
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '18', '10', 'Teatteri1', 'Turku')");
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '15', '15', 'Teatteri1', 'Turku')");
@@ -137,7 +137,7 @@ namespace Varausjarjestelma
         //käyttäjänimen perusteella
         public Kayttaja getKayttaja(String kayttajatunnus)
         {
-            var res = new Kayttaja("","","","","");
+            var res = new Kayttaja("", "", "", "", "");
             string sql = $"SELECT * FROM kayttajat WHERE tunnus= '{kayttajatunnus}'";
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
@@ -218,6 +218,7 @@ namespace Varausjarjestelma
             }
             return res;
         }
+
         private static Elokuvasali HaeElokuvasali(List<Elokuvasali> salit, string salinnimi)
         {
             return salit.First(s => s.Nimi == salinnimi);
@@ -311,12 +312,28 @@ namespace Varausjarjestelma
             }
             return res;
         }
-        
+
+        public Dictionary<Näytös, Paikka> VaratutPaikat(Kayttaja kayttaja)
+        {
+            var res = new Dictionary<Näytös, Paikka>();
+            var naytokset = GetElokuvat().SelectMany(GetElokuvanNaytokset).ToList();
+
+            string sql = $"SELECT * FROM varaukset WHERE kayttajantunnus='{kayttaja.Tunnus}'";
+            _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
+            _sqllukija = _sqlkomento.ExecuteReader();
+            if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
+            while (_sqllukija.Read())
+            {
+                //Paikka paikka = new Paikka();
+            }
+            return res;
+        }
+
         public void VaraaPaikka(Kayttaja kayttaja, Näytös naytos, Paikka paikka)
         {
             Ajasql($"INSERT INTO varaukset VALUES (null, '{naytos.Aika.ToShortTimeString()}', '{kayttaja.Tunnus}', {paikka.PaikkaNro}, '{naytos.Sali.Nimi}', '{naytos.Elokuva.Nimi}') ");
         }
-        
+
         public void PoistaPaikkaVaraus(Paikka paikka, Näytös naytos)
         {
             Ajasql($"DELETE FROM varaukset WHERE elokuvasali='{paikka.Sali.Nimi}' AND naytosaika='{naytos.Aika.ToShortTimeString()}' AND istumapaikka='{paikka.PaikkaNro}'");
