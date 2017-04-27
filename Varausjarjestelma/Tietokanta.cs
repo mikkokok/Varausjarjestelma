@@ -86,18 +86,20 @@ namespace Varausjarjestelma
             "elokuva VARCHAR(255))";
             Ajasql(_sql);
             // Luo pari kayttajaa tauluun
-            Ajasql($"INSERT INTO kayttajat VALUES (null, 'Ylla', 'Pitaja', 'yllapitaja', 'nimda', 'Admin')");
-            Ajasql($"INSERT INTO kayttajat VALUES (null, 'Antti', 'Virtanen', 'vantti', 'anttiv', 'User')");
+            Ajasql("INSERT INTO kayttajat VALUES (null, 'Ylla', 'Pitaja', 'yllapitaja', 'nimda', 'Admin')");
+            Ajasql("INSERT INTO kayttajat VALUES (null, 'Antti', 'Virtanen', 'vantti', 'anttiv', 'User')");
             // Luo muutama elokuva
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '2005', '120', 'Kissoja ja koiria', 'Kylla')");
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', '145', 'Kirahveja ja elefantteja', 'Ei')");
             // Muutama näytös
-            Ajasql("INSERT INTO naytokset VALUES(null, 'Paras elokuva', '" + System.DateTime.Now + "', 'Sali1', 'Teatteri1')");
+            Ajasql($"INSERT INTO naytokset VALUES(null, 'Paras elokuva', '{DateTime.Now.ToShortTimeString()}', 'Sali1', 'Teatteri1')");
             // Luo muutama elokuvasali ja teatteri
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '18', '10', 'Teatteri1', 'Turku')");
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '15', '15', 'Teatteri1', 'Turku')");
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '20', '10', 'Teatteri2', 'Turku')");
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '10', '10', 'Teatteri2', 'Turku')");
+            // Muutama varaus varaukset tauluun
+            Ajasql($"INSERT INTO varaukset VALUES(null, '{DateTime.Now.ToShortTimeString()}', 'vantti', '10', 'Sali2', 'Paras elokuva')");
         }
 
         public List<string> Ajasql(string sql)
@@ -317,14 +319,21 @@ namespace Varausjarjestelma
         {
             var res = new Dictionary<Näytös, Paikka>();
             var naytokset = GetElokuvat().SelectMany(GetElokuvanNaytokset).ToList();
-
-            string sql = $"SELECT * FROM varaukset WHERE kayttajantunnus='{kayttaja.Tunnus}'";
-            _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
-            _sqllukija = _sqlkomento.ExecuteReader();
-            if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
-            while (_sqllukija.Read())
+            foreach (var naytos in naytokset)
             {
-                //Paikka paikka = new Paikka();
+                Paikka paikka = null;
+                string sql = $"SELECT * FROM varaukset WHERE naytosaika='{naytos.Aika.ToShortTimeString()}' AND kayttajantunnus='{kayttaja.Tunnus}'";
+                _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
+                _sqllukija = _sqlkomento.ExecuteReader();
+                if (_sqllukija.FieldCount == 0) continue; // Taulu on tyhja
+                while (_sqllukija.Read())
+                {
+                    paikka = new Paikka(naytos.Sali, int.Parse(_sqllukija.GetString(3)));
+                }
+                if (!res.ContainsKey(naytos) && paikka != null)
+                {
+                    res.Add(naytos, paikka);
+                }
             }
             return res;
         }
