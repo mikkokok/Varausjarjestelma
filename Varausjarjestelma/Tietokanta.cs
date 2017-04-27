@@ -315,24 +315,24 @@ namespace Varausjarjestelma
             return res;
         }
 
-        public Dictionary<Näytös, Paikka> VaratutPaikat(Kayttaja kayttaja)
+        public Dictionary<Näytös, List<Paikka>> VaratutPaikat(Kayttaja kayttaja)
         {
-            var res = new Dictionary<Näytös, Paikka>();
+            var res = new Dictionary<Näytös, List<Paikka>>();
             var naytokset = GetElokuvat().SelectMany(GetElokuvanNaytokset).ToList();
             foreach (var naytos in naytokset)
             {
-                Paikka paikka = null;
+                List<Paikka> paikat = new List<Paikka>();
                 string sql = $"SELECT * FROM varaukset WHERE naytosaika='{naytos.Aika.ToShortTimeString()}' AND kayttajantunnus='{kayttaja.Tunnus}'";
                 _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
                 _sqllukija = _sqlkomento.ExecuteReader();
                 if (_sqllukija.FieldCount == 0) continue; // Taulu on tyhja
                 while (_sqllukija.Read())
                 {
-                    paikka = new Paikka(naytos.Sali, int.Parse(_sqllukija.GetString(3)));
+                    paikat.Add(new Paikka(naytos.Sali, int.Parse(_sqllukija.GetString(3))));
                 }
-                if (!res.ContainsKey(naytos) && paikka != null)
+                if (!res.ContainsKey(naytos) && paikat.Count > 0)
                 {
-                    res.Add(naytos, paikka);
+                    res.Add(naytos, paikat);
                 }
             }
             return res;
