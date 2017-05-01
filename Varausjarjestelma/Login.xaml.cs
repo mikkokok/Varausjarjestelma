@@ -169,7 +169,7 @@ namespace Varausjarjestelma
             if (!kayttajanimi.Equals("") && !etunimi.Equals("") && !sukunimi.Equals("") && !salasana.Equals("") && !salasanaVarmistus.Equals(""))
             {
                 //Tarkistetaan onko sama käyttäjänimi jo tietokannassa
-                Kayttaja kayttaja = Tietokanta.getKayttaja(kayttajanimi);
+                Kayttaja kayttaja = Tietokanta.GetKayttaja(kayttajanimi);
 
                 //Jos käyttäjää ei löydy tietokannasta niin jatketaan rekisteröintiä
                 if (kayttaja.Tunnus.Equals(kayttajanimi))

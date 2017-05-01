@@ -14,12 +14,19 @@ namespace Varausjarjestelma
         private static SQLiteConnection _kantaYhteys;
         private SQLiteCommand _sqlkomento;
         private SQLiteDataReader _sqllukija;
+        /// <summary>
+        /// Tietokantaluokan konstruktori
+        /// Luo automaattisesti uuden tietokannan jos sellaista ei ole ja yhdistää siihen
+        /// </summary>
         public Tietokanta()
         {
             LuoTietokanta();
             YhdistaTietokantaan();
         }
-
+        /// <summary>
+        /// Yhdistätietokantaan metodi joka yhdistää tietokantaan jos yhteyttä ei ole vielä olemassa
+        /// Jos yhteys on olemassa metodi ei tee mitään
+        /// </summary>
         private static void YhdistaTietokantaan()
         {
             if (_kantaYhteys != null) return; // Yhteys on jo olemassa
@@ -27,16 +34,22 @@ namespace Varausjarjestelma
             _kantaYhteys.Open();
 
         }
+        /// <summary>
+        /// LuoTietokanta metodi joka luo tietokannan ja tietokantaan tarvittavat taulut jos sitä ei ole olemassa
+        /// Metodi ei tee mitään jos tietokanta on jo olemassa
+        /// </summary>
         private void LuoTietokanta()
         {
             if (File.Exists(Tietokannannimi)) return;
             SQLiteConnection.CreateFile(Tietokannannimi); // Luo tietokannan samaan hakemistoon missä .exe ajetaan
             LuoTaulut(); // Luo taulut vain jos kantaa ei ole olemassa
         }
-
+        /// <summary>
+        /// LuoTaulut metodi joka luo tietokantaan taulut, sekä muutamia tietoja testauksen helpottamiseksi
+        /// </summary>
         private void LuoTaulut()
         {
-            if (_kantaYhteys == null) // Alustetaan kantayhteys jos sitä ei ole vielä tehty
+            if (_kantaYhteys == null) // Alustetaan kantayhteys jos sitä ei olla vielä tehty
                 YhdistaTietokantaan();
 
             _sql = "CREATE TABLE IF NOT EXISTS kayttajat" +   // Taulu kayttajat
@@ -101,7 +114,11 @@ namespace Varausjarjestelma
             // Muutama varaus varaukset tauluun
             Ajasql($"INSERT INTO varaukset VALUES(null, '{DateTime.Now.ToShortTimeString()}', 'vantti', '10', 'Sali2', 'Paras elokuva')");
         }
-
+        /// <summary>
+        /// Geneerinen metodi jonka avulla saadaan ajettua tarvittavia transactioneita tietokantaan
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
         public List<string> Ajasql(string sql)
         {
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
@@ -121,6 +138,11 @@ namespace Varausjarjestelma
             return palautettava;
         }
         #region käyttäjäkyselyt
+        /// <summary>
+        /// Getkayttajat metodi, jonka avulla voidaan kysyä kaikki käyttäjät tietokannasta
+        /// Palauttaa listan kayttaja olioista
+        /// </summary>
+        /// <returns></returns>
         public List<Kayttaja> GetKayttajat()
         {
             var res = new List<Kayttaja>();
@@ -134,10 +156,12 @@ namespace Varausjarjestelma
             }
             return res;
         }
-
-        //Metodi joka etsii ja palauttaa käyttäjän tietokannasta
-        //käyttäjänimen perusteella
-        public Kayttaja getKayttaja(String kayttajatunnus)
+        /// <summary>
+        /// Metodi joka etsii ja palauttaa käyttäjän tietokannasta käyttäjänimen perusteella
+        /// </summary>
+        /// <param name="kayttajatunnus"></param>
+        /// <returns></returns>
+        public Kayttaja GetKayttaja(string kayttajatunnus)
         {
             var res = new Kayttaja("", "", "", "", "");
             string sql = $"SELECT * FROM kayttajat WHERE tunnus= '{kayttajatunnus}'";
@@ -150,13 +174,20 @@ namespace Varausjarjestelma
             }
             return res;
         }
-
+        /// <summary>
+        /// Setkayttaja metodi, jolla luodaan uusi käyttäjä tietokantaan
+        /// </summary>
+        /// <param name="kayttaja"></param>
         public void SetKayttaja(Kayttaja kayttaja)
         {
             Ajasql($"INSERT INTO kayttajat VALUES (null, '{kayttaja.Etunimi}', '{kayttaja.Sukunimi}', '{kayttaja.Tunnus}', '{kayttaja.Salasana}', '{kayttaja.Rooli}')");
         }
         #endregion
         #region elokuvakyselyt
+        /// <summary>
+        /// GetElokuvat metodi, jolla saadaan tietokannasta kaikki elokuvat
+        /// </summary>
+        /// <returns></returns>
         public List<Elokuva> GetElokuvat()
         {
             var res = new List<Elokuva>();
@@ -170,8 +201,11 @@ namespace Varausjarjestelma
             }
             return res;
         }
-
-        //Etsii ja palauttaa halutun elokuvan tietokannasta
+        /// <summary>
+        /// Etsii ja palauttaa halutun elokuvan tietokannasta
+        /// </summary>
+        /// <param name="elokuvaNimi"></param>
+        /// <returns></returns>
         public Elokuva GetElokuva(string elokuvaNimi)
         {
             var res = new Elokuva("", 1, 1, "", "");
@@ -185,17 +219,27 @@ namespace Varausjarjestelma
             }
             return res;
         }
-
+        /// <summary>
+        /// SetElokuva metodi joka luo tietokantaan uuden elokuvan
+        /// </summary>
+        /// <param name="elokuva"></param>
         public void SetElokuva(Elokuva elokuva)
         {
             Ajasql($"INSERT INTO elokuvat VALUES (null, '{elokuva.Nimi}', '{elokuva.Vuosi}','{elokuva.Kesto}', '{elokuva.Teksti}', '{elokuva.Ohjelmistossa}')");
         }
-
+        /// <summary>
+        /// Metodi joka päivittää elokuvan nimen
+        /// </summary>
+        /// <param name="elokuva"></param>
+        /// <param name="vanhaNimi"></param>
         public void UpdateElokuva(Elokuva elokuva, string vanhaNimi)
         {
             Ajasql($"UPDATE elokuvat SET elokuvannimi='{elokuva.Nimi}',vuosi='{elokuva.Vuosi}', kesto='{elokuva.Kesto}', kuvaus='{elokuva.Teksti}', ohjelmistossa='{elokuva.Ohjelmistossa}' WHERE elokuvannimi='{vanhaNimi}'");
         }
-
+        /// <summary>
+        /// Metodi joka poistaa elokuvan tietokannasta
+        /// </summary>
+        /// <param name="elokuva"></param>
         public void DelElokuva(Elokuva elokuva)
         {
             Ajasql($"DELETE FROM elokuvat WHERE elokuvannimi='{elokuva.Nimi}'");
@@ -204,8 +248,11 @@ namespace Varausjarjestelma
         #endregion
 
         #region näytöskyselyt
-
-        //Palauttaa elokuvaan kuuluvat näytökset
+        /// <summary>
+        /// Palauttaa elokuvaan kuuluvat näytökset
+        /// </summary>
+        /// <param name="elokuva"></param>
+        /// <returns></returns>
         public List<Näytös> GetElokuvanNaytokset(Elokuva elokuva)
         {
             var res = new List<Näytös>();
@@ -220,19 +267,32 @@ namespace Varausjarjestelma
             }
             return res;
         }
-
-        private static Elokuvasali HaeElokuvasali(List<Elokuvasali> salit, string salinnimi)
+        /// <summary>
+        /// Metodi joka hakee elokuvasalin salin nimen perusteella
+        /// </summary>
+        /// <param name="salit"></param>
+        /// <param name="salinnimi"></param>
+        /// <returns></returns>
+        private static Elokuvasali HaeElokuvasali(IEnumerable<Elokuvasali> salit, string salinnimi)
         {
             return salit.First(s => s.Nimi == salinnimi);
         }
-
-        private static Teatteri HaeTeatteri(List<Elokuvasali> salit, string teatterinnimi)
+        /// <summary>
+        /// Metodi joka hakee teatterin sen nimen perusteella
+        /// </summary>
+        /// <param name="salit"></param>
+        /// <param name="teatterinnimi"></param>
+        /// <returns></returns>
+        private static Teatteri HaeTeatteri(IEnumerable<Elokuvasali> salit, string teatterinnimi)
         {
-            Elokuvasali sali = salit.First(s => s.Teatteri.Nimi == teatterinnimi);
+            var sali = salit.First(s => s.Teatteri.Nimi == teatterinnimi);
             return sali.Teatteri;
         }
-
-        //Päivittää elokuvaan liittyvät näytökset
+        /// <summary>
+        /// Päivittää elokuvaan liittyvät näytökset
+        /// </summary>
+        /// <param name="elokuva"></param>
+        /// <param name="naytokset"></param>
         public void MuokkaaNaytokset(Elokuva elokuva, List<Näytös> naytokset)
         {
             // Tyhjennä aikaisemmat näytökset
@@ -242,18 +302,30 @@ namespace Varausjarjestelma
                 SetElokuvanNaytos(elokuva, naytos);
             }
         }
+        /// <summary>
+        /// Luo uuden näytöksen elokuvalle
+        /// </summary>
+        /// <param name="elokuva"></param>
+        /// <param name="naytos"></param>
         public void SetElokuvanNaytos(Elokuva elokuva, Näytös naytos)
         {
             Ajasql($"INSERT INTO naytokset VALUES (null, '{elokuva.Nimi}', '{naytos.Aika}', '{naytos.Sali.Nimi}', '{naytos.Teatteri.Nimi}')");
         }
         #endregion
-
+        /// <summary>
+        /// Poistaa näytökset elokuvalta
+        /// </summary>
+        /// <param name="elokuva"></param>
         public void DelElokuvanNaytos(Elokuva elokuva)
         {
             Ajasql($"DELETE FROM naytokset WHERE elokuvannimi='{elokuva.Nimi}'");
         }
 
         #region Elokuvasalit
+        /// <summary>
+        /// Metodi joka palauttaa kaikki elokuvasalit tietokannasta
+        /// </summary>
+        /// <returns></returns>
         public List<Elokuvasali> GetElokuvasalit()
         {
             var res = new List<Elokuvasali>();
@@ -267,19 +339,30 @@ namespace Varausjarjestelma
             }
             return res;
         }
-
+        /// <summary>
+        /// Metodi joka luo uuden elokuvasalin
+        /// </summary>
+        /// <param name="elokuvasali"></param>
         public void SetElokuvasali(Elokuvasali elokuvasali)
         {
             Ajasql($"INSERT INTO elokuvasalit VALUES (null, '{elokuvasali.Nimi}', '{elokuvasali.PaikkojaRivissä}', '{elokuvasali.Rivejä}', '{elokuvasali.Teatteri.Nimi}, '{elokuvasali.Teatteri.Kaupunki}')");
         }
-
+        /// <summary>
+        /// Metodi joka poistaa elokuvasalin
+        /// </summary>
+        /// <param name="elokuvasali"></param>
         public void DelElokuvasali(Elokuvasali elokuvasali)
         {
             Ajasql($"DELETE FROM elokuvasalit WHERE nimi='{elokuvasali.Nimi}'");
         }
         #endregion
 
-
+        /// <summary>
+        /// Metodi joka palauttaa listan varatuista paikoista käyttäjän ja näytöksen perusteella
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
         public List<Paikka> VaratutPaikat(Näytös n, Kayttaja k)
         {
             var res = new List<Paikka>();
@@ -300,7 +383,11 @@ namespace Varausjarjestelma
 
             return res;
         }
-
+        /// <summary>
+        /// Metodi joka palauttaa varatut paikat näytöksen perusteella
+        /// </summary>
+        /// <param name="naytos"></param>
+        /// <returns></returns>
         public List<Paikka> VaratutPaikat(Näytös naytos)
         {
             var res = new List<Paikka>();
@@ -314,14 +401,18 @@ namespace Varausjarjestelma
             }
             return res;
         }
-
+        /// <summary>
+        /// Metodi joka palauttaa varatut paikat käyttäjän perusteella
+        /// </summary>
+        /// <param name="kayttaja"></param>
+        /// <returns></returns>
         public Dictionary<Näytös, List<Paikka>> VaratutPaikat(Kayttaja kayttaja)
         {
             var res = new Dictionary<Näytös, List<Paikka>>();
             var naytokset = GetElokuvat().SelectMany(GetElokuvanNaytokset).ToList();
             foreach (var naytos in naytokset)
             {
-                List<Paikka> paikat = new List<Paikka>();
+                var paikat = new List<Paikka>();
                 string sql = $"SELECT * FROM varaukset WHERE naytosaika='{naytos.Aika.ToShortTimeString()}' AND kayttajantunnus='{kayttaja.Tunnus}'";
                 _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
                 _sqllukija = _sqlkomento.ExecuteReader();
@@ -337,17 +428,28 @@ namespace Varausjarjestelma
             }
             return res;
         }
-
+        /// <summary>
+        /// Metodi joka varaa paikan käyttäjälle tietystä näytöksestä
+        /// </summary>
+        /// <param name="kayttaja"></param>
+        /// <param name="naytos"></param>
+        /// <param name="paikka"></param>
         public void VaraaPaikka(Kayttaja kayttaja, Näytös naytos, Paikka paikka)
         {
             Ajasql($"INSERT INTO varaukset VALUES (null, '{naytos.Aika.ToShortTimeString()}', '{kayttaja.Tunnus}', {paikka.PaikkaNro}, '{naytos.Sali.Nimi}', '{naytos.Elokuva.Nimi}') ");
         }
-
+        /// <summary>
+        /// Metodi joka poistaa paikkavarauksen tietystä näytöksestä
+        /// </summary>
+        /// <param name="paikka"></param>
+        /// <param name="naytos"></param>
         public void PoistaPaikkaVaraus(Paikka paikka, Näytös naytos)
         {
             Ajasql($"DELETE FROM varaukset WHERE elokuvasali='{paikka.Sali.Nimi}' AND naytosaika='{naytos.Aika.ToShortTimeString()}' AND istumapaikka='{paikka.PaikkaNro}'");
         }
-
+        /// <summary>
+        /// Metodi joka hoitaa tietokannan sulkemiseen tarvittavat asiat
+        /// </summary>
         public void Dispose()
         {
             _kantaYhteys.Close();
