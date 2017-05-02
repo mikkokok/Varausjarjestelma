@@ -22,6 +22,15 @@
                 <TextBlock Text="{Binding VapaitaPaikkojaYht}"  Margin="10,10,10,10" TextWrapping="Wrap" VerticalAlignment="Top" Width="Auto" Height="16"/>
             </StackPanel>
         </DataTemplate>
+        <DataTemplate x:Key="Varaukset">
+            <Grid d:DesignHeight="200" d:DesignWidth="400">
+                <StackPanel d:DesignHeight="200" d:DesignWidth="400">
+                    <TextBlock Text="{Binding Path=Key.Elokuva.Nimi}"  Margin="10,10,10,10" TextWrapping="Wrap" VerticalAlignment="Top" Width="Auto" Height="16"/>
+                    <TextBlock Text="{Binding Path=Key.Sali.Nimi}"  Margin="10,10,10,10" TextWrapping="Wrap" VerticalAlignment="Top" Width="Auto" Height="16"/>
+                    <TextBlock Text="{Binding Path=Key.Aika}"  Margin="10,10,10,10" TextWrapping="Wrap" VerticalAlignment="Top" Width="Auto" Height="16"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
 
     </Window.Resources>
 
@@ -30,7 +39,7 @@
             <Grid Background="#3385ff">
                 <Grid HorizontalAlignment="Center" Height="401" VerticalAlignment="Center" Width="466" Margin="10">
                     <Button Content="Selaa ohjelmistoa" FontSize="20" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="174" Height="68" Margin="137,46,0,0" Click="Button_SelaaElokuvia" />
-                    <Button Tag="nayta_varaukset" FontSize="20" Style="{StaticResource ButtonStyle}" Content="Näytä varaukset" HorizontalAlignment="Left" VerticalAlignment="Top" Width="174" Height="68" Margin="137,172,0,0" Click="Button_Siirry"/>
+                    <Button Tag="nayta_varaukset" FontSize="20" Style="{StaticResource ButtonStyle}" Content="Näytä varaukset" HorizontalAlignment="Left" VerticalAlignment="Top" Width="174" Height="68" Margin="137,172,0,0" Click="Button_Varaukset"/>
                     <Button Content="Kirjaudu ulos" FontSize="20" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Center" Margin="137,303,155,0" Width="174" Height="68" VerticalAlignment="Top" Click="Button_KirjauduUlos"/>
                 </Grid>
 
@@ -39,7 +48,10 @@
 
         <TabItem x:Name="nayta_varaukset" Header="Varaukset" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
             <Grid Background="#3385ff">
-                <Button Style="{StaticResource ButtonStyle}" Content="Etusivulle" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_Siirry" Tag="etusivu"/>
+                <ListBox x:Name="Varaukset" Margin="10,45,10,35" ItemsSource="{Binding}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemTemplate="{DynamicResource Varaukset}" Background="#FFCFDCF1" Foreground="Black"/>
+                <Button Style="{StaticResource ButtonStyle}" Content="Etusivulle" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_Siirry" Tag="etusivu" Grid.ColumnSpan="2"/>
+                <Button IsEnabled="{Binding ElementName=Varaukset, Path=SelectedItems.Count}" Style="{StaticResource ButtonStyle}" Content="Muokkaa" Margin="0,0,90,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_Muokkaa" Grid.ColumnSpan="2"/>
+                <Button IsEnabled="{Binding ElementName=Varaukset, Path=SelectedItems.Count}" Style="{StaticResource ButtonStyle}" Content="Poista" Margin="0,0,170,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_Muokkaa" Grid.ColumnSpan="2"/>
             </Grid>
         </TabItem>
 
@@ -114,7 +126,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Style="{StaticResource TextBlockHeaderStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Vahvista varaus" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="158" Height="30"/>
-                    <TextBlock Style="{StaticResource TextBlockStyle}" Margin="0,10,10,0" Grid.Row="1" TextWrapping="Wrap" Text="Elokuvan nimi:" VerticalAlignment="Top" TextAlignment="Right" Height="16" HorizontalAlignment="Right" Width="100"/>
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Margin="0,10,10,0" Grid.Row="1" TextWrapping="Wrap" Text="Elokuva:" VerticalAlignment="Top" TextAlignment="Right" Height="16" HorizontalAlignment="Right" Width="100"/>
                     <TextBlock Style="{StaticResource TextBlockStyle}" Margin="10,10,10,0" Text="{Binding ElementName=Ohjelmisto, Path=SelectedItem.Nimi}" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Height="16"/>
                     <TextBlock Style="{StaticResource TextBlockStyle}" Margin="0,31,10,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Right" Height="16" HorizontalAlignment="Right" Width="100" Text="Aika:" />
                     <TextBlock Style="{StaticResource TextBlockStyle}" Margin="10,31,10,0" Text="{Binding SelectedItem.Aika, ElementName=TulevatNäytökset}" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Height="16"/>

@@ -111,6 +111,8 @@ namespace Varausjarjestelma
             Siirry("varaa_kiitos");
         }
 
+        
+
         // Siirry nimettyyn välilehteen
         // nimi siis x:Name="nimi"
         //
@@ -137,5 +139,22 @@ namespace Varausjarjestelma
             this.Close();
         }
 
+        //asiakas voi muokata valitsemaansa varausta.
+        //
+        private void Button_Muokkaa(object sender, RoutedEventArgs e)
+        {
+            String n = Varaukset.SelectedItem.ToString();
+            Console.WriteLine(n);
+        }
+
+        //siirtyminen Näytä Varaukset- välilehteen
+        //
+        private void Button_Varaukset(object sender, RoutedEventArgs e)
+        {
+            //haetaan tietokannasta Käyttäjän perusteella Dictionary, jossa näytökset ja lista paikoista.
+            //
+            Varaukset.ItemsSource = _tietokanta.VaratutPaikat(kayttaja);
+            Siirry("nayta_varaukset");
+        }
     }
 }
