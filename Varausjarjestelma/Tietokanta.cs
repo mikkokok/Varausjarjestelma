@@ -106,6 +106,9 @@ namespace Varausjarjestelma
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', '145', 'Kirahveja ja elefantteja', 'Ei')");
             // Muutama näytös
             Ajasql($"INSERT INTO naytokset VALUES(null, 'Paras elokuva', '{DateTime.Now.ToShortTimeString()}', 'Sali1', 'Teatteri1')");
+            Ajasql($"INSERT INTO naytokset VALUES(null, 'Paras elokuva', '{DateTime.Now.ToShortTimeString()}', 'Sali2', 'Teatteri2')");
+            Ajasql($"INSERT INTO naytokset VALUES(null, 'Huono elokuva', '{DateTime.Now.ToShortTimeString()}', 'Sali1', 'Teatteri1')");
+            Ajasql($"INSERT INTO naytokset VALUES(null, 'Huono elokuva', '{DateTime.Now.ToShortTimeString()}', 'Sali2', 'Teatteri2')");
             // Luo muutama elokuvasali ja teatteri
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '18', '10', 'Teatteri1', 'Turku')");
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '15', '15', 'Teatteri1', 'Turku')");
@@ -113,6 +116,13 @@ namespace Varausjarjestelma
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '10', '10', 'Teatteri2', 'Turku')");
             // Muutama varaus varaukset tauluun
             Ajasql($"INSERT INTO varaukset VALUES(null, '{DateTime.Now.ToShortTimeString()}', 'vantti', '10', 'Sali2', 'Paras elokuva')");
+            Ajasql($"INSERT INTO varaukset VALUES(null, '{DateTime.Now.ToShortTimeString()}', 'vantti', '11', 'Sali2', 'Paras elokuva')");
+            Ajasql($"INSERT INTO varaukset VALUES(null, '{DateTime.Now.ToShortTimeString()}', 'vantti', '10', 'Sali2', 'Huono elokuva')");
+            Ajasql($"INSERT INTO varaukset VALUES(null, '{DateTime.Now.ToShortTimeString()}', 'vantti', '11', 'Sali2', 'Huono elokuva')");
+            Ajasql($"INSERT INTO varaukset VALUES(null, '{DateTime.Now.ToShortTimeString()}', 'vantti', '10', 'Sali1', 'Paras elokuva')");
+            Ajasql($"INSERT INTO varaukset VALUES(null, '{DateTime.Now.ToShortTimeString()}', 'vantti', '11', 'Sali1', 'Paras elokuva')");
+            Ajasql($"INSERT INTO varaukset VALUES(null, '{DateTime.Now.ToShortTimeString()}', 'vantti', '10', 'Sali1', 'Huono elokuva')");
+            Ajasql($"INSERT INTO varaukset VALUES(null, '{DateTime.Now.ToShortTimeString()}', 'vantti', '11', 'Sali1', 'Huono elokuva')");
         }
         /// <summary>
         /// Geneerinen metodi jonka avulla saadaan ajettua tarvittavia transactioneita tietokantaan
