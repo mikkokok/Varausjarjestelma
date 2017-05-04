@@ -143,8 +143,11 @@ namespace Varausjarjestelma
         //
         private void Button_Muokkaa(object sender, RoutedEventArgs e)
         {
-            String n = Varaukset.SelectedItem.ToString();
-            Console.WriteLine(n);
+            var selectedItem = (KeyValuePair<Näytös, List<Paikka>>)Varaukset.SelectedItem;
+            Elokuva valittuElokuva = _tietokanta.GetElokuva(selectedItem.Key.Elokuva.Nimi);
+            List<Näytös> näytökset = _tietokanta.GetElokuvanNaytokset(valittuElokuva);
+            TulevatNäytökset.ItemsSource = näytökset;
+            Siirry("varaa_näytös");
         }
 
         //siirtyminen Näytä Varaukset- välilehteen
