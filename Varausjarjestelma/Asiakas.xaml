@@ -52,9 +52,10 @@
                 <ListBox x:Name="Varaukset" Margin="10,45,10,35" ItemsSource="{Binding}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemTemplate="{DynamicResource Varaukset}" Background="#FFCFDCF1" Foreground="Black"/>
                 <Button Style="{StaticResource ButtonStyle}" Content="Etusivulle" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_Siirry" Tag="etusivu" Grid.ColumnSpan="2"/>
                 <Button IsEnabled="{Binding ElementName=Varaukset, Path=SelectedItems.Count}" Style="{StaticResource ButtonStyle}" Content="Muokkaa" Margin="0,0,90,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_Muokkaa" Grid.ColumnSpan="2"/>
-                <Button IsEnabled="{Binding ElementName=Varaukset, Path=SelectedItems.Count}" Style="{StaticResource ButtonStyle}" Content="Poista" Margin="0,0,170,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_Muokkaa" Grid.ColumnSpan="2"/>
+                <Button IsEnabled="{Binding ElementName=Varaukset, Path=SelectedItems.Count}" Style="{StaticResource ButtonStyle}" Content="Poista" Margin="0,0,170,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Button_Poista" Grid.ColumnSpan="2"/>
             </Grid>
         </TabItem>
+        
 
         <TabItem x:Name="selaa_elokuvia" Header="Selaa elokuvia" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
             <Grid Background="#3385ff">
@@ -170,6 +171,14 @@
             <Grid Background="#3385ff">
                 <Button Style="{StaticResource ButtonStyle}" Content="Etusivulle" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="125" Click="Button_Siirry" Tag="etusivu"/>
                 <TextBlock Style="{StaticResource TextBlockHeaderStyle}" HorizontalAlignment="Center" Margin="0,0,0,50" TextWrapping="Wrap" Text="Kiitos kun varasit lippuja" VerticalAlignment="Center" FontSize="36"/>
+
+            </Grid>
+        </TabItem>
+
+        <TabItem x:Name="varaus_poistettu" Header="Varaus poistettu" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
+            <Grid Background="#3385ff">
+                <Button Style="{StaticResource ButtonStyle}" Content="Etusivulle" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="125" Click="Button_Siirry" Tag="etusivu"/>
+                <TextBlock Style="{StaticResource TextBlockHeaderStyle}" HorizontalAlignment="Center" Margin="0,0,0,50" TextWrapping="Wrap" Text="Varaus Poistettu" VerticalAlignment="Center" FontSize="36"/>
 
             </Grid>
         </TabItem>

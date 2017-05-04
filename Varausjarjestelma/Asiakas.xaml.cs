@@ -139,14 +139,29 @@ namespace Varausjarjestelma
             this.Close();
         }
 
-        //asiakas voi muokata valitsemaansa varausta.
+        //käyttäjä voi muokata valitsemaansa varausta.
         //
         private void Button_Muokkaa(object sender, RoutedEventArgs e)
         {
+            //selectedItem edustaa varausta, jota käyttäjä haluaa muokata. Luomalla siitä uusi
+            //Dictionary, voidaan elokuvan nimen perusteella luoda uusi varaustapahtuma
+            //
             var selectedItem = (KeyValuePair<Näytös, List<Paikka>>)Varaukset.SelectedItem;
             Elokuva valittuElokuva = _tietokanta.GetElokuva(selectedItem.Key.Elokuva.Nimi);
             List<Näytös> näytökset = _tietokanta.GetElokuvanNaytokset(valittuElokuva);
             TulevatNäytökset.ItemsSource = näytökset;
+
+            //loopataan valitun näytöksen paikat läpi, luodaan niistä Paikka- luokan instanssi
+            //ja poistetaan valittu varaus tietokannasta.
+            //
+            var paikat = selectedItem.Value.Count;
+            for (int i = 0; i < paikat; i++)
+            {
+                Paikka poistettava = selectedItem.Value[i] as Paikka;
+                Console.WriteLine(poistettava.PaikkaNro);
+                _tietokanta.PoistaPaikkaVaraus(poistettava, selectedItem.Key);
+            }
+
             Siirry("varaa_näytös");
         }
 
@@ -158,6 +173,21 @@ namespace Varausjarjestelma
             //
             Varaukset.ItemsSource = _tietokanta.VaratutPaikat(kayttaja);
             Siirry("nayta_varaukset");
+        }
+
+        //Käyttäjä voi poistaa haluamansa varauksen
+        //
+        private void Button_Poista(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = (KeyValuePair<Näytös, List<Paikka>>)Varaukset.SelectedItem;
+            var paikat = selectedItem.Value.Count;
+            for (int i = 0; i < paikat; i++)
+            {
+                Paikka poistettava = selectedItem.Value[i] as Paikka;
+                Console.WriteLine(poistettava.PaikkaNro);
+                _tietokanta.PoistaPaikkaVaraus(poistettava, selectedItem.Key);
+            }
+            Siirry("varaus_poistettu");
         }
     }
 }
