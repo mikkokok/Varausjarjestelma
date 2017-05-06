@@ -77,7 +77,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Binding="{Binding Kesto}" ClipboardContentBinding="{x:Null}" Header="Kesto" Width="40" FontSize="10">
+                            <DataGridTextColumn Binding="{Binding Kesto}" ClipboardContentBinding="{x:Null}" Header="Kesto (min)" Width="72" FontSize="10">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style>
                                         <Setter Property="TextBlock.TextWrapping" Value="Wrap" />

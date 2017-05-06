@@ -51,7 +51,8 @@ namespace Varausjarjestelma
 
         #region yleisetUImetodit
 
-        //Metodi joka tulostaa ilmoituksen haluttuun labeliin
+        //Metodi joka tulostaa ilmoituksen haluttuun labeliin sekä ajastaa 
+        //siihen liittyvän animaation
         private void tulostaIlmoitus(string tuloste, Label lbl, Boolean virheilmoitus)
         {
             if (virheilmoitus)

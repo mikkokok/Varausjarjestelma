@@ -32,7 +32,6 @@ namespace Varausjarjestelma
         private List<Näytös> lisattavatNaytokset;
         private List<Näytös> paivitettavatNaytokset;
         private List<Kayttaja> kayttajat;
-
         private String elokuvanNimi;
         private int elokuvanVuosi;
         private int elokuvanKesto;
@@ -62,6 +61,7 @@ namespace Varausjarjestelma
         }
 
         #region tietokantametodit
+
         //Lisää elokuvan tietokantaan
         //Palauttaa true jos onnistuu
         private bool lisaaElokuvaTietokantaan(Elokuva elokuva, List<Näytös> naytokset)
@@ -79,6 +79,9 @@ namespace Varausjarjestelma
         #endregion tietokantametodit
         #region yleisetUImetodit
 
+        //Metodi joka tulostaa varmistusviestin käyttäjälle mikäli käyttäjä
+        //on lisäämässä tai päivittämässä elokuvaa tai elokuvan näytöksiä ja on poistumassa
+        //kyseiseltä sivulta. Käyttäjän vastauksen mukaan joko pysytään sivulla tai siirrytään sieltä pois
         private bool toiminnonTarkistus(int valittuIndeksi)
         {
             bool voikoJatkaa = true;
@@ -106,8 +109,11 @@ namespace Varausjarjestelma
             return voikoJatkaa;
         }
 
+        //Metodi joka huolehtii siitä mitä tapahtuu kun käyttäjä vaihtaa sivun ja tallentaa 
+        //viimeksi valitun sivun muistiin
         private void YllapidonControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //Etusivu
             if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 0)
             {
                 if (toiminnonTarkistus(0))
@@ -119,6 +125,7 @@ namespace Varausjarjestelma
                 
             }
 
+            //Elokuvan päivitys - sivu
             if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 1 && paivitettavaElokuva != null)
             {
                 elokuvanVanhaNimi = paivitettavaElokuva.Nimi;
@@ -128,6 +135,7 @@ namespace Varausjarjestelma
                 txt_KuvausP.Text = paivitettavaElokuva.Teksti;
             }
 
+            //Käyttäjät - sivu
             if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 2)
             {
                 if (toiminnonTarkistus(2))
@@ -139,6 +147,7 @@ namespace Varausjarjestelma
                 
             }
 
+            //Ohjeet - sivu
             if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 3)
             {
                 if (toiminnonTarkistus(3))
@@ -148,6 +157,7 @@ namespace Varausjarjestelma
                 }
             }
 
+            //Kirjaudu ulos - sivu
             if (e.Source == YllapidonControl && YllapidonControl.SelectedIndex == 4)
             {
                 if (toiminnonTarkistus(4))
@@ -160,7 +170,8 @@ namespace Varausjarjestelma
             viimeksiValittu = this.YllapidonControl.SelectedItem as TabItem;
         }
 
-        //Metodi joka tulostaa ilmoituksen haluttuun labeliin
+        //Metodi joka tulostaa ilmoituksen haluttuun labeliin sekä ajastaa 
+        //siihen liittyvän animaation
         private void tulostaIlmoitus(string tuloste, Label lbl, Boolean virheilmoitus)
         {
             if (virheilmoitus)
@@ -204,8 +215,12 @@ namespace Varausjarjestelma
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
+
         #endregion UImetodit
         #region etusivu
+
+        //Metodi joka hakee ajantasaiset tiedot elokuvista tietokannasta ja 
+        //täyttää elokuvien datagridin niillä
         private void paivitaElokuvatDG()
         {
             dg_Elokuvat.Items.Clear();
@@ -224,6 +239,9 @@ namespace Varausjarjestelma
             }
         }
 
+        //Metodi, joka hakee elokuvaan liittyvät näytökset tietokannasta ja täyttää
+        //näytökset - datagridin niillä sekä antaa elokuvan poisto, muokkaus sekä näytösten  
+        //muokkaus - painikkeet käytettäväksi 
         private void dg_Elokuvat_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             dg_Naytokset.Items.Clear();
@@ -259,6 +277,7 @@ namespace Varausjarjestelma
             }       
         }
 
+        //Metodi joka avaa Elokuvan lisäys - sivun
         private void btn_Avaa_Elokuvan_Lisays_Click(object sender, RoutedEventArgs e)
         {
             paivitettavaElokuva = null;
@@ -270,6 +289,7 @@ namespace Varausjarjestelma
             Lisaa_Elokuva_Tab.IsSelected = true;
         }
 
+        //Metodi joka avaa Elokuvan muokkaus - sivun
         private void btn_Avaa_Elokuvan_Muokkaus_Click(object sender, RoutedEventArgs e)
         {
             if (elokuvaIndeksi != -1)
@@ -284,6 +304,7 @@ namespace Varausjarjestelma
 
         }
 
+        //Metodi joka poistaa elokuvan järjestelmästä
         private void btn_Poista_Elokuva_Click(object sender, RoutedEventArgs e)
         {           
             if (elokuvaIndeksi != -1)
@@ -301,6 +322,7 @@ namespace Varausjarjestelma
            
         }
 
+        //Metodi joka avaa Näytösten muokkaus - sivun
         private void btn_Muokkaa_Naytokset_Click(object sender, RoutedEventArgs e)
         {
             if (elokuvaIndeksi != -1)
@@ -321,6 +343,7 @@ namespace Varausjarjestelma
         #endregion
         #region elokuvanLisays
 
+        //Metodi joka tyhjentää kaikki UI elementit Elokuvan lisays - sivulta
         private void clearElokuvanLisays()
         {
             lisattavaElokuva = null;
@@ -335,6 +358,9 @@ namespace Varausjarjestelma
             dg_Lisattavat_Naytokset.Items.Clear();
         }
 
+        //Metodi joka luo uuden Elokuva - olion elokuvan lisäystä varten.
+        //Metodi tarkistaa myös että käyttäjä on antanut kaikki elokuvan tiedot sekä sen
+        //jos elokuva on jo olemassa järjestelmässä. Käyttäjä myös ohjataan Näytösten lisäys - sivulle
         private void btn_Lisaa_Elokuvan_Perustiedot_Click(object sender, RoutedEventArgs e)
         {
             if (txt_Elokuvan_Nimi.Text.Equals("") || txt_Vuosi.Text.Equals("") || txt_Kesto.Text.Equals("") || txt_Kuvaus.Text.Equals(""))
@@ -364,12 +390,14 @@ namespace Varausjarjestelma
             }
         }
 
+        //Metodi, joka ohjaa käyttäjän takaisin elokuvan perustietojen lisäykseen
         private void btn_Takaisin_Lisays_Click(object sender, RoutedEventArgs e)
         {
             Naytokset_Lisays_Grid.Visibility = Visibility.Collapsed;
             Perustiedot_Grid.Visibility = Visibility.Visible;
         }
 
+        //Metodi joka määrittää sen mikä sali näkyy käyttäjälle kun käyttäjä valitsee teatterin
         private void cmb_Elokuvateatteri_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmb_Elokuvateatteri.SelectedIndex != -1)
@@ -385,6 +413,7 @@ namespace Varausjarjestelma
 
         }
 
+        //Metodi joka lisää näytöksen Lisättävät näytökset - datagridiin
         private void btn_Lisaa_Naytos_Click(object sender, RoutedEventArgs e)
         {
             if (cmb_Elokuvateatteri.Text.Equals("") || cmb_Salit.Equals("") || datep_Naytoksen_aika.Text.Equals(""))
@@ -434,6 +463,7 @@ namespace Varausjarjestelma
 
         }
 
+        //Metodi joka poistaa valitun näytöksen Lisää näytökset - datagridistä
         private void btn_Poista_Lisattava_Naytos_Click(object sender, RoutedEventArgs e)
         {
             if (dg_Lisattavat_Naytokset.SelectedIndex != -1)
@@ -449,6 +479,7 @@ namespace Varausjarjestelma
 
         }
 
+        //Metodi joka lisää elokuvan järjestelmään ja ohjaa käyttäjän takaisin etusivulle
         private async void btn_Lisaa_Elokuva_Click_(object sender, RoutedEventArgs e)
         {
             if (cmb_Elokuvateatteri.Equals(null) || datep_Naytoksen_aika.Text.Equals(null))
@@ -468,6 +499,7 @@ namespace Varausjarjestelma
         #endregion
         #region elokuvanPaivitys
 
+        ////Metodi joka tyhjentää kaikki UI elementit Elokuvan päivitys - sivulta
         private void clearElokuvanPaivitys()
         {
             paivitettavaElokuva = null;
@@ -478,6 +510,7 @@ namespace Varausjarjestelma
             txt_Elokuvan_NimiP.Clear();
         }
 
+        //Metodi joka tyhjentää ja hakee ajantasaiset päivitettävät näytökset listasta
         private void paivitaNaytoksetP()
         {
             cmb_ElokuvateatteriP1.SelectedIndex = -1;
@@ -499,6 +532,8 @@ namespace Varausjarjestelma
 
         }
 
+        //Metodi joka tyhjentää UI elementit jotka liittyvät
+        //näytöksen lisäämiseen datagridiin Näytösten päivitys - sivulla
         private void clearNaytosPLisays()
         {
             cmb_ElokuvateatteriP2.SelectedIndex = -1;
@@ -506,6 +541,8 @@ namespace Varausjarjestelma
             dp_Paivitetty_Aika2.Text = "";
         }
 
+        //Metodi joka lisää näytöksen Päivitettävät näytökset - listaan 
+        //elokuvan näytösten päivittämistä varten
         private void btn_Lisaa_NaytosP_Click(object sender, RoutedEventArgs e)
         {
             if (cmb_ElokuvateatteriP2.Text.Equals("") || cmb_SalitP2.Text.Equals("") || dp_Paivitetty_Aika2.Text.Equals(""))
@@ -549,6 +586,9 @@ namespace Varausjarjestelma
 
         }
 
+        //Metodi joka antaa käyttöön päivitä ja poista näytös - painikkeet kun käyttäjä valitsee 
+        //näytöksen Päivitettävät näytöksen - datagridistä sekä täyttää näytöksen päivitykseen
+        //liittyvät UI elementit valitun näytöksen tiedoilla
         private void dg_Paivitettavat_Naytokset_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             clearNaytosPLisays();
@@ -584,6 +624,7 @@ namespace Varausjarjestelma
 
         }
 
+        //Metodi joka päivittää käyttäjän valitseman näytöksen uusilla tiedoilla 
         private void btn_Paivita_Naytos_Click(object sender, RoutedEventArgs e)
         {
             Teatteri teatteri = new Teatteri(cmb_ElokuvateatteriP1.Text, "Turku");
@@ -620,6 +661,7 @@ namespace Varausjarjestelma
             clearNaytosPLisays();
         }
 
+        //Metodi joka poistaa näytöksen Päivitettävät näytökset datagridista
         private void btn_Poista_Valittu_NaytosP_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult varmistus = Xceed.Wpf.Toolkit.MessageBox.Show("Haluatko varmasti poistaa valitun näytöksen?", "Näytöksen poistaminen", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
@@ -633,6 +675,7 @@ namespace Varausjarjestelma
             }
         }
 
+        //Metodi joka päivittää elokuvan tiedot järjestelmään
         private async void btn_Paivita_Elokuvan_Perustiedot_Click(object sender, RoutedEventArgs e)
         {
             if (txt_Elokuvan_NimiP.Text.Equals("") || txt_KestoP.Text.Equals("") || txt_VuosiP.Text.Equals("") || txt_KuvausP.Text.Equals(""))
@@ -660,6 +703,7 @@ namespace Varausjarjestelma
             }
         }
 
+        //Metodi joka päivittää elokuvan näytökset järjestelmään
         private async void btn_Paivita_Naytokset_Click(object sender, RoutedEventArgs e)
         {
             tietokanta.MuokkaaNaytokset(paivitettavaElokuva, paivitettavatNaytokset);
@@ -673,6 +717,8 @@ namespace Varausjarjestelma
         #endregion
         #region kayttajat
 
+        //Metodi joka tyhjentää ja hakee ajantasaiset tiedot järjestelmään 
+        //rekisteröityneistä käyttäjistä tietokannasta Käyttäjät - datagridiin
         private void paivitaKayttajat()
         {
             dg_kayttajat.Items.Clear();
@@ -690,6 +736,7 @@ namespace Varausjarjestelma
             }
         }
 
+        //Metodi joka ylentää käyttäjän asiakkaasta ylläpitäjäksi
         private void btn_Ylenna_Kayttaja_Click(object sender, RoutedEventArgs e)
         {
             Kayttaja kayttaja = kayttajat[kayttajaIndeksi];
@@ -698,6 +745,8 @@ namespace Varausjarjestelma
             btn_Ylenna_Kayttaja.IsEnabled = false;
         }
 
+        //Metodi joka antaa käyttöön tai ottaa käytöstä Ylennä käyttäjä - painikkeen
+        //Käyttäjät - datagridista valitun käyttäjän mukaan
         private void dg_kayttajat_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (dg_kayttajat.SelectedIndex != -1)
@@ -719,7 +768,7 @@ namespace Varausjarjestelma
         #region kirjauduUlos
 
         //Hoitaa käyttäjän kirjautumisen ulos järjestelmästä ja 
-        //avaa login-formin ja tyhjentää muuttujat
+        //avaa login-formin
         private async void btn_kirjaudu_ulos_Click(object sender, RoutedEventArgs e)
         {
             lbl_logout_ilmoitus.Visibility = Visibility.Visible;
