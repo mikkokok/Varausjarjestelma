@@ -104,11 +104,17 @@ namespace Varausjarjestelma
             // Luo muutama elokuva
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Paras elokuva', '2005', '120', 'Kissoja ja koiria', 'Kylla')");
             Ajasql("INSERT INTO elokuvat VALUES(null, 'Huono elokuva', '2002', '145', 'Kirahveja ja elefantteja', 'Ei')");
+            Ajasql("INSERT INTO elokuvat VALUES(null, 'Teräsmies', '1978', '151', 'Tiedemies Jor-El lähettää poikansa turvaan tuhoontuomitulta Krypton-planeetalta. Kal-El-niminen lapsi päätyy Maahan, jossa Kentin pariskunta kasvattaa hänet nimeten lapsen Clark Kentiksi. Adoptioisänsä kuoltua Clark/Kal päätyy pohjoisnavalla olevaan kryptonilaiseen linnakkeeseen, jossa saa tietää oikean isänsä hologrammilta synnyintarinansa. Hän muuttaa Metropolisiin ja aloittaa uransa supersankari Teräsmiehenä, käyttäen toisena henkilöllisyytenään lempeäkäytöksistä toimittajaa Clark Kentiä. Tapaa ensimmäisen kerran kollegansa Lois Lanen ja ihastuu tähän. Teräsmiehen täytyy myös estää tulevan arkkivihollisensa Lex Luthorin pirulliset suunnitelmat.', 'Kylla')");
+            Ajasql("INSERT INTO elokuvat VALUES(null, 'Kuudes Aisti', '1999', '107', 'Elokuva kertoo Malcolm Crowesta (Bruce Willis), joka on arvostettu lastenpsykologi. Malcolmia on jo vuosia vaivannut yksi potilas, jota hän ei voinut auttaa. Malcolm tapaa yhdeksänvuotiaan pojan, joka pystyy puhumaan kuolleille. Häntä auttaessaan Malcolm syöksyy suoraan pelon ja painajaisten maailmaan.', 'Kylla')");
             // Muutama näytös
             Ajasql($"INSERT INTO naytokset VALUES(null, 'Paras elokuva', '{DateTime.Now.ToShortTimeString()}', 'Sali1', 'Teatteri1')");
             Ajasql($"INSERT INTO naytokset VALUES(null, 'Paras elokuva', '{DateTime.Now.ToShortTimeString()}', 'Sali2', 'Teatteri2')");
             Ajasql($"INSERT INTO naytokset VALUES(null, 'Huono elokuva', '{DateTime.Now.ToShortTimeString()}', 'Sali1', 'Teatteri1')");
             Ajasql($"INSERT INTO naytokset VALUES(null, 'Huono elokuva', '{DateTime.Now.ToShortTimeString()}', 'Sali2', 'Teatteri2')");
+            Ajasql($"INSERT INTO naytokset VALUES(null, 'Teräsmies', '{DateTime.Now.ToShortTimeString()}', 'Sali1', 'Teatteri1')");
+            Ajasql($"INSERT INTO naytokset VALUES(null, 'Teräsmies', '{DateTime.Now.ToShortTimeString()}', 'Sali2', 'Teatteri2')");
+            Ajasql($"INSERT INTO naytokset VALUES(null, 'Kuudes Aisti', '{DateTime.Now.ToShortTimeString()}', 'Sali1', 'Teatteri1')");
+            Ajasql($"INSERT INTO naytokset VALUES(null, 'Kuudes Aisti', '{DateTime.Now.ToShortTimeString()}', 'Sali2', 'Teatteri2')");
             // Luo muutama elokuvasali ja teatteri
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali1', '18', '10', 'Teatteri1', 'Turku')");
             Ajasql("INSERT INTO elokuvasalit VALUES(null, 'Sali2', '15', '15', 'Teatteri1', 'Turku')");

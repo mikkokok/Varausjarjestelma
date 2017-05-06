@@ -50,12 +50,12 @@
                         <ColumnDefinition Width="119*"/>
                     </Grid.ColumnDefinitions>
                     <Label x:Name="label" Content="ELOKUVAT" Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="20" Grid.ColumnSpan="2"/>
-                    <Label x:Name="lbl_Naytokset" Content="ELOKUVAN NÄYTÖKSET" Visibility="Visible" Style="{StaticResource LabelHeaderStyle}" Grid.Column="2" HorizontalAlignment="Left" Margin="123,7,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="lbl_Naytokset" Content="ELOKUVAN NÄYTÖKSET" Visibility="Visible" Style="{StaticResource LabelHeaderStyle}" Grid.Column="2" HorizontalAlignment="Left" Margin="150,7,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="btn_Avaa_Elokuvan_Muokkaus" Content="Muokkaa Elokuvaa" Visibility="Visible" IsEnabled="False" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="53,434,0,0" VerticalAlignment="Top" Width="120" Height="36" Click="btn_Avaa_Elokuvan_Muokkaus_Click" Grid.Column="1"/>
-                    <Button x:Name="btn_Muokkaa_Naytokset" Content="Muokkaa näytöksiä" IsEnabled="False" Visibility="Visible" Grid.Column="2" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="123,434,0,0" VerticalAlignment="Top" Width="119" Height="36" Click="btn_Muokkaa_Naytokset_Click"/>
+                    <Button x:Name="btn_Muokkaa_Naytokset" Content="Muokkaa näytöksiä" IsEnabled="False" Visibility="Visible" Grid.Column="2" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="150,434,0,0" VerticalAlignment="Top" Width="119" Height="36" Click="btn_Muokkaa_Naytokset_Click"/>
                     <Button x:Name="btn_Avaa_Elokuvan_Lisays" Content="Lisää Elokuva" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="10,434,0,0" VerticalAlignment="Top" Width="119" Height="36" Click="btn_Avaa_Elokuvan_Lisays_Click" Grid.ColumnSpan="2"/>
                     <Button x:Name="btn_Poista_Elokuva" Content="Poista Elokuva" IsEnabled="False" Visibility="Visible" Style="{StaticResource ButtonStyle}" Width="119" Height="36" HorizontalAlignment="Left" Margin="10,482,0,0" VerticalAlignment="Top" Click="btn_Poista_Elokuva_Click" Grid.ColumnSpan="2"/>
-                    <DataGrid x:Name="dg_Elokuvat" IsReadOnly="True" Background="#80c1ff" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Height="368" Width="448" Grid.ColumnSpan="3" SelectionChanged="dg_Elokuvat_SelectionChanged">
+                    <DataGrid x:Name="dg_Elokuvat" IsReadOnly="True" Background="#80c1ff" ScrollViewer.CanContentScroll="False" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Height="368" Width="475" Grid.ColumnSpan="3" SelectionChanged="dg_Elokuvat_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding ElokuvanNimi}" ClipboardContentBinding="{x:Null}" Header="Nimi" Width="70" FontSize="10">
                                 <DataGridTextColumn.ElementStyle>
@@ -118,7 +118,7 @@
                             </Style>
                         </DataGrid.RowStyle>
                     </DataGrid>
-                    <DataGrid x:Name="dg_Naytokset" IsReadOnly="True" Background=" #80c1ff" Visibility="Visible" Grid.Column="2" HorizontalAlignment="Left" Margin="123,46,0,0" VerticalAlignment="Top" Width="343" Height="368">
+                    <DataGrid x:Name="dg_Naytokset" IsReadOnly="True" ScrollViewer.CanContentScroll="False" Background=" #80c1ff" Visibility="Visible" Grid.Column="2" HorizontalAlignment="Left" Margin="150,47,0,0" VerticalAlignment="Top" Width="344" Height="368">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Teatteri}" ClipboardContentBinding="{x:Null}" Header="Teatteri"/>
                             <DataGridTextColumn Binding="{Binding Sali}" ClipboardContentBinding="{x:Null}" Header="Sali"/>
@@ -176,7 +176,7 @@
                         <Button x:Name="btn_Lisaa_Naytos" Content="Lisää näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="628,332,0,0" VerticalAlignment="Top" Width="160" Height="54" Click="btn_Lisaa_Naytos_Click"/>
                         <Button x:Name="btn_Poista_Lisattava_Naytos" Content="Poista näytös" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="462,333,0,0" VerticalAlignment="Top" Width="134" Height="53" Click="btn_Poista_Lisattava_Naytos_Click"/>
                         <Button x:Name="btn_Lisaa_Elokuva" Content="Lisää elokuva" Style="{StaticResource ButtonStyle}" FontSize="16" HorizontalAlignment="Left" Margin="688,30,0,0" VerticalAlignment="Top" Width="160" Height="53" Click="btn_Lisaa_Elokuva_Click_"/>
-                        <DataGrid x:Name="dg_Lisattavat_Naytokset" IsReadOnly="True" Background=" #80c1ff" HorizontalAlignment="Left" Margin="26,74,0,0" VerticalAlignment="Top" Height="460" Width="416">
+                        <DataGrid x:Name="dg_Lisattavat_Naytokset" IsReadOnly="True" ScrollViewer.CanContentScroll="False" Background=" #80c1ff" HorizontalAlignment="Left" Margin="26,74,0,0" VerticalAlignment="Top" Height="460" Width="416">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Elokuvateatteri}" ClipboardContentBinding="{x:Null}" Header="Elokuvateatteri"/>
                                 <DataGridTextColumn Binding="{Binding Sali}" ClipboardContentBinding="{x:Null}" Header="Sali"/>
@@ -212,7 +212,7 @@
                     </Grid>
 
                     <Grid x:Name="Naytosten_Paivitys_Grid" Visibility="Collapsed" Margin="-10,-23,0,0">
-                        <DataGrid x:Name="dg_Paivitettavat_Naytokset" IsReadOnly="True" Background=" #80c1ff" HorizontalAlignment="Left" Margin="26,72,0,0" VerticalAlignment="Top" Height="474" Width="202" SelectionChanged="dg_Paivitettavat_Naytokset_SelectionChanged">
+                        <DataGrid x:Name="dg_Paivitettavat_Naytokset" IsReadOnly="True" ScrollViewer.CanContentScroll="False" Background=" #80c1ff" HorizontalAlignment="Left" Margin="26,72,0,0" VerticalAlignment="Top" Height="474" Width="202" SelectionChanged="dg_Paivitettavat_Naytokset_SelectionChanged">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Teatteri}" ClipboardContentBinding="{x:Null}" Header="Teatteri"/>
                                 <DataGridTextColumn Binding="{Binding Sali}" ClipboardContentBinding="{x:Null}" Header="Sali"/>
@@ -270,7 +270,7 @@
             </TabItem>
             <TabItem x:Name="Kayttajat_tab" Header="Käyttäjät">
                 <Grid x:Name="Kayttajat_Grid">
-                    <DataGrid x:Name="dg_kayttajat" IsReadOnly="True" Background="#80c1ff" HorizontalAlignment="Left" Margin="24,76,0,0" VerticalAlignment="Top" Height="329" Width="253" SelectionChanged="dg_kayttajat_SelectionChanged">
+                    <DataGrid x:Name="dg_kayttajat" IsReadOnly="True" ScrollViewer.CanContentScroll="False" Background="#80c1ff" HorizontalAlignment="Left" Margin="24,76,0,0" VerticalAlignment="Top" Height="329" Width="253" SelectionChanged="dg_kayttajat_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Kayttajatunnus}" ClipboardContentBinding="{x:Null}" Header="Tunnus"/>
                             <DataGridTextColumn Binding="{Binding Etunimi}" ClipboardContentBinding="{x:Null}" Header="Etunimi"/>

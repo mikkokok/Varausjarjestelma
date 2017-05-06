@@ -51,8 +51,13 @@ namespace Varausjarjestelma
 
         #region yleisetUImetodit
 
-        //Metodi joka tulostaa ilmoituksen haluttuun labeliin sekä ajastaa 
-        //siihen liittyvän animaation
+        /// <summary>
+        /// Metodi joka tulostaa ilmoituksen haluttuun labeliin sekä ajastaa 
+        /// siihen liittyvän animaation
+        /// </summary>
+        /// <param name="tuloste"></param>
+        /// <param name="lbl"></param>
+        /// <param name="virheilmoitus"></param>
         private void tulostaIlmoitus(string tuloste, Label lbl, Boolean virheilmoitus)
         {
             if (virheilmoitus)
@@ -78,22 +83,30 @@ namespace Varausjarjestelma
 
         }
 
-        //Toiminnot Enter-painikkeelle
+        /// <summary>
+        /// Toiminnot Enter-painikkeelle
+        /// Jos käyttäjä on login formissa ja painaa enteriä niin yritetään kirjautua sisään
+        /// Jos käyttäjä on rekisteröinti formissa ja painaa enteriä niin yritetään rekisteröityä
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            //Jos käyttäjä on login formissa ja painaa enteriä niin yritetään kirjautua sisään
             if (e.Key == Key.Enter && Login_Grid.IsVisible)
             {
                 btnkirjaudu_Click(sender, e);
             }
-            //Jos käyttäjä on rekisteröinti formissa ja painaa enteriä niin yritetään rekisteröityä
             else if (e.Key == Key.Enter && Register_Grid.IsVisible)
             {
                 btn_rekisteroidy_Click(sender, e);
             }
         }
 
-        //Metodi joka sijoittaa ikkunan keskelle tietokoneen näyttöä kun ikkunan koko muuttuu
+        /// <summary>
+        /// Metodi joka sijoittaa ikkunan keskelle tietokoneen näyttöä kun ikkunan koko muuttuu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (e.PreviousSize == e.NewSize)
@@ -107,19 +120,26 @@ namespace Varausjarjestelma
         }
         #endregion
         #region kirjautuminen
+
+        /// <summary>
+        /// Metodi joka kirjaa käyttäjän sisälle järjestelmään ja
+        /// ohjaa käyttäjän joko asiakkaan tai ylläpidon näkymään.
+        /// Tulostetaan virheilmoitus jos käyttäjää ei löydy järjestelmästä
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void btnkirjaudu_Click(object sender, RoutedEventArgs e)
         {
 
-            // Luetaan käyttäjät tietokannasta
-            _kayttajat = Tietokanta.GetKayttajat();
+            //Luetaan käyttäjät tietokannasta ja 
             //Alustetaan muuttujat tekstilaatikoiden avulla
+            _kayttajat = Tietokanta.GetKayttajat();           
             this.kayttajanimi = txt_kayttajaNimi.Text;
             this.salasana = txt_salasana.Password;
 
             Kayttaja kayttaja = _kayttajat.SingleOrDefault(n => n.Salasana == salasana && n.Tunnus == kayttajanimi);
 
             //Toiminnot jos käyttäjänimi ja salasana ovat oikein
-            //if (this.kayttajanimi == "Matti" && this.salasana == "Matti")
             if (kayttaja != null)
             {
                 tulostaIlmoitus("Kirjautuminen onnistui. Ladataan...", lbl_ilmoitus, false);
@@ -145,7 +165,11 @@ namespace Varausjarjestelma
             }
         }
 
-        //Painike joka avaa rekisteröinti sivun
+        /// <summary>
+        /// Metodi joka avaa rekisteröinti sivun
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_rekisteroidy_Click(object sender, RoutedEventArgs e)
         {
             txt_kayttajaNimi.Clear();
@@ -158,7 +182,12 @@ namespace Varausjarjestelma
         }
         #endregion
         #region rekisterointi
-        //Painike joka lisää käyttäjän tietokantaan
+
+        /// <summary>
+        /// Metodi joka lisää rekisteröityvän käyttäjän tietokantaan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void btn_rekisteroi_Click(object sender, RoutedEventArgs e)
         {
             this.kayttajanimi = txt_kayttajaNimiR.Text;
@@ -205,7 +234,11 @@ namespace Varausjarjestelma
             }
         }
 
-        //Painike joka palaa login-formiin rekisteröinti-lomakkeelta
+        /// <summary>
+        /// Metodi joka palaa login-formiin rekisteröinti-lomakkeelta
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_takaisinR_Click(object sender, RoutedEventArgs e)
         {
             txt_kayttajaNimiR.Clear();
