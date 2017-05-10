@@ -6,10 +6,24 @@ using System.Windows.Controls;
 
 namespace Varausjarjestelma
 {
-    /// <summary>
-    /// Interaction logic for PaikanValinta.xaml
-    /// </summary>
-    /// 
+    // Paikan valinta widget.
+    // Käyttää DataTemplatea, johon checkboxit jokaista paikkaa kohden.
+    // Paikkojen numerointi valkokankaalta katsottuna ensimmäinen rivi
+    // ja vasemmalta oikealle alhaalta ylös
+    //
+    // Paikkojen valinta on mahdollista estää, jolloin paikan checkbox 
+    // ei ole valittavissa.
+    //
+    // metodit:
+    //      PoistaValinta(...)      poistaa valinnan kyseiseltä paikalta
+    //      Valitse(...)            valitsee kyseisen paikan (checkbox)
+    //      Valittavissa(...)       IsEnabled (checkbox) paikalle
+    //      MerkitseVaratut(...)    Merkitsee varatut paikat ja asettaa niiden checkboxien
+    //                              IsEnabled = false
+    //      AlustaSali(...)         Alustaa näkymän salin pohjapiirrosta vastaavaksi
+    //      AlustaVarauksilla(...)  AlustaSali + MerkitseVaratut
+    //
+
     public partial class PaikanValinta : UserControl
     {
         public PaikanValinta()
@@ -18,6 +32,7 @@ namespace Varausjarjestelma
             ValitutPaikat = new ObservableCollection<Paikka>();
         }
         
+        // Luokka yhden paikan valinalle (jota vastaa checkbox)
         private class Valinta
         {
             public Paikka Paikka { get; set; }
@@ -35,14 +50,15 @@ namespace Varausjarjestelma
             }
         }
 
-        // ajantasainen lista paikoista, jotka ovat valittuina
+        // lista paikoista, jotka ovat valittuina
         // joko käyttäjän toimesta tai käyttämällä Valitse() -metodia
         //
         public ObservableCollection<Paikka> ValitutPaikat { get; set; }
 
-        private Valinta[][] _Valinnat;
+        private Valinta[][] _Valinnat; // taulukko paikkojen valinnalle
         private Elokuvasali Sali; 
         
+        // hakee paikan _Valinnat taulukosta
         private Valinta _Valinta(int nro)
         {
             int rivi = Sali.Rivejä - Sali.RiviNrosta(nro);
@@ -51,6 +67,7 @@ namespace Varausjarjestelma
             return _Valinnat[rivi][paikka];
         }
 
+        // hakee paikan _Valinnat taulukosta
         private Valinta _Valinta(Paikka p) {
             int rivi = p.Sali.Rivejä - p.Rivi;
             int paikka = p.PaikkaRivissä - 1;
@@ -118,7 +135,7 @@ namespace Varausjarjestelma
             }
         }
 
-        // Alusta pohjapiirros salin mukaan
+        // Alusta pohjapiirros salin mukaan. Alusta pohjapiirros olisi kuvaavampi nimi
         //
         public void AlustaSali(Elokuvasali sali)
         {
@@ -163,10 +180,12 @@ namespace Varausjarjestelma
         
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(PaikanValinta));
         
+        // checkbox valitaan
         private void CheckBox_LisääLippu(object sender, RoutedEventArgs e) {
             ValitutPaikat.Add(((sender as CheckBox).DataContext as Valinta).Paikka);
         }
 
+        // checkbox valinta poistetaan
         private void CheckBox_PoistaLippu(object sender, RoutedEventArgs e) {
             ValitutPaikat.Remove(((sender as CheckBox).DataContext as Valinta).Paikka);
         }

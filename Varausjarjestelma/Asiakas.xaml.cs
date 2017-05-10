@@ -15,9 +15,10 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 namespace Varausjarjestelma
 {
-    /// Käyttäjän näkymä lipunvarausjärjestelmään
-    /// TabControlia käyttäen siirtymät eteen-/taaksepäin
-    /// 
+    // Käyttäjän näkymä lipunvarausjärjestelmään.
+    // Toteutus käyttää TabControl:ia, jonka avulla esitetään
+    // Wizard-tyyliset siirtymät eteen-/taaksepäin
+    // 
     public partial class Asiakas : Window
     {
         private Tietokanta _tietokanta;
@@ -26,11 +27,9 @@ namespace Varausjarjestelma
         public Asiakas(Kayttaja k)
         {
             kayttaja = k;
+            _tietokanta = new Tietokanta();
 
             InitializeComponent();
-
-            // toistaiseksi näin, lopullisessa pärjää varmaan yhdellä instanssilla
-            _tietokanta = new Tietokanta();
 
             // välilehdet piiloon
             foreach (TabItem t in tabControl.Items.OfType<TabItem>())
@@ -39,6 +38,7 @@ namespace Varausjarjestelma
             }
         }
 
+        // siirry etusivulle
         protected void Etusivulle(object sender, EventArgs e)
         {
             etusivu.IsSelected = true;
@@ -110,7 +110,6 @@ namespace Varausjarjestelma
 
             Siirry("varaa_kiitos");
         }
-
         
 
         // Siirry nimettyyn välilehteen
