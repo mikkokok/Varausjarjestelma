@@ -407,7 +407,7 @@ namespace Varausjarjestelma
         public List<Paikka> VaratutPaikat(Näytös naytos)
         {
             var res = new List<Paikka>();
-            string sql = $"SELECT istumapaikka FROM varaukset WHERE elokuva='{naytos.Elokuva.Nimi}' AND naytosaika='{naytos.Aika.ToShortTimeString()}'";
+            string sql = $"SELECT istumapaikka FROM varaukset WHERE elokuva='{naytos.Elokuva.Nimi}' AND naytosaika='{naytos.Aika.ToShortTimeString()}' AND elokuvasali='{naytos.Sali.Nimi}'";
             _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
             _sqllukija = _sqlkomento.ExecuteReader();
             if (_sqllukija.FieldCount == 0) return res; // Taulu on tyhja
