@@ -429,7 +429,7 @@ namespace Varausjarjestelma
             foreach (var naytos in naytokset)
             {
                 var paikat = new List<Paikka>();
-                string sql = $"SELECT * FROM varaukset WHERE naytosaika='{naytos.Aika.ToShortTimeString()}' AND kayttajantunnus='{kayttaja.Tunnus}'";
+                string sql = $"SELECT DISTINCT * FROM varaukset WHERE naytosaika='{naytos.Aika.ToShortTimeString()}' AND kayttajantunnus='{kayttaja.Tunnus}' AND elokuva='{naytos.Elokuva.Nimi}' AND elokuvasali='{naytos.Sali.Nimi}' ";
                 _sqlkomento = new SQLiteCommand(sql, _kantaYhteys);
                 _sqllukija = _sqlkomento.ExecuteReader();
                 if (_sqllukija.FieldCount == 0) continue; // Taulu on tyhja
@@ -461,7 +461,7 @@ namespace Varausjarjestelma
         /// <param name="naytos"></param>
         public void PoistaPaikkaVaraus(Paikka paikka, Näytös naytos)
         {
-            Ajasql($"DELETE FROM varaukset WHERE elokuvasali='{paikka.Sali.Nimi}' AND naytosaika='{naytos.Aika.ToShortTimeString()}' AND istumapaikka='{paikka.PaikkaNro}'");
+            Ajasql($"DELETE FROM varaukset WHERE elokuvasali='{paikka.Sali.Nimi}' AND naytosaika='{naytos.Aika.ToShortTimeString()}' AND istumapaikka='{paikka.PaikkaNro}' AND elokuva='{naytos.Elokuva.Nimi}' AND elokuvasali='{naytos.Sali.Nimi}' ");
         }
         /// <summary>
         /// Metodi joka hoitaa tietokannan sulkemiseen tarvittavat asiat
